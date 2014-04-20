@@ -1,6 +1,6 @@
 === Front End PM ===
 Contributors: shamim51
-Tags: front end pm,front-end-pm,pm,private message,front end
+Tags: front end pm,front-end-pm,pm,private message,front end,frontend pm,frontend,message,email,mail
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 2.7
 Tested up to: 3.9

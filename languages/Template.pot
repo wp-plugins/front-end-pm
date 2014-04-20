@@ -1,0 +1,472 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Front End PM 1.1\n"
+"POT-Creation-Date: 2014-04-20 19:21+0600\n"
+"PO-Revision-Date: 2014-04-20 19:24+0600\n"
+"Last-Translator: \n"
+"Language-Team: Shamim\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"X-Poedit-Basepath: ../\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\js\n"
+
+#: fep-class.php:69 fep-class.php:90
+msgid "Login to view your messages"
+msgstr ""
+
+#: fep-class.php:75
+msgid "Inbox"
+msgstr ""
+
+#: fep-class.php:76
+msgid "Announcement"
+msgstr ""
+
+#: fep-class.php:78 fep-class.php:1086
+msgid "Other's Message"
+msgstr ""
+
+#: fep-class.php:88
+msgid "Messages"
+msgstr ""
+
+#: fep-class.php:96
+msgid "Hi"
+msgstr ""
+
+#: fep-class.php:97 fep-class.php:1060
+msgid "You have"
+msgstr ""
+
+#: fep-class.php:97
+msgid "new message(s)"
+msgstr ""
+
+#: fep-class.php:98
+msgid "There are"
+msgstr ""
+
+#: fep-class.php:98 fep-class.php:1061
+msgid "announcement(s)"
+msgstr ""
+
+#: fep-class.php:100
+msgid "Other's Message(s)"
+msgstr ""
+
+#: fep-class.php:101
+msgid "View Message Box"
+msgstr ""
+
+#: fep-class.php:176 fep-class.php:1084
+msgid "Settings"
+msgstr ""
+
+#: fep-class.php:177
+msgid "Instruction"
+msgstr ""
+
+#: fep-class.php:183
+msgid "Options successfully saved"
+msgstr ""
+
+#: fep-class.php:186
+msgid "Front End PM Settings"
+msgstr ""
+
+#: fep-class.php:200
+msgid "Setting"
+msgstr ""
+
+#: fep-class.php:200
+msgid "Value"
+msgstr ""
+
+#: fep-class.php:202
+msgid "Max messages a user can keep in box? (0 = Unlimited)"
+msgstr ""
+
+#: fep-class.php:202
+msgid "Admins always have Unlimited"
+msgstr ""
+
+#: fep-class.php:202 fep-class.php:203 fep-class.php:204
+msgid "Default"
+msgstr ""
+
+#: fep-class.php:203
+msgid "Messages to show per page"
+msgstr ""
+
+#: fep-class.php:203 fep-class.php:204
+msgid "Do not set this to 0!"
+msgstr ""
+
+#: fep-class.php:204
+msgid "Maximum user per page in Directory"
+msgstr ""
+
+#: fep-class.php:205
+msgid "Block Username"
+msgstr ""
+
+#: fep-class.php:205
+msgid "Separated by comma"
+msgstr ""
+
+#: fep-class.php:206
+msgid "Hide Directory from front end?"
+msgstr ""
+
+#: fep-class.php:206
+msgid "Always shown to Admins"
+msgstr ""
+
+#: fep-class.php:207
+msgid "Hide Branding Footer?"
+msgstr ""
+
+#: fep-class.php:208 fep-class.php:286
+msgid "Save Options"
+msgstr ""
+
+#: fep-class.php:218
+msgid "Front End PM Setup Instruction"
+msgstr ""
+
+#: fep-class.php:219
+msgid "Create a new page."
+msgstr ""
+
+#: fep-class.php:220
+msgid "Paste following code under the HTML tab of the page editor"
+msgstr ""
+
+#: fep-class.php:221
+msgid "Publish the page"
+msgstr ""
+
+#: fep-class.php:222
+#, php-format
+msgid "For more help or report bug pleasse visit this <a href=%s>website</a>"
+msgstr ""
+
+#: fep-class.php:272
+msgid "Your settings have been saved!"
+msgstr ""
+
+#: fep-class.php:274
+msgid "Set your preferences below"
+msgstr ""
+
+#: fep-class.php:279
+msgid "Allow others to send me messages?"
+msgstr ""
+
+#: fep-class.php:284
+msgid "Email me when I get new messages?"
+msgstr ""
+
+#: fep-class.php:333 fep-class.php:449 fep-class.php:580
+msgid "You cannot send messages because you are blocked by administrator!"
+msgstr ""
+
+#: fep-class.php:358
+msgid "Create New Message"
+msgstr ""
+
+#: fep-class.php:360 fep-class.php:701 fep-class.php:774
+msgid "To"
+msgstr ""
+
+#: fep-class.php:363 fep-class.php:423 fep-class.php:496 fep-class.php:702
+#: fep-class.php:775 fep-class.php:923 fep-class.php:954
+msgid "Subject"
+msgstr ""
+
+#: fep-class.php:365 fep-class.php:394 fep-class.php:467 fep-class.php:928
+msgid "Message"
+msgstr ""
+
+#: fep-class.php:371 fep-class.php:446 fep-class.php:516 fep-class.php:1141
+#: fep-class.php:1147
+msgid "Send Message"
+msgstr ""
+
+#: fep-class.php:378
+msgid "You cannot send messages because your message box is full!"
+msgstr ""
+
+#: fep-class.php:393 fep-class.php:466
+msgid "Message Thread"
+msgstr ""
+
+#: fep-class.php:394 fep-class.php:467
+msgid "Sender"
+msgstr ""
+
+#: fep-class.php:401 fep-class.php:474
+msgid "You do not have permission to view this message!"
+msgstr ""
+
+#: fep-class.php:412 fep-class.php:413 fep-class.php:485 fep-class.php:486
+msgid "Re:"
+msgstr ""
+
+#: fep-class.php:436 fep-class.php:506
+msgid "Add Reply"
+msgstr ""
+
+#: fep-class.php:558
+msgid "You must enter a valid recipient!"
+msgstr ""
+
+#: fep-class.php:560 fep-class.php:1001
+msgid "You must enter a valid subject!"
+msgstr ""
+
+#: fep-class.php:562
+msgid "You must enter some message content!"
+msgstr ""
+
+#: fep-class.php:564
+msgid "You do not have permission to send this message!"
+msgstr ""
+
+#: fep-class.php:570
+msgid "This user does not want to receive messages!"
+msgstr ""
+
+#: fep-class.php:575
+msgid "Your or Recipients Message Box Is Full!"
+msgstr ""
+
+#: fep-class.php:587 fep-class.php:1012
+msgid "Invalid Token. Please try again!"
+msgstr ""
+
+#: fep-class.php:592 fep-class.php:605
+msgid "Your message was successfully sent!"
+msgstr ""
+
+#: fep-class.php:639
+msgid "You have received a new message from"
+msgstr ""
+
+#: fep-class.php:639 fep-class.php:659
+msgid "follow this link to view it"
+msgstr ""
+
+#: fep-class.php:642 fep-class.php:662 fep-class.php:1081
+msgid "New Message"
+msgstr ""
+
+#: fep-class.php:659
+msgid "You have send a new message to"
+msgstr ""
+
+#: fep-class.php:686
+msgid "Your Messages"
+msgstr ""
+
+#: fep-class.php:690 fep-class.php:763 fep-class.php:1131
+msgid "Page"
+msgstr ""
+
+#: fep-class.php:700 fep-class.php:773
+msgid "Started By"
+msgstr ""
+
+#: fep-class.php:703 fep-class.php:776
+msgid "Last Reply By"
+msgstr ""
+
+#: fep-class.php:704 fep-class.php:727 fep-class.php:777 fep-class.php:794
+#: fep-class.php:926
+msgid "Delete"
+msgstr ""
+
+#: fep-class.php:710 fep-class.php:783
+msgid "Unread"
+msgstr ""
+
+#: fep-class.php:712 fep-class.php:785
+msgid "Read"
+msgstr ""
+
+#: fep-class.php:727 fep-class.php:794 fep-class.php:926
+msgid "Are you sure?"
+msgstr ""
+
+#: fep-class.php:738
+msgid "Your message box is empty!"
+msgstr ""
+
+#: fep-class.php:759
+msgid "All Messages"
+msgstr ""
+
+#: fep-class.php:805
+msgid "Message box is empty!"
+msgstr ""
+
+#: fep-class.php:865
+msgid "Your message was successfully deleted!"
+msgstr ""
+
+#: fep-class.php:879
+msgid "Message was successfully deleted!"
+msgstr ""
+
+#: fep-class.php:899
+msgid "The announcement was successfully deleted!"
+msgstr ""
+
+#: fep-class.php:905 fep-class.php:914 fep-class.php:1080
+msgid "Announcements"
+msgstr ""
+
+#: fep-class.php:910
+msgid "There are no announcements!"
+msgstr ""
+
+#: fep-class.php:924
+msgid "Date"
+msgstr ""
+
+#: fep-class.php:952
+msgid "Add a new announcement below"
+msgstr ""
+
+#: fep-class.php:960
+msgid "Submit"
+msgstr ""
+
+#: fep-class.php:1003
+msgid "You must enter some content!"
+msgstr ""
+
+#: fep-class.php:1017 fep-class.php:1025
+msgid "The announcement was successfully added!"
+msgstr ""
+
+#: fep-class.php:1053 fep-class.php:1062
+msgid "Unlimited"
+msgstr ""
+
+#: fep-class.php:1059
+msgid "Welcome"
+msgstr ""
+
+#: fep-class.php:1060
+msgid "new messages"
+msgstr ""
+
+#: fep-class.php:1061
+msgid "and"
+msgstr ""
+
+#: fep-class.php:1063
+msgid "Message box size"
+msgstr ""
+
+#: fep-class.php:1063
+msgid "of"
+msgstr ""
+
+#: fep-class.php:1065
+msgid "Your Message Box Is Full! Please delete some messages."
+msgstr ""
+
+#: fep-class.php:1079
+msgid "Message Box"
+msgstr ""
+
+#: fep-class.php:1083
+msgid "Directory"
+msgstr ""
+
+#: fep-class.php:1127
+msgid "Total Users"
+msgstr ""
+
+#: fep-class.php:1140
+msgid "User"
+msgstr ""
+
+#: fep-class.php:1156
+msgid "No User!"
+msgstr ""
+
+#: fep-class.php:1238
+msgid "You must be logged-in to view your message."
+msgstr ""
+
+#: fep-class.php:1315
+msgid "Bold"
+msgstr ""
+
+#: fep-class.php:1316
+msgid "Italic"
+msgstr ""
+
+#: fep-class.php:1317
+msgid "Underline"
+msgstr ""
+
+#: fep-class.php:1318
+msgid "Strikethrough"
+msgstr ""
+
+#: fep-class.php:1319
+msgid "Code"
+msgstr ""
+
+#: fep-class.php:1320
+msgid "Quote"
+msgstr ""
+
+#: fep-class.php:1321
+msgid "List"
+msgstr ""
+
+#: fep-class.php:1322
+msgid "List item"
+msgstr ""
+
+#: fep-class.php:1323
+msgid "Link"
+msgstr ""
+
+#: fep-class.php:1324
+msgid "Image"
+msgstr ""
+
+#: fep-class.php:1325
+msgid "Email"
+msgstr ""
+
+#: fep-class.php:1326
+msgid "Add Hex Color"
+msgstr ""
+
+#: fep-class.php:1327
+msgid "Embed"
+msgstr ""
+
+#: front-end-pm.php:38
+msgid "FEP button widget"
+msgstr ""
+
+#: front-end-pm.php:39
+msgid "FEP text widget"
+msgstr ""
+
+#: js/search.php:23
+msgid "No Matches Found"
+msgstr ""

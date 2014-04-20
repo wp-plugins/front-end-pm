@@ -136,8 +136,8 @@ if (!class_exists("clFEPm"))
     function setupLinks() //And DB table name too :)
     {
       global $wpdb;
-      $this->pluginDir = ABSPATH."wp-content/plugins/front-end-pm/";
-      $this->pluginURL = WP_CONTENT_URL."/plugins/front-end-pm/";
+      $this->pluginDir = plugin_dir_path( __FILE__ )."/";
+      $this->pluginURL = plugins_url()."/front-end-pm/";
       $this->styleDir = $this->pluginDir."style/";
       $this->styleURL = $this->pluginURL."style/";
       $this->jsURL = $this->pluginURL."js/";
@@ -219,7 +219,7 @@ if (!class_exists("clFEPm"))
           <p><ul><li>".__("Create a new page.", "fep")."</li>
           <li>".__("Paste following code under the HTML tab of the page editor", "fep")."<code>[front-end-pm]</code></li>
           <li>".__("Publish the page", "fep")."</li>
-		  <li>".sprintf(__("For more help or report bug pleasse visit this <a href=%s>website</a>", "fep"),esc_url($url))."</li>
+		  <li>".sprintf(__("For more help or report bug pleasse visit <a href=%s>Front End PM</a>", "fep"),esc_url($url))."</li>
           </ul></p></div>";
 		  }
 
@@ -1404,7 +1404,7 @@ if (!class_exists("clFEPm"))
 
     function get_version()
     {
-      $plugin_data = implode('', file(ABSPATH."wp-content/plugins/front-end-pm/front-end-pm.php"));
+      $plugin_data = implode('', file($this->pluginDir."front-end-pm.php"));
       if (preg_match("|Version:(.*)|i", $plugin_data, $version))
         $version = $version[1];
       return $version;

@@ -213,7 +213,7 @@ if (!class_exists("clFEPm"))
 	
 	function dispInstructionPage()
 	{
-	$url = 'http://www.sherateacher.com/project/front-end-pm-247/';
+	$url = 'http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/';
 	echo 	"<div class='wrap'>
           <h2>".__("Front End PM Setup Instruction", "fep")."</h2>
           <p><ul><li>".__("Create a new page.", "fep")."</li>
@@ -1107,7 +1107,7 @@ if (!class_exists("clFEPm"))
           $footer .= $this->dispNotify();
       
       if($this->adminOps['hide_branding'] != 'on')
-        $footer .= "<div id='pm-footer'><a href='http://www.sherateacher.com/project/front-end-pm-247/'>Front End PM ".$this->get_version()."</a></div>";
+        $footer .= "<div id='pm-footer'><a href='http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/'>Front End PM ".$this->get_version()."</a></div>";
       
       $footer .= "</div>"; //End main wrapper
       

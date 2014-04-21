@@ -64,6 +64,7 @@ if (!class_exists("clFEPm"))
     {
       global $user_ID;
       $uData = get_userdata($user_ID);
+	  $this->setPageURLs();
       echo $args['before_widget'];
       if (!$uData)
         echo __("Login to view your messages", "fep");
@@ -74,9 +75,9 @@ if (!class_exists("clFEPm"))
 		$numNewadm = $this->getNewMsgs_admin();
         echo "<a class='fep-button' href='".$this->pageURL."'>".__("Inbox", "fep")."".$numNew."</a>
 		<a class='fep-button' href='".$this->actionURL."viewannouncements'>".__("Announcement", "fep")."".$numAnn."</a>";
-		if (current_user_can('manage_options')){
+		if (current_user_can('manage_options'))
 		echo "<a class='fep-button' href='".$this->actionURL."viewallmgs'>".__("Other's Message", "fep")."".$numNewadm."</a>";
-      } }
+      }
       echo $args['after_widget'];
     }
 	
@@ -84,6 +85,7 @@ if (!class_exists("clFEPm"))
     {
       global $user_ID;
       $uData = get_userdata($user_ID);
+	  $this->setPageURLs();
       echo $args['before_widget'];
       echo $args['before_title'].__("Messages", "fep").$args['after_title'];
       if (!$uData)
@@ -154,7 +156,7 @@ if (!class_exists("clFEPm"))
     function getPageID()
     {
       global $wpdb;
-      return $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%[front-end-pm]%' AND post_status = 'publish' AND post_type = 'page'");
+      return $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%[front-end-pm]%' AND post_status = 'publish' AND post_type = 'page' LIMIT 1");
     }
 
     function setPageURLs()

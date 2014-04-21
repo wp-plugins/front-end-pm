@@ -221,8 +221,11 @@ if (!class_exists("clFEPm"))
           <p><ul><li>".__("Create a new page.", "fep")."</li>
           <li>".__("Paste following code under the HTML tab of the page editor", "fep")."<code>[front-end-pm]</code></li>
           <li>".__("Publish the page", "fep")."</li>
-		  <li>".sprintf(__("For more help or report bug pleasse visit <a href=%s>Front End PM</a>", "fep"),esc_url($url))."</li>
-          </ul></p></div>";
+		  <li>".__("Or you can create a page below", "fep")."</li>
+		  <li>".sprintf(__("For more help or report bug pleasse visit <a href='%s'>Front End PM</a>", "fep"),esc_url($url))."</li>
+          </ul></p>
+		  <h2>".__("Create Page For \"Front End PM\"", "fep")."</h2>
+		  ".$this->fep_creatPage()."</div>";
 		  }
 
     function pmAdminSave()
@@ -264,6 +267,60 @@ if (!class_exists("clFEPm"))
       $this->adminOps = $pmAdminOps;
       return $pmAdminOps;
     }
+	
+	function fep_creatPage(){
+	$token = $this->getToken();
+	$form = "<p>
+      <form name='fep-create-page' action='".$this->fep_createPage_action()."' method='post'>
+      ".__("Title of \"Front End PM\" Page", "fep").":<br/>
+      <input type='text' name='fep-create-page-title' value='' /><br/>
+	  <input type='hidden' name='token' value='".$token."' /><br/>
+      <input type='submit' name='fep-create-page' value='".__("Create Page", "fep")."' />
+      </form></p>";
+
+      return $form;
+    }
+
+	function fep_createPage_action(){
+	if (isset($_POST['fep-create-page'])){
+      	$titlePre = wp_strip_all_tags($_POST['fep-create-page-title']);
+		$title = utf8_encode($titlePre);
+		
+		if ($this->getPageID() !=''){
+		echo "<div id='message' class='error'><p>" .sprintf(__("You already created page <a href='%s'>%s </a> for \"Front End PM\". Please use that page instead!", "fep"),get_permalink($this->getPageID()),get_the_title($this->getPageID()))."</p></div>";
+        return;}
+		if (!$title){
+          echo "<div id='message' class='error'><p>" .__("You must enter a valid Title!", "fep")."</p></div>";
+        return;}
+		// Check if a form has been sent
+		$postedToken = filter_input(INPUT_POST, 'token');
+	  if (empty($postedToken))
+      {
+	  echo "<div id='message' class='error'><p>" .__("Invalid Token. Please try again!", "fep")."</p></div>";
+        return;
+      }
+  		if(!$this->isTokenValid($postedToken)){
+    // Actually This is not first form submission. First Submission Pass this condition and inserted into db.
+	echo "<div id='message' class='updated'><p>" .__("Page for \"Front End PM\" successfully created!", "fep")."</p></div>";
+        return;
+		}
+		
+		$fep_page = array(
+  	'post_title'    => $title,
+  	'post_content'  => '[front-end-pm]',
+  	'post_status'   => 'publish',
+  	'post_type' => 'page'
+		);
+	$pageID = wp_insert_post( $fep_page );
+	if($pageID == 0){
+	echo "<div id='message' class='error'><p>" .__("Something wrong.Please try again to create page!", "fep")."</p></div>";
+        return;
+		} else {
+		echo "<div id='message' class='updated'><p>" .sprintf(__("Page <a href='%s'>%s </a> for \"Front End PM\" successfully created!", "fep"),get_permalink($pageID),get_the_title($pageID))."</p></div>";
+        return;}
+		
+		}
+	}
 /******************************************ADMIN SETTINGS PAGE END******************************************/
 
 /******************************************USER SETTINGS PAGE BEGIN******************************************/

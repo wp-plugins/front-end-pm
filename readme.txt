@@ -1,7 +1,7 @@
 === Front End PM ===
 Contributors: shamim51
-Tags: front end pm,front-end-pm,pm,private message,front end,frontend pm,frontend,message,email,mail
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&item_name=Front%20End%20PM&item_number=Front%20End%20PM&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 2.7
 Tested up to: 3.9
 Stable tag: trunk
@@ -39,6 +39,8 @@ To know more visit [Front End PM](http://www.banglardokan.com/blog/recent/projec
 1. Paste following code under the HTML tab of the page editor [front-end-pm]
 1. Publish the page.
 
+Or you can create page for Front End PM by one click. Go to  **Front End PM>Instruction** give a Title(required) for Front End PM page and Slug(optional) then click “Create Page”. It will automatically create a page for your Message. If you keep Slug field blank, slug of page will be automatically created based on your given title.
+
 == Frequently Asked Questions ==
 = Can i use this plugin to my language? =
 Yes. this plugin is translate ready. But If your language is not available you can make one. If you want to help us to translate this plugin to your language you are welcome.
@@ -52,6 +54,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 3. Button widgets.
 4. Text widgets.
 5. Front End Directory.
+6. Front End PM setup instruction.
 
 == Changelog ==
 = 1.1 =

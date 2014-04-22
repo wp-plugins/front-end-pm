@@ -18,6 +18,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Threaded messages
 * BBCode in messages
 * Ability to embed things into messages like YouTube, Photobucket, Flickr, Wordpress TV, more.
+* Admins can create a page for "Front End PM" by one click (see Installation for more details).
 * Admins can send a public announcement for all users to see
 * Admins can set the max amount of messages a user can keep in his/her box. This is helpful for keeping Database sizes down.
 * Admins can set how many messages to show per page in the message box.
@@ -36,10 +37,12 @@ To know more visit [Front End PM](http://www.banglardokan.com/blog/recent/projec
 1. Upload "front-end-pm" to the "/wp-content/plugins/" directory.
 1. Activate the plugin through the "Plugins" menu in WordPress.
 1. Create a new page.
-1. Paste following code under the HTML tab of the page editor [front-end-pm]
+1. Paste code [front-end-pm] under the HTML tab of the page editor.
 1. Publish the page.
 
-Or you can create page for Front End PM by one click. Go to  **Front End PM>Instruction** give a Title(required) for Front End PM page and Slug(optional) then click “Create Page”. It will automatically create a page for your Message. If you keep Slug field blank, slug of page will be automatically created based on your given title.
+Or you can create page for Front End PM by one click. Go to **Front End PM>Instruction** give a Title(required) for Front End PM page and Slug(optional) then click "Create Page". It will automatically create a page for your Message. If you keep Slug field blank, slug of page will be automatically created based on your given title.
+
+For more instruction please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/)
 
 == Frequently Asked Questions ==
 = Can i use this plugin to my language? =
@@ -50,11 +53,11 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 == Screenshots ==
 1. Admin settings page.
-2. Front End pm.
-3. Button widgets.
-4. Text widgets.
-5. Front End Directory.
-6. Front End PM setup instruction.
+2. Front End PM setup instruction.
+3. Front End pm.
+4. Button widgets.
+5. Text widgets.
+6. Front End Directory.
 
 == Changelog ==
 = 1.1 =

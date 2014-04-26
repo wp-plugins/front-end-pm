@@ -198,7 +198,6 @@ if (!class_exists("clFEPm"))
 		<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!'>
 		<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
 		</form>
-		<ul>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</ul>
           <form id='pm-admin-save-form' name='pm-admin-save-form' method='post' action=''>
           <table class='widefat'>
           <thead>

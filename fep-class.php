@@ -184,6 +184,7 @@ if (!class_exists("clFEPm"))
       if ($this->pmAdminSave())
         echo "<div id='message' class='updated fade'><p>".__("Options successfully saved", "fep")."</p></div>";
       $viewAdminOps = $this->getAdminOps(); //Get current options
+	  $url = 'http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/';
       echo 	"<div class='wrap'>
           <h2>".__("Front End PM Settings", "fep")."</h2>
 		<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top'>
@@ -197,6 +198,7 @@ if (!class_exists("clFEPm"))
 		<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!'>
 		<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
 		</form>
+		<ul>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</ul>
           <form id='pm-admin-save-form' name='pm-admin-save-form' method='post' action=''>
           <table class='widefat'>
           <thead>
@@ -211,6 +213,7 @@ if (!class_exists("clFEPm"))
           <tr><td colspan='2'><span><input class='button' type='submit' name='pm-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
           </table>
 		  </form>
+		  <ul>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</ul>
           </div>";
     }
 	
@@ -223,7 +226,7 @@ if (!class_exists("clFEPm"))
           <li>".__("Paste following code under the HTML tab of the page editor", "fep")."<code>[front-end-pm]</code></li>
           <li>".__("Publish the page.", "fep")."</li>
 		  <li>".__("Or you can create a page below.", "fep")."</li>
-		  <li>".sprintf(__("For more help or report bug pleasse visit <a href='%s'>Front End PM</a>", "fep"),esc_url($url))."</li>
+		  <li>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</li>
           </ul></p>
 		  <h2>".__("Create Page For \"Front End PM\"", "fep")."</h2>
 		  ".$this->fep_createPage()."</div>";

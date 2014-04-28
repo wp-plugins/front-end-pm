@@ -623,8 +623,7 @@ if (!class_exists("clFEPm"))
       $from = $_POST['message_from'];
       $preTo = $_POST['message_to'];
       $to = $this->convertToID($preTo);
-      $myReplaceSub = array("'", "\\");//Make sure we get ' and \ out of the message title
-      $title = str_replace($myReplaceSub, "", $this->input_filter($_POST['message_title']));
+      $title = $this->input_filter($_POST['message_title']);
       $content = $this->input_filter($_POST['message_content']);
       $parentID = $_POST['parent_id'];
       $date = $_POST['message_date'];
@@ -784,7 +783,7 @@ if (!class_exists("clFEPm"))
           $msgsOut .= "<td><a href='".get_author_posts_url( $toUser->ID )."'>" .$toUser->display_name. "</a></td>";}
 		  else {
 		  $msgsOut .= "<td>" .$toUser->display_name. "</td>";}
-		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessage&id=".$msg->id."'>".$msg->message_title."</a><br/><small>".$read."</small></td>";
+		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessage&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>".$read."</small></td>";
 		  $msgsOut .= "<td>" .$uLast->display_name. "<br/><small>".$this->formatDate($msg->last_date)."</small></td>";
           $msgsOut .= "<td><a href='".$this->actionURL."deletemessage&id=".$msg->id."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>
           </tr>";
@@ -851,7 +850,7 @@ if (!class_exists("clFEPm"))
 		  $msgsOut .= "<tr class='trodd".$a."'>";
 		  $msgsOut .= "<td><a href='".get_author_posts_url( $uSend->ID )."'>" .$uSend->display_name. "</a><br/><small>".$this->formatDate($msg->date)."</small></td>";
           $msgsOut .= "<td><a href='".get_author_posts_url( $toUser->ID )."'>" .$toUser->display_name. "</a></td>";
-		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessageadmin&id=".$msg->id."'>".$msg->message_title."</a><br/><small>".$read."</small></td>";
+		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessageadmin&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>".$read."</small></td>";
 		  $msgsOut .= "<td>" .$uLast->display_name. "<br/><small>".$this->formatDate($msg->last_date)."</small></td>";
           $msgsOut .= "<td><a href='".$this->actionURL."deletemessageadmin&id=".$msg->id."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>
           </tr>";

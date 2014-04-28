@@ -208,6 +208,8 @@ if (!class_exists("clFEPm"))
 		  <tr><td>".__("Maximum user per page in Directory", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='user_page' value='".$viewAdminOps['user_page']."' /><br/> ".__("Default","fep").": 50</td></tr>
 		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><input type='text' size='50' name='have_permission' value='".$viewAdminOps['have_permission']."' /></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' ".checked($viewAdminOps['hide_directory'], 'on', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing receipent name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable send new message for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
           <tr><td colspan='2'><input type='checkbox' name='hide_branding' ".checked($viewAdminOps['hide_branding'], 'on', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
           <tr><td colspan='2'><span><input class='button' type='submit' name='pm-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
           </table>
@@ -240,6 +242,8 @@ if (!class_exists("clFEPm"))
 							  'user_page' => $_POST['user_page'],
                               'hide_branding' => $_POST['hide_branding'],
 							  'hide_directory' => $_POST['hide_directory'],
+							  'hide_autosuggest' => $_POST['hide_autosuggest'],
+							  'disable_new' => $_POST['disable_new'],
 							  'have_permission' => $_POST['have_permission']
         );
         update_option($this->adminOpsName, $saveAdminOps);
@@ -253,8 +257,10 @@ if (!class_exists("clFEPm"))
       $pmAdminOps = array('num_messages' => 50,
                           'messages_page' => 15,
 						  'user_page' => 50,
-                          'hide_branding' => false,
 						  'hide_directory' => false,
+						  'hide_autosuggest' => false,
+						  'disable_new' => false,
+                          'hide_branding' => false,
 						  'have_permission' => ''
       );
 
@@ -392,6 +398,8 @@ if (!class_exists("clFEPm"))
     function dispNewMsg()
     {
       global $user_ID;
+	  $token = $this->getToken();
+      $adminOps = $this->getAdminOps();
 	  if (isset($_GET['to'])){
       $to = $_GET['to'];
 	  }else{ $to = '';}
@@ -400,8 +408,11 @@ if (!class_exists("clFEPm"))
         $this->error = __("You cannot send messages because you are blocked by administrator!", "fep");
         return;
       }
-	  $token = $this->getToken();
-      $adminOps = $this->getAdminOps();
+	  if ($this->adminOps['disable_new'] == 'on' && !current_user_can('manage_options'))
+		{
+        $this->error = __("Send new message is disabled for users!", "fep");
+        return;
+      }
       if (!$this->isBoxFull($user_ID, $adminOps['num_messages'], '1'))
       {
        if(isset($_REQUEST['message_to'])){
@@ -424,10 +435,14 @@ if (!class_exists("clFEPm"))
 	}
         $newMsg = "<p><strong>".__("Create New Message", "fep").":</strong></p>";
         $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post'>".
-        __("To", "fep")."<font color='red'>*</font>:<br/>".
-        "<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_to' placeholder='Username of receipent' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>
-        <div id='results'></div>".
-        __("Subject", "fep")."<font color='red'>*</font>:<br/>
+        __("To", "fep")."<font color='red'>*</font>:<br/>";
+		if($this->adminOps['hide_autosuggest'] != 'on' || current_user_can('manage_options')) { 
+        $newMsg .="<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_to' placeholder='Username of receipent' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>
+        <div id='results'></div>";
+		} else {
+		$newMsg .="<input type='text' name='message_to' placeholder='Username of receipent' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
+		
+        $newMsg .= __("Subject", "fep")."<font color='red'>*</font>:<br/>
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='".$message_title."' /><br/>".
         __("Message", "fep")."<font color='red'>*</font>:<br/>".$this->get_form_buttons()."<br/>
         <textarea name='message_content' placeholder='Message Content'>".$message_content."</textarea>
@@ -672,7 +687,6 @@ if (!class_exists("clFEPm"))
       $this->success = __("Your message was successfully sent!", "fep");
 
       $this->sendEmail($to, $from);
-	  $this->sendEmail_sender($to, $from);
 
       return;
     }
@@ -705,26 +719,6 @@ if (!class_exists("clFEPm"))
           "Content-Type: text/plain; charset=\"" . get_option('blog_charset') . "\"\r\n";
         $mailMessage = __("You have received a new message from", "fep")." ".$sendfrom.", ".__("follow this link to view it", "fep").": ".$this->pageURL;
         $mUser = get_userdata($to);
-        $mailTo = $mUser->user_email;
-        wp_mail($mailTo, __("New Message", "fep"), $mailMessage);
-      }
-    }
-	
-	function sendEmail_sender($to, $from)
-    {
-      $toOptions = $this->getUserOps($from);
-      $notify = $toOptions['allow_emails'];
-      if ($notify == 'true')
-      {
-        $sendername = get_bloginfo("name");
-        $sendermail = get_bloginfo("admin_email");
-        $uData = get_userdata($to);
-        $sendto = $uData->user_login;
-        $headers = "MIME-Version: 1.0\r\n" .
-          "From: ".$sendername." "."<".$sendermail.">\n" . 
-          "Content-Type: text/plain; charset=\"" . get_option('blog_charset') . "\"\r\n";
-        $mailMessage = __("You have send a new message to", "fep")." ".$sendto.", ".__("follow this link to view it", "fep").": ".$this->pageURL;
-        $mUser = get_userdata($from);
         $mailTo = $mUser->user_email;
         wp_mail($mailTo, __("New Message", "fep"), $mailMessage);
       }

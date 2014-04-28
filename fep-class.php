@@ -519,7 +519,7 @@ if (!class_exists("clFEPm"))
       <form name='message' action='".$this->actionURL."checkmessage' method='post'>".
       $this->get_form_buttons()."<br/>
       <textarea name='message_content'></textarea>
-      <input type='hidden' name='message_to' value='".$this->convertToUser($to)."' />
+      <input type='hidden' name='message_to' value='".get_userdata($to)->user_login."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
       <input type='hidden' name='message_from' value='".$user_ID."' />
       <input type='hidden' name='message_date' value='".current_time('mysql')."' />
@@ -589,7 +589,7 @@ if (!class_exists("clFEPm"))
       <form name='message' action='".$this->actionURL."checkmessage' method='post'>".
       $this->get_form_buttons()."<br/>
       <textarea name='message_content'></textarea>
-      <input type='hidden' name='message_to' value='".$this->convertToUser($to)."' />
+      <input type='hidden' name='message_to' value='".get_userdata($to)->user_login."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
       <input type='hidden' name='message_from' value='".$user_ID."' />
       <input type='hidden' name='message_date' value='".current_time('mysql')."' />
@@ -610,8 +610,8 @@ if (!class_exists("clFEPm"))
 
     function convertToUser($to)
     {
-      global $wpdb;
-      $result = $wpdb->get_var($wpdb->prepare("SELECT user_login FROM {$wpdb->users} WHERE ID = %d OR user_login = %s", $to, $to));
+      $user = get_user_by( 'login' , $to );
+	  $result = $user->user_login;
       return $result;
     }
 /******************************************READ MESSAGE PAGE END******************************************/
@@ -726,8 +726,9 @@ if (!class_exists("clFEPm"))
 
     function convertToID($preTo)
     {
-      global $wpdb, $user_ID;
-      $result = $wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->users} WHERE user_login = %s", $preTo));
+      global $user_ID;
+		$user = get_user_by( 'login' , $preTo );
+		$result = $user->ID;
       if ($result != $user_ID && $result)
         return $result;
       else

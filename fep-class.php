@@ -208,7 +208,7 @@ if (!class_exists("clFEPm"))
 		  <tr><td>".__("Maximum user per page in Directory", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='user_page' value='".$viewAdminOps['user_page']."' /><br/> ".__("Default","fep").": 50</td></tr>
 		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><input type='text' size='50' name='have_permission' value='".$viewAdminOps['have_permission']."' /></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' ".checked($viewAdminOps['hide_directory'], 'on', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing receipent name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable send new message for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
           <tr><td colspan='2'><input type='checkbox' name='hide_branding' ".checked($viewAdminOps['hide_branding'], 'on', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
           <tr><td colspan='2'><span><input class='button' type='submit' name='pm-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
@@ -437,10 +437,10 @@ if (!class_exists("clFEPm"))
         $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post'>".
         __("To", "fep")."<font color='red'>*</font>:<br/>";
 		if($this->adminOps['hide_autosuggest'] != 'on' || current_user_can('manage_options')) { 
-        $newMsg .="<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_to' placeholder='Username of receipent' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>
+        $newMsg .="<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>
         <div id='results'></div>";
 		} else {
-		$newMsg .="<input type='text' name='message_to' placeholder='Username of receipent' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
+		$newMsg .="<input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
 		
         $newMsg .= __("Subject", "fep")."<font color='red'>*</font>:<br/>
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='".$message_title."' /><br/>".

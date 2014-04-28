@@ -1394,15 +1394,14 @@ if (!class_exists("clFEPm"))
     function output_filter($string)
     {
       $parser = new fepBBCParser();
-      return stripslashes($parser->bbc2html($string));
+	  $html = stripslashes($parser->bbc2html($string));
+	  $htmlncr = ent2ncr($html);
+      return stripslashes ($htmlncr);
     }
 
     function input_filter($string)
     {
-      global $wpdb;
-      $Find = array("<", "%", "$"); //Fixes some serious issues when entering these characters, also allows code to be posted
-      $Replace = array("&#60;", "&#37;", "&#36;");
-      $newStr = str_replace($Find, $Replace, $string);
+      $newStr = esc_attr($string);
       return strip_tags(esc_sql($newStr));
     }
 

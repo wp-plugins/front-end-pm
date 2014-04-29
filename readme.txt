@@ -68,7 +68,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 == Changelog ==
 
-=1.2=
+= 1.2 =
 
 * Using display name instead of user_login to send message (partially).
 * Bug fixes in bbcode and code in content when send message.
@@ -83,7 +83,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 == Upgrade Notice ==
 
-=1.2=
+= 1.2 =
 
 * Using display name instead of user_login to send message (partially).
 * Bug fixes in bbcode and code in content when send message.

@@ -25,10 +25,16 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Admins can set how many user to show per page in front end directory.
 * Admins can set Directory will be shown to all or not.
 * Admins can block any user to send private message.
-* Admin can see all other's private message.
+* Admins can see all other's private message.
+* Admins can block all users to send new message but they can send reply of their message.
+* Admins can hide autosuggestion for users.
 * There are two types of sidebar widget.
 * Users can select whether or not they want to receive messages
 * Users can select whether or not they want to be notified by email when they receive a new message.
+
+**Translation**
+* German translation thanks to palatino.
+* Simplified Chinese thanks to Changmeng Hu.
 
 
 To know more visit [Front End PM](http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/)
@@ -37,7 +43,7 @@ To know more visit [Front End PM](http://www.banglardokan.com/blog/recent/projec
 1. Upload "front-end-pm" to the "/wp-content/plugins/" directory.
 1. Activate the plugin through the "Plugins" menu in WordPress.
 1. Create a new page.
-1. Paste code [front-end-pm] under the HTML tab of the page editor.
+1. Paste code `[front-end-pm]` under the HTML tab of the page editor.
 1. Publish the page.
 
 Or you can create page for Front End PM by one click. Go to **Front End PM>Instruction** give a Title(required) for Front End PM page and Slug(optional) then click "Create Page". It will automatically create a page for your Message. If you keep Slug field blank, slug of page will be automatically created based on your given title.
@@ -60,9 +66,23 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 6. Front End Directory.
 
 == Changelog ==
+=1.2=
+* Using display name instead of user_login to send message (partially).
+* Bug fixes in bbcode and code in content when send message.
+* Security fixes in autosuggestion.
+* New options are added in admin settings.
+* No more sending email to sender.
+* Javascript fixes
 = 1.1 =
 * Initial release.
 
 == Upgrade Notice ==
+=1.2=
+* Using display name instead of user_login to send message (partially).
+* Bug fixes in bbcode and code in content when send message.
+* Security fixes in autosuggestion.
+* New options are added in admin settings.
+* No more sending email to sender.
+* Javascript fixes
 = 1.1 =
 * Initial release.

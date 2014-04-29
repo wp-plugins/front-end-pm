@@ -1,8 +1,9 @@
 <?php
 $SQL_FROM = $wpdb->users;
-$SQL_WHERE = 'user_login';
+$SQL_WHERE = 'display_name';
 $searchq = stripslashes($_GET['q']);
-$getRecord_sql = "SELECT * FROM {$SQL_FROM} WHERE {$SQL_WHERE} LIKE '%{$searchq}%' LIMIT 5";
+$search = '%'.$searchq.'%';
+$getRecord_sql = $wpdb->prepare("SELECT ID,user_login,display_name FROM {$SQL_FROM} WHERE {$SQL_WHERE} LIKE %s LIMIT 5",$search);
 $rows = $wpdb->get_results($getRecord_sql);
 if(strlen($searchq)>0)
 {
@@ -14,7 +15,9 @@ if(strlen($searchq)>0)
 			if($row->ID != $user_ID) //Don't let users message themselves
 			{
 				
-				echo "<li><a href='#' onClick='fillText(". $row->user_login.");return false;'>". $row->user_login."</a></li>";
+				?>
+				<li><a href="#" onClick="fepfillText('<?php echo $row->user_login; ?>','<?php echo $row->display_name; ?>');return false;"><?php echo $row->display_name; ?></a></li>
+				<?php
 			
 			}
 		}

@@ -51,7 +51,7 @@ function autosuggest(link) {
 	q = document.getElementById('search-q').value;
 	// Set the random number to add to URL request
 	nocache = Math.random();
-	http.open('get', link+'newmessage&pmjsscript=1&q='+q+'&nocache = '+nocache);
+	http.open('get', link+'newmessage&fepjscript=1&q='+q+'&nocache = '+nocache);
 	http.onreadystatechange = autosuggestReply;
 	http.send(null);
 }
@@ -82,8 +82,20 @@ function autosuggestReply() {
 	}
 }
 
-function fillText(v) {
+function fepfillText(vv,v) {
+	
+	fillTextq(v);
+	fillTextqq(vv)
+}
+	
+function fillTextq(v) {
 	e = document.getElementById('search-q');
+	e.value=v;
+	document.getElementById('results').style.display="none";
+}
+
+function fillTextqq(v) {
+	e = document.getElementById('search-qq');
 	e.value=v;
 	document.getElementById('results').style.display="none";
 }

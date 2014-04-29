@@ -127,8 +127,8 @@ if (!class_exists("clFEPm"))
 
     function jsInit()
     {
-	if (isset($_GET['pmjsscript']))
-      if($_GET['pmjsscript'] == '1')
+	if (isset($_GET['fepjscript']))
+      if($_GET['fepjscript'] == '1')
       {
         global $wpdb, $user_ID;
         require_once('js/search.php');
@@ -421,6 +421,12 @@ if (!class_exists("clFEPm"))
 	else{
 		$message_to = '';
 	}
+	if(isset($_REQUEST['message_top'])){
+		$message_top = $_REQUEST['message_top'];
+	}
+	else{
+		$message_top = '';
+	}
 	  if(isset($_REQUEST['message_title'])){
 		$message_title = $_REQUEST['message_title'];
 	}
@@ -435,9 +441,11 @@ if (!class_exists("clFEPm"))
 	}
         $newMsg = "<p><strong>".__("Create New Message", "fep").":</strong></p>";
         $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post'>".
-        __("To", "fep")."<font color='red'>*</font>:<br/>";
+        __("To", "fep")."<font color='red'>*</font>: ";
 		if($this->adminOps['hide_autosuggest'] != 'on' || current_user_can('manage_options')) { 
-        $newMsg .="<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>
+		$newMsg .="<noscript>Username of recipient</noscript><br/>";
+        $newMsg .="<input type='hidden' id='search-qq' name='message_to' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' />
+		<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='".$this->convertToDisplay($to)."".$message_top."' /><br/>
         <div id='results'></div>";
 		} else {
 		$newMsg .="<input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
@@ -614,6 +622,12 @@ if (!class_exists("clFEPm"))
 	  $result = $user->user_login;
       return $result;
     }
+	function convertToDisplay($to)
+    {
+	$user = get_user_by( 'login' , $to );
+	$result = $user->display_name;
+      return $result;
+    }
 /******************************************READ MESSAGE PAGE END******************************************/
 
 /******************************************CHECK MESSAGE PAGE BEGIN******************************************/
@@ -622,6 +636,8 @@ if (!class_exists("clFEPm"))
       global $wpdb, $user_ID;
       $from = $_POST['message_from'];
       $preTo = $_POST['message_to'];
+	  if ($preTo =="")
+	  $preTo = $_POST['message_top'];
       $to = $this->convertToID($preTo);
       $title = $this->input_filter($_POST['message_title']);
       $content = $this->input_filter($_POST['message_content']);
@@ -1117,7 +1133,7 @@ if (!class_exists("clFEPm"))
 
       $header = "<div id='pm-wrapper'>";
       $header .= "<div id='pm-header'>";
-      $header .= get_avatar($user_ID, 55)."<p><strong>".__("Welcome", "fep").": ".$user_login."</strong><br/>";
+      $header .= get_avatar($user_ID, 55)."<p><strong>".__("Welcome", "fep").": ".$this->convertToDisplay($user_login)."</strong><br/>";
       $header .= __("You have", "fep")." (<font color='red'>".$numNew."</font>) ".__("new messages", "fep").
       " ".__("and", "fep")." (<font color='red'>".$numAnn."</font>) ".__("announcement(s)", "fep")."<br/>";
       if ($msgBoxTotal == __("Unlimited", "fep") || $msgBoxSize < $msgBoxTotal)
@@ -1130,7 +1146,6 @@ if (!class_exists("clFEPm"))
 
     function dispMenu()
     {
-	global $user_ID, $user_login;
 
       $numNew = $this->getNewMsgs_btn();
 	  $numNewadm = $this->getNewMsgs_admin();
@@ -1309,9 +1324,10 @@ if (!class_exists("clFEPm"))
  * @return string
  */
  	function session(){
- 	if (!session_start())
- 	session_start();
-	 }
+ 	if(!isset($_SESSION)) {
+            session_start();
+        } 
+		}
  
 	function getToken(){
   		$token = sha1(mt_rand());

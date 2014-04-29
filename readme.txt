@@ -33,6 +33,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Users can select whether or not they want to be notified by email when they receive a new message.
 
 **Translation**
+
 * German translation thanks to palatino.
 * Simplified Chinese thanks to Changmeng Hu.
 
@@ -66,23 +67,31 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 6. Front End Directory.
 
 == Changelog ==
+
 =1.2=
+
 * Using display name instead of user_login to send message (partially).
 * Bug fixes in bbcode and code in content when send message.
 * Security fixes in autosuggestion.
 * New options are added in admin settings.
 * No more sending email to sender.
 * Javascript fixes
+
 = 1.1 =
+
 * Initial release.
 
 == Upgrade Notice ==
+
 =1.2=
+
 * Using display name instead of user_login to send message (partially).
 * Bug fixes in bbcode and code in content when send message.
 * Security fixes in autosuggestion.
 * New options are added in admin settings.
 * No more sending email to sender.
 * Javascript fixes
+
 = 1.1 =
+
 * Initial release.

@@ -167,7 +167,7 @@ if (!class_exists("clFEPm"))
       else
         $delim = "&";
       $this->pageURL = get_permalink($this->getPageID());
-      $this->actionURL = $this->pageURL.$delim."pmaction=";
+      $this->actionURL = $this->pageURL.$delim."fepaction=";
     }
 /******************************************SETUP END******************************************/
 
@@ -1251,8 +1251,8 @@ if (!class_exists("clFEPm"))
         $out .= $this->dispMenu();
 
         //Start the guts of the display
-		if (isset($_GET['pmaction'])){
-		$switch = $_GET['pmaction'];
+		if (isset($_GET['fepaction'])){
+		$switch = $_GET['fepaction'];
 		}else{ $switch = '';}
         switch ($switch)
         {

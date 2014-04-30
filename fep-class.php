@@ -213,10 +213,10 @@ if (!class_exists("clFEPm"))
 		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable \"send new message\" for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
           <tr><td colspan='2'><input type='checkbox' name='hide_branding' ".checked($viewAdminOps['hide_branding'], 'on', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
-          <tr><td colspan='2'><span><input class='button' type='submit' name='fep-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
+          <tr><td colspan='2'><span><input class='button-primary' type='submit' name='fep-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
           </table>
 		  </form>
-		  <ul>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</ul>
+		  <ul>".sprintf(__("For more info or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</ul>
           </div>";
     }
 	
@@ -229,7 +229,7 @@ if (!class_exists("clFEPm"))
           <li>".__("Paste following code under the HTML tab of the page editor", "fep")."<code>[front-end-pm]</code></li>
           <li>".__("Publish the page.", "fep")."</li>
 		  <li>".__("Or you can create a page below.", "fep")."</li>
-		  <li>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</li>
+		  <li>".sprintf(__("For more info or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</li>
           </ul></p>
 		  <h2>".__("Create Page For \"Front End PM\"", "fep")."</h2>
 		  ".$this->fep_createPage()."</div>";
@@ -296,7 +296,7 @@ if (!class_exists("clFEPm"))
 	  <strong>".__("Slug", "fep")."</strong>: <em>".__("If blank, slug will be automatically created based on Title", "fep")."</em><br/>
       <input type='text' name='fep-create-page-slug' value='' /><br/>
 	  <input type='hidden' name='token' value='".$token."' /><br/>
-      <input type='submit' name='fep-create-page' value='".__("Create Page", "fep")."' />
+      <input class='button-primary' type='submit' name='fep-create-page' value='".__("Create Page", "fep")."' />
       </form></p>";
 
       return $form;

@@ -107,9 +107,9 @@ if (!class_exists("clFEPm"))
     }
 
     //Setup some variables
-    var $adminOpsName = "clFEPm_options";
+    var $adminOpsName = "FEP_options";
     var $adminOps = array();
-    var $userOpsName = "clFEPm_uOptions";
+    var $userOpsName = "FEP_uOptions";
     var $userOps = array();
 
     var $error = "";
@@ -198,7 +198,7 @@ if (!class_exists("clFEPm"))
 		<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!'>
 		<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
 		</form>
-          <form id='pm-admin-save-form' name='pm-admin-save-form' method='post' action=''>
+          <form id='fep-admin-save-form' name='fep-admin-save-form' method='post' action=''>
           <table class='widefat'>
           <thead>
           <tr><th width='30%'>".__("Setting", "fep")."</th><th width='70%'>".__("Value", "fep")."</th></tr>
@@ -213,7 +213,7 @@ if (!class_exists("clFEPm"))
 		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable \"send new message\" for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
           <tr><td colspan='2'><input type='checkbox' name='hide_branding' ".checked($viewAdminOps['hide_branding'], 'on', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
-          <tr><td colspan='2'><span><input class='button' type='submit' name='pm-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
+          <tr><td colspan='2'><span><input class='button' type='submit' name='fep-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
           </table>
 		  </form>
 		  <ul>".sprintf(__("For more help or report bug pleasse visit <a href='%s' target='_blank'>Front End PM</a>", "fep"),esc_url($url))."</ul>
@@ -237,11 +237,12 @@ if (!class_exists("clFEPm"))
 
     function pmAdminSave()
     {
-      if (isset($_POST['pm-admin-save']))
+      $viewAdminOps = $this->getAdminOps();
+      if (isset($_POST['fep-admin-save']))
       {
 	  if (is_email($_POST['ann_to'])) {
 	  $ann_to = $_POST['ann_to'];
-	  } else { $ann_to = get_bloginfo("admin_email");}
+	  } else { $ann_to = $viewAdminOps['ann_to'];}
         $saveAdminOps = array('num_messages' 	=> $_POST['num_messages'],
                               'messages_page' => $_POST['messages_page'],
 							  'user_page' => $_POST['user_page'],
@@ -354,7 +355,7 @@ if (!class_exists("clFEPm"))
         $this->success = __("Your settings have been saved!", "fep");
       $viewUserOps = $this->getUserOps($user_ID); //Get current options
       $prefs = "<p><strong>".__("Set your preferences below", "fep").":</strong></p>
-      <form id='pm-user-save-form' name='pm-user-save-form' method='post' action=''>
+      <form id='fep-user-save-form' name='fep-user-save-form' method='post' action=''>
       <input type='checkbox' name='allow_messages' value='true'";
       if($viewUserOps['allow_messages'] == 'true')
         $prefs .= "checked='checked'";
@@ -370,7 +371,7 @@ if (!class_exists("clFEPm"))
         $prefs .= "checked='checked'";
       $prefs .= "/> <i>".__("Email me when New announcement is published?", "fep")."</i><br/>
 	  
-      <input class='button' type='submit' name='pm-user-save' value='".__("Save Options", "fep")."' />
+      <input class='button' type='submit' name='fep-user-save' value='".__("Save Options", "fep")."' />
       </form>";
       return $prefs;
     }
@@ -378,7 +379,7 @@ if (!class_exists("clFEPm"))
     function pmUserSave()
     {
       global $user_ID;
-      if (isset($_POST['pm-user-save']))
+      if (isset($_POST['fep-user-save']))
       {
         $saveUserOps = array(	'allow_emails' 	=> $_POST['allow_emails'],
                     'allow_messages' => $_POST['allow_messages'],
@@ -651,9 +652,10 @@ if (!class_exists("clFEPm"))
     {
       global $wpdb, $user_ID;
       $from = $_POST['message_from'];
-      $preTo = $_POST['message_to'];
-	  if ($preTo =="")
-	  $preTo = $_POST['message_top'];
+      if ($_POST['message_to']) {
+	  $preTo = $_POST['message_to'];
+	  } else {
+	  $preTo = $_POST['message_top']; }
       $to = $this->convertToID($preTo);
       $title = $this->input_filter($_POST['message_title']);
       $content = $this->input_filter($_POST['message_content']);

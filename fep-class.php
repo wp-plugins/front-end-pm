@@ -207,9 +207,11 @@ if (!class_exists("clFEPm"))
           <tr><td>".__("Messages to show per page", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='messages_page' value='".$viewAdminOps['messages_page']."' /><br/> ".__("Default","fep").": 15</td></tr>
 		  <tr><td>".__("Maximum user per page in Directory", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='user_page' value='".$viewAdminOps['user_page']."' /><br/> ".__("Default","fep").": 50</td></tr>
 		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><input type='text' size='50' name='have_permission' value='".$viewAdminOps['have_permission']."' /></td></tr>
+		  <tr><td>".__("Valid email address for \"to\" field when send announcement email", "fep")."<br /><small>".__("All users email will be send in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='50' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='notify_ann' ".checked($viewAdminOps['notify_ann'], 'on', false)." /> ".__("Send email to all users when a new announcement is published?", "fep")."</td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' ".checked($viewAdminOps['hide_directory'], 'on', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable send new message for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable \"send new message\" for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
           <tr><td colspan='2'><input type='checkbox' name='hide_branding' ".checked($viewAdminOps['hide_branding'], 'on', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
           <tr><td colspan='2'><span><input class='button' type='submit' name='pm-admin-save' value='".__("Save Options", "fep")."' /></span></td></tr>
           </table>
@@ -237,6 +239,9 @@ if (!class_exists("clFEPm"))
     {
       if (isset($_POST['pm-admin-save']))
       {
+	  if (is_email($_POST['ann_to'])) {
+	  $ann_to = $_POST['ann_to'];
+	  } else { $ann_to = get_bloginfo("admin_email");}
         $saveAdminOps = array('num_messages' 	=> $_POST['num_messages'],
                               'messages_page' => $_POST['messages_page'],
 							  'user_page' => $_POST['user_page'],
@@ -244,6 +249,8 @@ if (!class_exists("clFEPm"))
 							  'hide_directory' => $_POST['hide_directory'],
 							  'hide_autosuggest' => $_POST['hide_autosuggest'],
 							  'disable_new' => $_POST['disable_new'],
+							  'ann_to' => $ann_to,
+							  'notify_ann' => $_POST['notify_ann'],
 							  'have_permission' => $_POST['have_permission']
         );
         update_option($this->adminOpsName, $saveAdminOps);
@@ -258,6 +265,8 @@ if (!class_exists("clFEPm"))
                           'messages_page' => 15,
 						  'user_page' => 50,
 						  'hide_directory' => false,
+						  'ann_to' => get_bloginfo("admin_email"),
+						  'notify_ann' => false,
 						  'hide_autosuggest' => false,
 						  'disable_new' => false,
                           'hide_branding' => false,
@@ -356,6 +365,11 @@ if (!class_exists("clFEPm"))
         $prefs .= "checked='checked'";
       $prefs .= "/> <i>".__("Email me when I get new messages?", "fep")."</i><br/>
 	  
+	  <input type='checkbox' name='allow_ann' value='true'";
+      if($viewUserOps['allow_ann'] == 'true')
+        $prefs .= "checked='checked'";
+      $prefs .= "/> <i>".__("Email me when New announcement is published?", "fep")."</i><br/>
+	  
       <input class='button' type='submit' name='pm-user-save' value='".__("Save Options", "fep")."' />
       </form>";
       return $prefs;
@@ -367,7 +381,8 @@ if (!class_exists("clFEPm"))
       if (isset($_POST['pm-user-save']))
       {
         $saveUserOps = array(	'allow_emails' 	=> $_POST['allow_emails'],
-                    'allow_messages' => $_POST['allow_messages']
+                    'allow_messages' => $_POST['allow_messages'],
+					'allow_ann' => $_POST['allow_ann']
         );
         update_user_meta($user_ID, $this->userOpsName, $saveUserOps);
         return true;
@@ -378,7 +393,8 @@ if (!class_exists("clFEPm"))
     function getUserOps($ID)
     {
       $pmUserOps = array(	'allow_emails' 		=> 'true',
-                'allow_messages' 	=> 'true'
+                'allow_messages' 	=> 'true',
+				'allow_ann' 	=> 'true'
       );
 
       //Get old values if they exist
@@ -960,11 +976,7 @@ if (!class_exists("clFEPm"))
 /******************************************DELETE PAGE END******************************************/
 
 /******************************************VIEW ANNOUNCEMENTS BEGIN******************************************/
-    /*
-    Announcement Feature TODO list
-    # Mass emails when announcement is created
-    # Clean-up style
-    */
+
     function dispAnnouncement()
     {
       global $wpdb, $user_ID;
@@ -1067,6 +1079,7 @@ if (!class_exists("clFEPm"))
     function addAnnouncement()
     {
       global $wpdb;
+	  $adminOps = $this->getAdminOps();
       $title = $this->input_filter($_POST['message_title']);
       $contents = $this->input_filter($_POST['message_content']);
       $date = $_POST['message_date'];
@@ -1099,8 +1112,14 @@ if (!class_exists("clFEPm"))
       {
         $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (message_title, message_contents, date, message_read) VALUES ( %s, %s, %s, %d )", $title, $contents, $date, $read));
       }
+	  if ($adminOps['notify_ann'] == 'on') {
+	  $this->notify_users($title);
+	  $this->success = __("The announcement was successfully added and sent email to all users!", "fep");
+        return;
+	  } else {
       $this->success = __("The announcement was successfully added!", "fep");
         return;
+		}
     }
 
     function deleteAnnouncement()
@@ -1114,6 +1133,41 @@ if (!class_exists("clFEPm"))
         return true;
       }
       return false;
+    }
+	
+	//Mass emails when announcement is created
+		function notify_users($title) {
+		
+		$domain_name =  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']);
+		$usersarray = get_users("orderby=ID");
+		$adminOps = $this->getAdminOps();
+		$to = $adminOps['ann_to'];
+		$from = noreply.'@'.$domain_name;
+		
+		$bcc = array();
+		foreach  ($usersarray as $user) {
+		$toOptions = $this->getUserOps($user->ID);
+		$notify = $toOptions['allow_ann'];
+		if (in_array($notify == 'true',$usersarray)){
+		$bcc[] = $user->user_email;
+		}
+		}
+		
+	$chunked_bcc = array_chunk($bcc, 25);
+	
+	$subject = "" . get_bloginfo("name").": New Announcement";
+	$message = "A new Announcement is Published in \r\n";
+	$message .= get_bloginfo("name")."\r\n";
+	$message .= "Title: ".$title. "\r\n";
+	$message .= "Please Click the following link to view full Announcement. \r\n";
+	$message .= $this->actionURL."viewannouncements \r\n";
+	foreach($chunked_bcc as $bcc_chunk){
+        $headers = array();
+		$headers['From'] = 'From: '.get_bloginfo("name").'<'.$from.'> \r\n';
+        $headers['Bcc'] = 'Bcc: '.implode(', ', $bcc_chunk);
+        wp_mail($to , $subject, $message, $headers);
+		}
+		return;
     }
 /******************************************VIEW ANNOUNCEMENTS END******************************************/
 

@@ -23,6 +23,8 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Admins can set the max amount of messages a user can keep in his/her box. This is helpful for keeping Database sizes down.
 * Admins can set how many messages to show per page in the message box.
 * Admins can set how many user to show per page in front end directory.
+* Admins can set will email be send to all users when a new announcement is published or not.
+* Admins can set to field of announcement email.
 * Admins can set Directory will be shown to all or not.
 * Admins can block any user to send private message.
 * Admins can see all other's private message.
@@ -31,6 +33,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * There are two types of sidebar widget.
 * Users can select whether or not they want to receive messages
 * Users can select whether or not they want to be notified by email when they receive a new message.
+* Users can select whether or not they want to be notified by email when a new announcement is published.
 
 **Translation**
 
@@ -71,11 +74,12 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 = 1.2 =
 
 * Using display name instead of user_login to send message (partially).
+* Send email to all users when a new announcement is published (there are options to control).
 * Bug fixes in bbcode and code in content when send message.
 * Security fixes in autosuggestion.
 * New options are added in admin settings.
 * No more sending email to sender.
-* Javascript fixes
+* Javascript fixes.
 
 = 1.1 =
 
@@ -86,11 +90,12 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 = 1.2 =
 
 * Using display name instead of user_login to send message (partially).
+* Send email to all users when a new announcement is published (there are options to control).
 * Bug fixes in bbcode and code in content when send message.
 * Security fixes in autosuggestion.
 * New options are added in admin settings.
 * No more sending email to sender.
-* Javascript fixes
+* Javascript fixes.
 
 = 1.1 =
 

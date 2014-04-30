@@ -207,7 +207,7 @@ if (!class_exists("clFEPm"))
           <tr><td>".__("Messages to show per page", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='messages_page' value='".$viewAdminOps['messages_page']."' /><br/> ".__("Default","fep").": 15</td></tr>
 		  <tr><td>".__("Maximum user per page in Directory", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='user_page' value='".$viewAdminOps['user_page']."' /><br/> ".__("Default","fep").": 50</td></tr>
 		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><input type='text' size='50' name='have_permission' value='".$viewAdminOps['have_permission']."' /></td></tr>
-		  <tr><td>".__("Valid email address for \"to\" field when send announcement email", "fep")."<br /><small>".__("All users email will be send in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='50' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
+		  <tr><td>".__("Valid email address for \"to\" field of announcement email", "fep")."<br /><small>".__("All users email will be in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='50' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='notify_ann' ".checked($viewAdminOps['notify_ann'], 'on', false)." /> ".__("Send email to all users when a new announcement is published?", "fep")."</td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' ".checked($viewAdminOps['hide_directory'], 'on', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
@@ -1144,7 +1144,7 @@ if (!class_exists("clFEPm"))
 		$usersarray = get_users("orderby=ID");
 		$adminOps = $this->getAdminOps();
 		$to = $adminOps['ann_to'];
-		$from = noreply.'@'.$domain_name;
+		$from = 'noreply@'.$domain_name;
 		
 		$bcc = array();
 		foreach  ($usersarray as $user) {
@@ -1165,7 +1165,7 @@ if (!class_exists("clFEPm"))
 	$message .= $this->actionURL."viewannouncements \r\n";
 	foreach($chunked_bcc as $bcc_chunk){
         $headers = array();
-		$headers['From'] = 'From: '.get_bloginfo("name").'<'.$from.'> \r\n';
+		$headers['From'] = 'From: '.get_bloginfo("name").'<'.$from.'>';
         $headers['Bcc'] = 'Bcc: '.implode(', ', $bcc_chunk);
         wp_mail($to , $subject, $message, $headers);
 		}

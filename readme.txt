@@ -31,7 +31,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Admins can see all other's private message.
 * Admins can block all users to send new message but they can send reply of their messages.
 * Admins can hide autosuggestion for users.
-* There are two types of sidebar widget.
+* There are two types of sidebar widget.(button widget and text widget).
 * Users can select whether or not they want to receive messages
 * Users can select whether or not they want to be notified by email when they receive a new message.
 * Users can select whether or not they want to be notified by email when a new announcement is published.

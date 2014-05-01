@@ -1,5 +1,5 @@
 /*The main wrapper*/
-#pm-wrapper
+#fep-wrapper
 {
 	margin: 5px;
 	position: relative;
@@ -7,20 +7,20 @@
 }
 
 /*Header styling*/
-#pm-header
+#fep-header
 {
 	border: 1px solid #E7E7E7;
 	width: 100%;
 	color: white;
 }
 
-#pm-header strong
+#fep-header strong
 {
 	color: #333;
 	font-size: 20px;
 }
 
-#pm-header p
+#fep-header p
 {
 	padding: 0px;
 	margin: 3px;
@@ -29,7 +29,7 @@
 	line-height:20px;
 }
 
-#pm-header .avatar
+#fep-header .avatar
 {
 	float: left;
 	border: none;
@@ -38,7 +38,7 @@
 }
 
 /*Menu Styling*/
-#pm-menu
+#fep-menu
 {
 	color: #333;
 	width: 100%;
@@ -73,7 +73,7 @@
 
 }
 /*Content styling*/
-#pm-content
+#fep-content
 {
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -84,35 +84,36 @@
 	color: #333;
 }
 
-#pm-content p, #pm-content form
+#fep-content p, #fep-content form
 {
 	margin: 5px;
 }
 
-#pm-content  hr
+#fep-content  hr
 {
 	margin-top: 5px;
 	margin-bottom: 5px;
 	margin-right: 5px;
 }
 
-#pm-content .pmtext p
+#fep-content .pmtext p
 {
 	margin-left: 0px;
 }
 
-#pm-content textarea
+#fep-content textarea
 {
 	width: 90%;
 	height: 200px;
 }
 
-#pm-content input[type=text]
+#fep-content input[type=text]
 {
 	width: 45%;
+	min-width:250px;
 }
 
-#pm-content table
+#fep-content table
 {
 	width: 100%;
 	border-collapse: collapse;
@@ -120,48 +121,48 @@
 	text-align: left;
 }
 
-#pm-content th, #pm-content td
+#fep-content th, #fep-content td
 {
 	padding-left: 5px;
 	border: 1px solid #E7E7E7;
 	vertical-align: top;
 	white-space: pre-line;
 }
-#pm-content .head{
+#fep-content .head{
 	font-size: 14px;
 	width:100%;
 	color: #fff;
-	width: 100%;
+	height: 100%;
 	background: #444;
 	}
-#pm-content .trodd0
+#fep-content .trodd0
 {
 	background-color: #FAFAFA;
 }
-#pm-content .trodd1
+#fep-content .trodd1
 {
 	background-color: #F2F7FC;
 }
 
-#pm-content img
+#fep-content img
 {
 	max-width: 400px;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
-#pm-content a
+#fep-content a
 {
 	color: navy;
 	text-decoration: underline;
 }
 
-#pm-content small
+#fep-content small
 {
 	font-size: 10px;
 }
 
-#pm-content .avatar
+#fep-content .avatar
 {
 	float: left;
 	border: none;
@@ -169,7 +170,7 @@
 	margin-bottom: 5px;
 }
 
-#pm-content blockquote
+#fep-content blockquote
 {
 	color: #666;
 	width: 90%;
@@ -192,7 +193,7 @@ pre.code
 }
 
 /*Footer styling*/
-#pm-footer
+#fep-footer
 {
 	text-align: center;
 	font-size: 10px;
@@ -201,14 +202,14 @@ pre.code
 	color: #333;
 }
 
-#pm-footer a, #pm-footer a:hover, #pm-footer a:visited
+#fep-footer a, #fep-footer a:hover, #fep-footer a:visited
 {
 	color: #333;
 	text-decoration: underline;
 }
 
 /*Auto-suggest*/
-#results
+#result
 {
 	width:250px;
 	border: solid 1px #333;
@@ -217,7 +218,7 @@ pre.code
 	background: #00FF99;
 }
 
-#results ul, #results li
+#result ul, #result li
 {
 	padding: 0px;
 	margin: 0px;
@@ -225,12 +226,12 @@ pre.code
 	list-style: none;
 }
 
-#results li
+#result li
 {
 	border-top: solid 1px #333;
 }
 
-#results li a
+#result li a
 {
 	display: block;
 	padding: 5px;
@@ -239,12 +240,12 @@ pre.code
 	font-weight: normal;
 }
 
-#results li a:hover
+#result li a:hover
 {
 	background: #333;
 	color: white;
 }
-#pm-menu .fep-button,.fep-button {
+#fep-menu .fep-button,.fep-button {
 	display: inline-block;
 	color:#000000 !important;
 	font-size:13px;
@@ -260,7 +261,7 @@ pre.code
 	text-decoration:none !important;
 }
 
-#pm-menu .fep-button:hover,.fep-button:hover {
+#fep-menu .fep-button:hover,.fep-button:hover {
 	background:#D3EEF5;
 	color: #333;
 	font-size: 14px;

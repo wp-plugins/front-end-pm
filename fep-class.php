@@ -468,7 +468,7 @@ if (!class_exists("clFEPm"))
 		$newMsg .="<noscript>Username of recipient</noscript><br/>";
         $newMsg .="<input type='hidden' id='search-qq' name='message_to' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' />
 		<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='".$this->convertToDisplay($to)."".$message_top."' /><br/>
-        <div id='results'></div>";
+        <div id='result'></div>";
 		} else {
 		$newMsg .="<br/><input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
 		
@@ -1202,8 +1202,8 @@ if (!class_exists("clFEPm"))
       else
         $msgBoxTotal = $adminOps['num_messages'];
 
-      $header = "<div id='pm-wrapper'>";
-      $header .= "<div id='pm-header'>";
+      $header = "<div id='fep-wrapper'>";
+      $header .= "<div id='fep-header'>";
       $header .= get_avatar($user_ID, 55)."<p><strong>".__("Welcome", "fep").": ".$this->convertToDisplay($user_login)."</strong><br/>";
       $header .= __("You have", "fep")." (<font color='red'>".$numNew."</font>) ".__("new messages", "fep").
       " ".__("and", "fep")." (<font color='red'>".$numAnn."</font>) ".__("announcement(s)", "fep")."<br/>";
@@ -1222,7 +1222,7 @@ if (!class_exists("clFEPm"))
 	  $numNewadm = $this->getNewMsgs_admin();
 	  $numAnn = $this->getAnnouncementsNum_btn();
 	  
-      $menu = "<div id='pm-menu'>";
+      $menu = "<div id='fep-menu'>";
       $menu .= "<a class='fep-button' href='".$this->pageURL."'>".__("Message Box".$numNew."", "fep")."</a>";
       $menu .= "<a class='fep-button' href='".$this->actionURL."viewannouncements'>".__("Announcements".$numAnn."", "fep")."</a>";
       $menu .= "<a class='fep-button' href='".$this->actionURL."newmessage'>".__("New Message", "fep")."</a>";
@@ -1232,7 +1232,7 @@ if (!class_exists("clFEPm"))
 	  if(current_user_can('manage_options'))
 		$menu .= "<a class='fep-button' href='".$this->actionURL."viewallmgs'>".__("Other's Message".$numNewadm."", "fep") . "</a>";
 		$menu .="</div>";
-      $menu .= "<div id='pm-content'>";
+      $menu .= "<div id='fep-content'>";
       return $menu;
     }
 
@@ -1254,7 +1254,7 @@ if (!class_exists("clFEPm"))
           $footer .= $this->dispNotify();
       
       if($this->adminOps['hide_branding'] != 'on')
-        $footer .= "<div id='pm-footer'><a href='http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/'>Front End PM ".$this->get_version()."</a></div>";
+        $footer .= "<div id='fep-footer'><a href='http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/'>Front End PM ".$this->get_version()."</a></div>";
       
       $footer .= "</div>"; //End main wrapper
       

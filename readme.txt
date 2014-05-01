@@ -23,13 +23,13 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Admins can set the max amount of messages a user can keep in his/her box. This is helpful for keeping Database sizes down.
 * Admins can set how many messages to show per page in the message box.
 * Admins can set how many user to show per page in front end directory.
-* Admins can set will email be send to all users when a new announcement is published or not.
-* Admins can set to field of announcement email.
+* Admins can set will email be sent to all users when a new announcement is published or not.
+* Admins can set "to" field of announcement email.
 * Admins can set Directory will be shown to all or not.
 * Admins can block any user to send private message.
 * Admins can set time delay between two messages send by a user.
 * Admins can see all other's private message.
-* Admins can block all users to send new message but they can send reply of their message.
+* Admins can block all users to send new message but they can send reply of their messages.
 * Admins can hide autosuggestion for users.
 * There are two types of sidebar widget.
 * Users can select whether or not they want to receive messages

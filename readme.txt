@@ -27,6 +27,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Admins can set to field of announcement email.
 * Admins can set Directory will be shown to all or not.
 * Admins can block any user to send private message.
+* Admins can set time delay between two messages send by a user.
 * Admins can see all other's private message.
 * Admins can block all users to send new message but they can send reply of their message.
 * Admins can hide autosuggestion for users.
@@ -75,6 +76,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 * Using display name instead of user_login to send message (partially).
 * Send email to all users when a new announcement is published (there are options to control).
+* Now admins can set time delay between two messages send by a user.
 * Bug fixes in bbcode and code in content when send message.
 * Security fixes in autosuggestion.
 * New options are added in admin settings.
@@ -91,6 +93,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 * Using display name instead of user_login to send message (partially).
 * Send email to all users when a new announcement is published (there are options to control).
+* Now admins can set time delay between two messages send by a user.
 * Bug fixes in bbcode and code in content when send message.
 * Security fixes in autosuggestion.
 * New options are added in admin settings.

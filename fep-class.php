@@ -206,8 +206,9 @@ if (!class_exists("clFEPm"))
           <tr><td>".__("Max messages a user can keep in box? (0 = Unlimited)", "fep")."<br /><small>".__("Admins always have Unlimited", "fep")."</small></td><td><input type='text' size='10' name='num_messages' value='".$viewAdminOps['num_messages']."' /><br/> ".__("Default","fep").": 50</td></tr>
           <tr><td>".__("Messages to show per page", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='messages_page' value='".$viewAdminOps['messages_page']."' /><br/> ".__("Default","fep").": 15</td></tr>
 		  <tr><td>".__("Maximum user per page in Directory", "fep")."<br/><small>".__("Do not set this to 0!", "fep")."</small></td><td><input type='text' size='10' name='user_page' value='".$viewAdminOps['user_page']."' /><br/> ".__("Default","fep").": 50</td></tr>
-		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><input type='text' size='50' name='have_permission' value='".$viewAdminOps['have_permission']."' /></td></tr>
-		  <tr><td>".__("Valid email address for \"to\" field of announcement email", "fep")."<br /><small>".__("All users email will be in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='50' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
+		  <tr><td>".__("Time delay between two messages send by a user in minutes (0 = No delay required)", "fep")."<br/><small>".__("Admins have no restriction", "fep")."</small></td><td><input type='text' size='10' name='time_delay' value='".$viewAdminOps['time_delay']."' /><br/> ".__("Default","fep").": 5</td></tr>
+		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><input type='text' size='30' name='have_permission' value='".$viewAdminOps['have_permission']."' /></td></tr>
+		  <tr><td>".__("Valid email address for \"to\" field of announcement email", "fep")."<br /><small>".__("All users email will be in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='30' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='notify_ann' ".checked($viewAdminOps['notify_ann'], 'on', false)." /> ".__("Send email to all users when a new announcement is published?", "fep")."</td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' ".checked($viewAdminOps['hide_directory'], 'on', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
@@ -237,20 +238,23 @@ if (!class_exists("clFEPm"))
 
     function pmAdminSave()
     {
-      $viewAdminOps = $this->getAdminOps();
       if (isset($_POST['fep-admin-save']))
       {
-	  if (is_email($_POST['ann_to'])) {
-	  $ann_to = $_POST['ann_to'];
-	  } else { $ann_to = $viewAdminOps['ann_to'];}
+	  if (!is_email($_POST['ann_to'])) {
+	  echo "<div id='message' class='error'><p>".__("Please enter a valid email address!", "fep")."</p></div>";
+	  return;}
+	  if (!ctype_digit($_POST['num_messages']) || !$this->is_positive($_POST['messages_page']) || !$this->is_positive($_POST['user_page']) || !ctype_digit($_POST['time_delay'])) {
+	  echo "<div id='message' class='error'><p>".__("First four fields support only positive numbers!", "fep")."</p></div>"; 
+	  return;}
         $saveAdminOps = array('num_messages' 	=> $_POST['num_messages'],
                               'messages_page' => $_POST['messages_page'],
 							  'user_page' => $_POST['user_page'],
+							  'time_delay' => $_POST['time_delay'],
                               'hide_branding' => $_POST['hide_branding'],
 							  'hide_directory' => $_POST['hide_directory'],
 							  'hide_autosuggest' => $_POST['hide_autosuggest'],
 							  'disable_new' => $_POST['disable_new'],
-							  'ann_to' => $ann_to,
+							  'ann_to' => $_POST['ann_to'],
 							  'notify_ann' => $_POST['notify_ann'],
 							  'have_permission' => $_POST['have_permission']
         );
@@ -265,6 +269,7 @@ if (!class_exists("clFEPm"))
       $pmAdminOps = array('num_messages' => 50,
                           'messages_page' => 15,
 						  'user_page' => 50,
+						  'time_delay' => 5,
 						  'hide_directory' => false,
 						  'ann_to' => get_bloginfo("admin_email"),
 						  'notify_ann' => false,
@@ -465,7 +470,7 @@ if (!class_exists("clFEPm"))
 		<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='".$this->convertToDisplay($to)."".$message_top."' /><br/>
         <div id='results'></div>";
 		} else {
-		$newMsg .="<input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
+		$newMsg .="<br/><input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
 		
         $newMsg .= __("Subject", "fep")."<font color='red'>*</font>:<br/>
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='".$message_title."' /><br/>".
@@ -482,7 +487,7 @@ if (!class_exists("clFEPm"))
       }
       else
       {
-        $this->error = __("You cannot send messages because your message box is full!", "fep");
+        $this->error = __("You cannot send messages because your message box is full! Please delete some messages.", "fep");
         return;
       }
     }
@@ -693,6 +698,12 @@ if (!class_exists("clFEPm"))
 	  if (!$this->have_permission())
       {
         $this->error = __("You cannot send messages because you are blocked by administrator!", "fep");
+        return;
+      }
+	  $timeDelay = $this->TimeDelay($date,$adminOps['time_delay']);
+	  if ($timeDelay['diffr'] < $adminOps['time_delay'] && !current_user_can('manage_options'))
+      {
+        $this->error = sprintf(__("Please wait at least more %s to send another message!", "fep"),$timeDelay['time']);
         return;
       }
 	  // Check if a form has been sent
@@ -1490,6 +1501,22 @@ if (!class_exists("clFEPm"))
       //return date('M d, h:i a', strtotime($date));
 	  return human_time_diff(strtotime($date),strtotime($now)).' ago';
     }
+	
+	function TimeDelay($time,$DeTime)
+    {
+		global $wpdb, $user_ID;
+		$Dtime = $DeTime * 60;
+		$Prev = $wpdb->get_var($wpdb->prepare("SELECT last_date FROM {$this->fepTable} WHERE parent_id = 0 AND last_sender = %d ORDER BY last_date DESC LIMIT 1", $user_ID));
+	  $diff = strtotime($time) - strtotime($Prev);
+	  $diffr = $diff/60;
+	  $tdiffr = $Dtime-$diff;
+	  $Ntime = gmdate("H:i:s", $tdiffr);
+	   return array('diffr' => $diffr, 'time' => $Ntime);
+    }
+	
+	function is_positive($str) {
+ 	 return (is_numeric($str) && $str > 0 && $str == round($str));
+	}
 
     function getNewMsgs()
     {

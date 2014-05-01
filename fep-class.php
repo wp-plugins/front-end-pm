@@ -1514,7 +1514,7 @@ if (!class_exists("clFEPm"))
 	  $diff = strtotime($time) - strtotime($Prev);
 	  $diffr = $diff/60;
 	  $tdiffr = $Dtime-$diff;
-	  $Ntime = gmdate("H:i:s", $tdiffr);
+	  $Ntime = gmdate("H \H\O\U\R i \M\I\N s \S\E\C", $tdiffr);
 	   return array('diffr' => $diffr, 'time' => $Ntime);
     }
 	

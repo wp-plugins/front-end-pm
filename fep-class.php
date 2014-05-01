@@ -1094,7 +1094,7 @@ if (!class_exists("clFEPm"))
 
     function addAnnouncement()
     {
-      global $wpdb;
+      global $wpdb,$user_ID;
 	  $adminOps = $this->getAdminOps();
       $title = $this->input_filter($_POST['message_title']);
       $contents = $this->input_filter($_POST['message_content']);
@@ -1102,12 +1102,14 @@ if (!class_exists("clFEPm"))
       $date = $_POST['message_date'];
       $read = '2';
 	  
-	  if (!$title || !$contents)
+	  if (!$title || !$contents || $from != $user_ID)
       {
         if (!$title)
           $theError = __("You must enter a valid subject!", "fep");
         if (!$contents)
           $theError = __("You must enter some content!", "fep");
+		 if ($from != $user_ID)
+          $theError = __("Please try again!", "fep");
         $this->error = $theError;
         return $this->dispAnnounceForm();
 		}
@@ -1124,11 +1126,9 @@ if (!class_exists("clFEPm"))
 	$this->success = __("The announcement was successfully added!", "fep");
         return;
   			}
-
-      if ($title && $contents)
-      {
+		//if nothing wrong continue
         $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, message_title, message_contents, date, message_read) VALUES ( %s, %s, %s, %s, %d )",$from, $title, $contents, $date, $read));
-      }
+
 	  if ($adminOps['notify_ann'] == 'on') {
 	  $this->notify_users($title);
 	  $this->success = __("The announcement was successfully added and sent email to all users!", "fep");

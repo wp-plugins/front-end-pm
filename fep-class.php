@@ -1024,8 +1024,9 @@ if (!class_exists("clFEPm"))
         {
           $announce .= "<tr class='trodd".$a."'><td class='pmtext'><strong>".__("Subject", "fep").":</strong> ".$this->output_filter($announcement->message_title).
           "<br/><strong>".__("Date", "fep").":</strong> ".$this->formatDate($announcement->date);
-          if (current_user_can('manage_options'))
-            $announce .= "<br/><a href='".$this->actionURL."viewannouncements&del=1&id=".$announcement->id."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a>";
+          if (current_user_can('manage_options')) {
+		  $announce .= "<br/><strong>".__("Added by", "fep").":</strong> ".get_userdata($announcement->from_user)->display_name;
+            $announce .= "<br/><a href='".$this->actionURL."viewannouncements&del=1&id=".$announcement->id."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a>"; }
           $announce .= "<hr/>";
           $announce .= "<strong>".__("Message", "fep").":</strong><br/>".apply_filters("comment_text", $this->output_filter($announcement->message_contents))."</td></tr>";
           if ($a) $a = 0; else $a = 1; //Alternate table colors
@@ -1038,6 +1039,7 @@ if (!class_exists("clFEPm"))
 
     function dispAnnounceForm()
     {
+		global $user_ID;
 		$token = $this->getToken();
        if(isset($_REQUEST['message_title'])){
 		$message_title = $_REQUEST['message_title'];
@@ -1058,6 +1060,7 @@ if (!class_exists("clFEPm"))
       $this->get_form_buttons()."<br/>
       <textarea name='message_content'>".$message_content."</textarea>
       <input type='hidden' name='message_date' value='".current_time('mysql')."' />
+	  <input type='hidden' name='message_from' value='".$user_ID."' />
 	  <input type='hidden' name='token' value='".$token."' /><br/>
       <input type='submit' name='add-announcement' value='".__("Submit", "fep")."' />
       </form>";
@@ -1068,14 +1071,14 @@ if (!class_exists("clFEPm"))
     function getAnnouncements()
     {
       global $wpdb; //message_read = 2 indicates that the msg is an announcement :)
-      $results = $wpdb->get_results("SELECT * FROM {$this->fepTable} WHERE message_read = 2 ORDER BY `id` DESC");
+      $results = $wpdb->get_results("SELECT * FROM {$this->fepTable} WHERE message_read = 2 ORDER BY id DESC");
       return $results;
     }
 
     function getAnnouncementsNum()
     {
       global $wpdb; //message_read = 2 indicates that the msg is an announcement :)
-      $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 2 ORDER BY `id` DESC");
+      $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 2 ORDER BY id DESC");
       return $wpdb->num_rows;
     }
 	function getAnnouncementsNum_btn(){
@@ -1095,6 +1098,7 @@ if (!class_exists("clFEPm"))
 	  $adminOps = $this->getAdminOps();
       $title = $this->input_filter($_POST['message_title']);
       $contents = $this->input_filter($_POST['message_content']);
+	  $from = $_POST['message_from'];
       $date = $_POST['message_date'];
       $read = '2';
 	  
@@ -1123,7 +1127,7 @@ if (!class_exists("clFEPm"))
 
       if ($title && $contents)
       {
-        $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (message_title, message_contents, date, message_read) VALUES ( %s, %s, %s, %d )", $title, $contents, $date, $read));
+        $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, message_title, message_contents, date, message_read) VALUES ( %s, %s, %s, %s, %d )",$from, $title, $contents, $date, $read));
       }
 	  if ($adminOps['notify_ann'] == 'on') {
 	  $this->notify_users($title);

@@ -700,7 +700,7 @@ if (!class_exists("clFEPm"))
         $this->error = __("You cannot send messages because you are blocked by administrator!", "fep");
         return;
       }
-	  $timeDelay = $this->TimeDelay($date,$adminOps['time_delay']);
+	  $timeDelay = $this->TimeDelay($adminOps['time_delay']);
 	  if ($timeDelay['diffr'] < $adminOps['time_delay'] && !current_user_can('manage_options'))
       {
         $this->error = sprintf(__("Please wait at least more %s to send another message!", "fep"),$timeDelay['time']);
@@ -1506,15 +1506,16 @@ if (!class_exists("clFEPm"))
 	  return human_time_diff(strtotime($date),strtotime($now)).' ago';
     }
 	
-	function TimeDelay($time,$DeTime)
+	function TimeDelay($DeTime)
     {
 		global $wpdb, $user_ID;
+		$now = current_time('mysql');
 		$Dtime = $DeTime * 60;
 		$Prev = $wpdb->get_var($wpdb->prepare("SELECT last_date FROM {$this->fepTable} WHERE parent_id = 0 AND last_sender = %d ORDER BY last_date DESC LIMIT 1", $user_ID));
-	  $diff = strtotime($time) - strtotime($Prev);
+	  $diff = strtotime($now) - strtotime($Prev);
 	  $diffr = $diff/60;
-	  $tdiffr = $Dtime-$diff;
-	  $Ntime = gmdate("H \H\O\U\R i \M\I\N s \S\E\C", $tdiffr);
+	  $next = strtotime($Prev) + $Dtime;
+	  $Ntime = human_time_diff(strtotime($now),$next);
 	   return array('diffr' => $diffr, 'time' => $Ntime);
     }
 	

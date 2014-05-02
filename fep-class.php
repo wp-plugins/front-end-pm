@@ -550,6 +550,7 @@ if (!class_exists("clFEPm"))
       $this->get_form_buttons()."<br/>
       <textarea name='message_content'></textarea>
       <input type='hidden' name='message_to' value='".get_userdata($to)->user_login."' />
+	  <input type='hidden' name='message_top' value='".get_userdata($to)->display_name."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
       <input type='hidden' name='message_from' value='".$user_ID."' />
       <input type='hidden' name='message_date' value='".current_time('mysql')."' />
@@ -620,6 +621,7 @@ if (!class_exists("clFEPm"))
       $this->get_form_buttons()."<br/>
       <textarea name='message_content'></textarea>
       <input type='hidden' name='message_to' value='".get_userdata($to)->user_login."' />
+	  <input type='hidden' name='message_top' value='".get_userdata($to)->display_name."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
       <input type='hidden' name='message_from' value='".$user_ID."' />
       <input type='hidden' name='message_date' value='".current_time('mysql')."' />

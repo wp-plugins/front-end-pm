@@ -78,7 +78,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Escape properly before input into database.
 * Some css fix.
 * Email template change.
-* Recommended to update because some core functions have been changed and from this version (1.3) this functions will be used.
+* Recommended to update because some core functions have been changed and from this version (1.3) those functions will be used.
 
 = 1.2 =
 
@@ -103,7 +103,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Escape properly before input into database.
 * Some css fix.
 * Email template change.
-* Recommended to update this plugin because some core functions (this plugin) have been changed and from this version (1.3) thoss functions will be used.
+* Recommended to update this plugin because some core functions (this plugin) have been changed and from this version (1.3) those functions will be used.
 
 = 1.2 =
 

@@ -437,30 +437,11 @@ if (!class_exists("clFEPm"))
       }
       if (!$this->isBoxFull($user_ID, $adminOps['num_messages'], '1'))
       {
-       if(isset($_REQUEST['message_to'])){
-		$message_to = $_REQUEST['message_to'];
-	}
-	else{
-		$message_to = '';
-	}
-	if(isset($_REQUEST['message_top'])){
-		$message_top = $_REQUEST['message_top'];
-	}
-	else{
-		$message_top = '';
-	}
-	  if(isset($_REQUEST['message_title'])){
-		$message_title = $_REQUEST['message_title'];
-	}
-	else{
-		$message_title = '';
-	}
-	if(isset($_REQUEST['message_content'])){
-		$message_content = $_REQUEST['message_content'];
-	}
-	else{
-		$message_content = '';
-	}
+	$message_to = ( isset( $_REQUEST['message_to'] ) ) ? $_REQUEST['message_to']: '';
+	$message_top = ( isset( $_REQUEST['message_top'] ) ) ? $_REQUEST['message_top']: '';
+	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
+	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
+	
         $newMsg = "<p><strong>".__("Create New Message", "fep").":</strong></p>";
         $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post'>".
         __("To", "fep")."<font color='red'>*</font>: ";
@@ -477,7 +458,6 @@ if (!class_exists("clFEPm"))
         __("Message", "fep")."<font color='red'>*</font>:<br/>".$this->get_form_buttons()."<br/>
         <textarea name='message_content' placeholder='Message Content'>".$message_content."</textarea>
         <input type='hidden' name='message_from' value='".$user_ID."' />
-        <input type='hidden' name='message_date' value='".current_time('mysql')."' />
         <input type='hidden' name='parent_id' value='0' />
 		<input type='hidden' name='token' value='".$token."' /><br/>
         <input type='submit' id='submit' value='".__("Send Message", "fep")."' />
@@ -553,7 +533,6 @@ if (!class_exists("clFEPm"))
 	  <input type='hidden' name='message_top' value='".get_userdata($to)->display_name."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
       <input type='hidden' name='message_from' value='".$user_ID."' />
-      <input type='hidden' name='message_date' value='".current_time('mysql')."' />
       <input type='hidden' name='parent_id' value='".$pID."' />
 	  <input type='hidden' name='token' value='".$token."' /><br/>
       <input type='submit' value='".__("Send Message", "fep")."' />
@@ -624,7 +603,6 @@ if (!class_exists("clFEPm"))
 	  <input type='hidden' name='message_top' value='".get_userdata($to)->display_name."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
       <input type='hidden' name='message_from' value='".$user_ID."' />
-      <input type='hidden' name='message_date' value='".current_time('mysql')."' />
       <input type='hidden' name='parent_id' value='".$pID."' />
 	  <input type='hidden' name='token' value='".$token."' /><br/>
       <input type='submit' value='".__("Send Message", "fep")."' />
@@ -638,6 +616,14 @@ if (!class_exists("clFEPm"))
       global $wpdb;
       $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE id = %d OR parent_id = %d ORDER BY id ASC", $id, $id));
       return $results;
+    }
+	
+    function getInfo($id)
+    {
+      global $wpdb;
+      $to = $wpdb->get_var($wpdb->prepare("SELECT to_user FROM {$this->fepTable} WHERE id = %d", $id));
+	  $from = $wpdb->get_var($wpdb->prepare("SELECT from_user FROM {$this->fepTable} WHERE id = %d", $id));
+      return array ( 'to' => $to , 'from' => $from );
     }
 
     function convertToUser($to)
@@ -667,7 +653,7 @@ if (!class_exists("clFEPm"))
       $title = $this->input_filter($_POST['message_title']);
       $content = $this->input_filter($_POST['message_content']);
       $parentID = $_POST['parent_id'];
-      $date = $_POST['message_date'];
+      $date = current_time('mysql');
       
       $adminOps = $this->getAdminOps();
       if ($to)
@@ -708,6 +694,14 @@ if (!class_exists("clFEPm"))
         $this->error = sprintf(__("Please wait at least more %s to send another message!", "fep"),$timeDelay['time']);
         return;
       }
+	  if ($parentID != 0) {
+	  $mgsInfo = $this->getInfo($parentID);
+	  if ($mgsInfo['to'] != $user_ID && $mgsInfo['from'] != $user_ID && !current_user_can( 'manage_options' ))
+        {
+          $this->error = __("You do not have permission to send this message!", "fep");
+          return;
+        }
+		}
 	  // Check if a form has been sent
 		$postedToken = filter_input(INPUT_POST, 'token');
 	  if (empty($postedToken))
@@ -732,7 +726,7 @@ if (!class_exists("clFEPm"))
 
       $this->success = __("Your message was successfully sent!", "fep");
 
-      $this->sendEmail($to, $from);
+      $this->sendEmail($to, $from, $title);
 
       return;
     }
@@ -750,7 +744,7 @@ if (!class_exists("clFEPm"))
         return true;
     }
 
-    function sendEmail($to, $from)
+    function sendEmail($to, $from, $title)
     {
       $toOptions = $this->getUserOps($to);
       $notify = $toOptions['allow_emails'];
@@ -759,14 +753,20 @@ if (!class_exists("clFEPm"))
         $sendername = get_bloginfo("name");
         $sendermail = get_bloginfo("admin_email");
         $uData = get_userdata($from);
-        $sendfrom = $uData->user_login;
+        $sendfrom = $uData->display_name;
         $headers = "MIME-Version: 1.0\r\n" .
-          "From: ".$sendername." "."<".$sendermail.">\n" . 
+          "From: ".$sendername." "."<".$sendermail.">\r\n" . 
           "Content-Type: text/plain; charset=\"" . get_option('blog_charset') . "\"\r\n";
-        $mailMessage = __("You have received a new message from", "fep")." ".$sendfrom.", ".__("follow this link to view it", "fep").": ".$this->pageURL;
+		$subject = "" . get_bloginfo("name").": New Message";
+		$message = "You have received a new message in \r\n";
+		$message .= get_bloginfo("name")."\r\n";
+		$message .= "From: ".$sendfrom. "\r\n";
+		$message .= "Subject: ".$title. "\r\n";
+		$message .= "Please Click the following link to view full Message. \r\n";
+		$message .= $this->pageURL."\r\n";		
         $mUser = get_userdata($to);
         $mailTo = $mUser->user_email;
-        wp_mail($mailTo, __("New Message", "fep"), $mailMessage);
+        wp_mail($mailTo, $subject, $message);
       }
     }
 
@@ -1043,25 +1043,16 @@ if (!class_exists("clFEPm"))
     {
 		global $user_ID;
 		$token = $this->getToken();
-       if(isset($_REQUEST['message_title'])){
-		$message_title = $_REQUEST['message_title'];
-	}
-	else{
-		$message_title = '';
-	}
-	  if(isset($_REQUEST['message_content'])){
-		$message_content = $_REQUEST['message_content'];
-	}
-	else{
-		$message_content = '';
-	}
+
+	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
+	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
+	
       $form = "<p>".__("Add a new announcement below", "fep")."</p>
       <form name='message' action='".$this->actionURL."addannouncement' method='post'>
       ".__("Subject", "fep").":<br/>
       <input type='text' name='message_title' value='".$message_title."' /><br/>".
       $this->get_form_buttons()."<br/>
       <textarea name='message_content'>".$message_content."</textarea>
-      <input type='hidden' name='message_date' value='".current_time('mysql')."' />
 	  <input type='hidden' name='message_from' value='".$user_ID."' />
 	  <input type='hidden' name='token' value='".$token."' /><br/>
       <input type='submit' name='add-announcement' value='".__("Submit", "fep")."' />
@@ -1101,7 +1092,7 @@ if (!class_exists("clFEPm"))
       $title = $this->input_filter($_POST['message_title']);
       $contents = $this->input_filter($_POST['message_content']);
 	  $from = $_POST['message_from'];
-      $date = $_POST['message_date'];
+      $date = current_time('mysql');
       $read = '2';
 	  
 	  if (!$title || !$contents || $from != $user_ID)
@@ -1483,14 +1474,13 @@ if (!class_exists("clFEPm"))
     {
       $parser = new fepBBCParser();
 	  $html = stripslashes($parser->bbc2html($string));
-	  $htmlncr = ent2ncr($html);
-      return stripslashes ($htmlncr);
+      return ent2ncr($html);
     }
 
     function input_filter($string)
     {
       $newStr = esc_attr($string);
-      return strip_tags(esc_sql($newStr));
+      return wp_strip_all_tags($newStr);
     }
 
     function getUserNumMsgs()

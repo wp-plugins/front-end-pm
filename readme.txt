@@ -72,6 +72,14 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 == Changelog ==
 
+= 1.3 =
+
+* Parent ID and time check server side.
+* Escape properly before input into database.
+* Some css fix.
+* Email template change.
+* Recommended to update because some core functions have been changed and from this version (1.3) this functions will be used.
+
 = 1.2 =
 
 * Using display name instead of user_login to send message (partially).
@@ -88,6 +96,14 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.3 =
+
+* Parent ID and time check server side.
+* Escape properly before input into database.
+* Some css fix.
+* Email template change.
+* Recommended to update this plugin because some core functions (this plugin) have been changed and from this version (1.3) thoss functions will be used.
 
 = 1.2 =
 

@@ -10,7 +10,7 @@ class fepBBCParser {
 	var $patterns = array
 	(
 		'/\[list\](.+)\[\/list\]/Uis',
-		'/\[\*\](.+)(\\\r\\\n|\\r|\\n)/Ui',
+		'/\[\*\](.+)\\n/Ui',
 		'/\[b\](.+)\[\/b\]/Uis',
 		'/\[i\](.+)\[\/i\]/Uis',
 		'/\[u\](.+)\[\/u\]/Uis',
@@ -51,7 +51,6 @@ class fepBBCParser {
 	{
 		//$subject = nl2br($subject); //UCOMMENT THIS LINE TO REPLACE \n's with <br />'s
 		$subject = preg_replace($this->patterns, $this->replacements, $subject);
-		$subject = str_replace(array("\\r\\n", "\\r", "\\n"), "<br />", $subject);
 		
 		$findQ = array("[quote]", "[/quote]", "[QUOTE]", "[/QUOTE]");
 		$replaceQ  = array("<blockquote>", "</blockquote>", "<blockquote>", "</blockquote>");

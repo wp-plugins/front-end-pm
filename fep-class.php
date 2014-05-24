@@ -925,7 +925,7 @@ if (!class_exists("clFEPm"))
       $start = $page * $adminOps['messages_page'];
       $end = $adminOps['messages_page'];
 
-      $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE (to_user = %d AND parent_id = 0 AND to_del <> 1) OR (from_user = %d AND parent_id = 0 AND from_del <> 1) ORDER BY last_date DESC LIMIT %d, %d", $user_ID, $user_ID, $start, $end));
+      $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE (to_user = %d AND parent_id = 0 AND message_read <> 2 AND to_del <> 1) OR (from_user = %d AND parent_id = 0 AND message_read <> 2 AND from_del <> 1) ORDER BY last_date DESC LIMIT %d, %d", $user_ID, $user_ID, $start, $end));
 
       return $get_messages;
     }
@@ -1486,7 +1486,7 @@ if (!class_exists("clFEPm"))
     function getUserNumMsgs()
     {
       global $wpdb, $user_ID;
-      $get_messages = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE (to_user = %d AND parent_id = 0 AND to_del <> 1) OR (from_user = %d AND parent_id = 0 AND from_del <> 1)", $user_ID, $user_ID));
+      $get_messages = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE (to_user = %d AND parent_id = 0 AND message_read <> 2 AND to_del <> 1) OR (from_user = %d AND parent_id = 0 AND message_read <> 2 AND from_del <> 1)", $user_ID, $user_ID));
       $num = $wpdb->num_rows;
       return $num;
     }

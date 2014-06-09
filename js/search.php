@@ -23,7 +23,7 @@ if(strlen($searchq)>0)
 		}
 	}
 	else
-		echo "<li>".__("No Matches Found", "cartpaujpm")."</li>";
+		echo "<li>".__("No Matches Found", "fep")."</li>";
 	echo "</ul>";
 }
 die();

@@ -1,17 +1,17 @@
 === Front End PM ===
 Contributors: shamim51
-Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail
+Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail,contact form, secure contact form, simple contact form
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&item_name=Front%20End%20PM&item_number=Front%20End%20PM&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
-Requires at least: 2.7
+Requires at least: 2.8
 Tested up to: 3.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Front End PM is a Private Messaging system to your WordPress site.This is full functioning messaging system from front end.
+Front End PM is a Private Messaging system and a secure contact form to your WordPress site.This is full functioning messaging system from front end.
 
 == Description ==
-Front End PM is a Private Messaging system to your WordPress site.This is full functioning messaging system from front end. The messaging is done entirely through the front-end of your site rather than the Dashboard. This is very helpful if you want to keep your users out of the Dashboard area.
+Front End PM is a Private Messaging system and a secure contact form to your WordPress site.This is full functioning messaging system from front end. The messaging is done entirely through the front-end of your site rather than the Dashboard. This is very helpful if you want to keep your users out of the Dashboard area.
 
 * Works through a Page rather than the dashboard. This is very helpful if you want to keep your users out of the Dashboard area!
 * Users can privately message one another
@@ -36,6 +36,13 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Users can select whether or not they want to be notified by email when they receive a new message.
 * Users can select whether or not they want to be notified by email when a new announcement is published.
 
+**FEP Contact Form**
+
+* Added from version 2.0 a secure contact form.
+* Can select department and to whom message will be send for that department.
+* Manual and AKISMET check of contact message.
+* Reply directly to Email address from front end.
+
 **Translation**
 
 * German translation thanks to palatino.
@@ -48,7 +55,7 @@ To know more visit [Front End PM](http://www.banglardokan.com/blog/recent/projec
 1. Upload "front-end-pm" to the "/wp-content/plugins/" directory.
 1. Activate the plugin through the "Plugins" menu in WordPress.
 1. Create a new page.
-1. Paste code `[front-end-pm]` under the HTML tab of the page editor.
+1. Paste code `[front-end-pm]` for Front End pm and `[fep-contact-form]` for FEP Contact Form under the HTML tab of the page editor.
 1. Publish the page.
 
 Or you can create page for Front End PM by one click. Go to **Front End PM>Instruction** give a Title(required) for Front End PM page and Slug(optional) then click "Create Page". It will automatically create a page for your Message. If you keep Slug field blank, slug of page will be automatically created based on your given title.
@@ -69,8 +76,29 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 4. Button widgets.
 5. Text widgets.
 6. Front End Directory.
+7. FEP Contact Form Settings
+8. FEP Contact Form Settings 2
+9. FEP Contact Form
 
 == Changelog ==
+
+= 2.0 =
+
+* Added a secure contact form.
+* Manual check of contact message.
+* AKISMET check of contact message.
+* Can configure CAPTCHA for contact message form.
+* Separate settings page for contact message.
+* Can select department and to whom message will be send for that department.
+* Can set separate time delay to send message of a user via contact message.
+* Reply directly to Email address from front end.
+* Send Email to any email addresss from front end.
+* Use wordpress nonce instead of cookie.
+* All forms nonce check before process.
+* Added capability check to use messaging.
+* Capability and nonce check before any action.
+* Security Update.
+* Some css fix.
 
 = 1.3 =
 
@@ -96,6 +124,24 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Initial release.
 
 == Upgrade Notice ==
+
+= 2.0 =
+
+* Added a secure contact form.
+* Manual check of contact message.
+* AKISMET check of contact message.
+* Can configure CAPTCHA for contact message form.
+* Separate settings page for contact message.
+* Can select department and to whom message will be send for that department.
+* Can set separate time delay to send message of a user via contact message.
+* Reply directly to Email address from front end.
+* Send Email to any email addresss from front end.
+* Use wordpress nonce instead of cookie.
+* All forms nonce check before process.
+* Added capability check to use messaging.
+* Capability and nonce check before any action.
+* Security Update.
+* Some css fix.
 
 = 1.3 =
 

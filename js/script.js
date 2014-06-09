@@ -72,7 +72,7 @@ var http = createObject();
 function autosuggestReply() {
 	if(http.readyState == 4){
 		var response = http.responseText;
-		e = document.getElementById('result');
+		e = document.getElementById('fep-result');
 		if(response!=""){
 			e.innerHTML=response;
 			e.style.display="block";
@@ -91,11 +91,11 @@ function fepfillText(vv,v) {
 function fillTextq(v) {
 	e = document.getElementById('search-q');
 	e.value=v;
-	document.getElementById('result').style.display="none";
+	document.getElementById('fep-result').style.display="none";
 }
 
 function fillTextqq(v) {
 	e = document.getElementById('search-qq');
 	e.value=v;
-	document.getElementById('result').style.display="none";
+	document.getElementById('fep-result').style.display="none";
 }

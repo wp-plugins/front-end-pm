@@ -47,7 +47,7 @@
 }
 
 /*Notify Styling*/
-#error,#success
+#fep-error,#fep-success,#fep-cf-error
 {
 	color: black;
 	background-color: #FFEBE8;
@@ -66,11 +66,14 @@
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
-#success
+#fep-success
 {
 	background-color: #66FF99;
-	border-color: #E6DB55;
-
+	border-color: #00FF00;
+}
+#fep-cf-error
+{
+text-align:left;
 }
 /*Content styling*/
 #fep-content
@@ -208,7 +211,7 @@ pre.code
 }
 
 /*Auto-suggest*/
-#result
+#fep-result
 {
 	width:250px;
 	border: solid 1px #333;
@@ -217,7 +220,7 @@ pre.code
 	background: #00FF99;
 }
 
-#result ul, #result li
+#fep-result ul, #fep-result li
 {
 	padding: 0px;
 	margin: 0px;
@@ -225,12 +228,12 @@ pre.code
 	list-style: none;
 }
 
-#result li
+#fep-result li
 {
 	border-top: solid 1px #333;
 }
 
-#result li a
+#fep-result li a
 {
 	display: block;
 	padding: 5px;
@@ -239,7 +242,7 @@ pre.code
 	font-weight: normal;
 }
 
-#result li a:hover
+#fep-result li a:hover
 {
 	background: #333;
 	color: white;
@@ -264,4 +267,8 @@ pre.code
 	background:#D3EEF5;
 	color: #333;
 	font-size: 14px;
+}
+/*Hide form fields*/
+#fep-hd {
+display:none;
 }

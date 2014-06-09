@@ -230,7 +230,7 @@ if (!class_exists("fep_cf_class"))
         <textarea name='message_content' placeholder='Message Content'>$message_content</textarea><br/>";
 		if ($adminOps['fep_cf_cap'] == 'on')
       {
-		$newMsg .= __("CAPTCHA question", "fep")."<font color='red'>*</font>:<br/>";
+		$newMsg .= __("CAPTCHA question", "fep").":<br/>";
 		$newMsg .= $adminOps['fep_cf_capqs']."<br />";
 		$newMsg .= __("CAPTCHA answer", "fep")."<font color='red'>*</font>:<br/>";
 		$newMsg .= "<input type='text' name='cap_ans' autocomplete='off' value='' /><br/>";}

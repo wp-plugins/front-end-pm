@@ -1256,7 +1256,8 @@ if (!class_exists("fep_main_class"))
         $threadOut .= "<tr><td>$fullMgs->from_name<br/>$reg<br /><small>".$this->formatDate($fullMgs->send_date)."</small><br/>".get_avatar($fullMgs->from_email, 60)."</td>";
 		$threadOut .= "<td class='pmtext'><strong>".__("Subject", "fep").": </strong>".$this->output_filter($fullMgs->message_title)."<hr/>".apply_filters("comment_text", $this->autoembed($this->output_filter($fullMgs->message_contents)))."";
 		foreach ($fullMgsMeta as $meta){
-		$threadOut .="<strong>". ucwords($meta->field_name) . ":</strong> " . apply_filters("comment_text",$this->output_filter($meta->field_value)) . "";}
+		if ($meta->field_value)
+		$threadOut .="<strong>". ucwords($meta->field_name) . ":</strong> " . apply_filters("comment_text",$this->output_filter($meta->field_value)) . ""; }
 	  $threadOut .= "</td></tr></table>";
 	  if ($this->have_permission() && $uData){
       $threadOut .= "

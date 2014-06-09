@@ -57,7 +57,7 @@ if (!class_exists("fep_cf_class"))
           <thead>
           <tr><th width='30%'>".__("Setting", "fep")."</th><th width='70%'>".__("Value", "fep")."</th></tr>
           </thead>
-		  <tr><td>".__("Required Fields", "fep")."<br/><small>".__("Name, Email, Subject, Message always required.", "fep")."</small></td><td><input type='text' size='10' name='fep_cf_req' value='".$viewAdminOps['fep_cf_req']."' /><br/><small>".__("Separated by comma. Available (Address,Website)", "fep")."</small></td></tr>
+		  <tr><td>".__("Required Fields", "fep")."<br/><small>".__("Name, Email, Subject, Message always required.", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_req' value='".$viewAdminOps['fep_cf_req']."' /><br/><small>".__("Separated by comma. Available (Address,Website)", "fep")."</small></td></tr>
 		  <tr><td>".__("Bad words", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_cf_bad'>".$viewAdminOps['fep_cf_bad']." </TEXTAREA></td></tr>
 		  <tr><td>".__("Email Footer", "fep")."<br /><small>".__("For sending email", "fep")."</small></td><td><TEXTAREA name='fep_cf_efoot'>".$viewAdminOps['fep_cf_efoot']." </TEXTAREA></td></tr>
 		  <tr><td>".__("Block IP", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA></td></tr>

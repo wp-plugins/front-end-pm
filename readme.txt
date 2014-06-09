@@ -99,6 +99,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Capability and nonce check before any action.
 * Security Update.
 * Some css fix.
+* POT file updated.
 
 = 1.3 =
 
@@ -142,6 +143,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Capability and nonce check before any action.
 * Security Update.
 * Some css fix.
+* POT file updated.
 
 = 1.3 =
 

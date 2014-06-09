@@ -962,6 +962,25 @@ if (!class_exists("fep_main_class"))
 
       return;
     }
+	
+//Delete all spam messages
+	function emptySpam()
+    {
+      global $wpdb;
+	  if (!$this->fep_verify_nonce($_GET['token'])){
+	  return "<div id='fep-error'>".__("Invalid Token!", "fep")."</div>";}
+	  
+	  $spams = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8 ORDER BY id ASC");
+	  $spamID = array();
+	  foreach ($spams as $spam) {
+	  $spamID[] = $spam->id;
+	  }
+	  $query = implode(",", $spamID);
+	  $wpdb->query("DELETE FROM {$this->cfTable} WHERE message_id IN ({$query})");
+	  $wpdb->query("DELETE FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8");
+	  $this->success = __("All spam messages successfully deleted!", "fep");
+      return;
+    }
 /******************************************DELETE PAGE END******************************************/
 
 /******************************************VIEW ANNOUNCEMENTS BEGIN******************************************/
@@ -1169,7 +1188,12 @@ if (!class_exists("fep_main_class"))
 	 
       if ($numMsgs)
       {
-        $msgsOut = "<p><strong>".__("All Messages", "fep").": ($numMsgs)</strong></p>";
+        $msgsOut = "<p><strong>".__("All Messages", "fep").": ($numMsgs) </strong>";
+		
+		if ($_GET['fepaction'] === 'spam' && current_user_can('manage_options'))
+		$msgsOut .= "<a href='".$this->actionURL."emptyspam&token=$token' onclick='return confirm(\"".__('Are you sure you want to delete all spam messages? This action CAN NOT be undone.', 'fep')."\");'>Empty Spam Folder</a> ";
+		$msgsOut .= "</p>";
+		
         $numPgs = $numMsgs / $adminOps['messages_page'];
         if ($numPgs > 1)
         {
@@ -1602,6 +1626,9 @@ function dispDirectory()
             break;
 		case 'notspam':
 			$out .= $this->notSpam();
+            break;
+		case 'emptyspam':
+			$out .= $this->emptySpam();
             break;
 		case 'viewcontact':
             $out .= $this->dispContactMgs();

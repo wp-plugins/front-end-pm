@@ -649,7 +649,7 @@ function fep_weekly_spam_delete()
 	  $fep = new fep_main_class();
 	  $prev = time()-604800;
 	  $prevdate = date("Y-m-d H:i:s", $prev);
-	  $spams = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$fep->fepTable} WHERE send_date < %s AND (message_read = 7 OR message_read = 8) ORDER BY id DESC", $prevdate));
+	  $spams = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$fep->fepTable} WHERE send_date < %s AND (message_read = 7 OR message_read = 8) ORDER BY id ASC", $prevdate));
 	  $spamID = array();
 	  foreach ($spams as $spam) {
 	  $spamID[] = $spam->id;

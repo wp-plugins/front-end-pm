@@ -35,7 +35,7 @@ if (!class_exists("fep_cf_class"))
           <form id='fep-admin-save-form' name='fep-admin-save-form' method='post' action=''>
 	<table id='options-table' class='widefat'>
 	  <thead><tr><th>Department Name</th><th>Username</th><th>&nbsp;</th></tr></thead><tr><td><input type='button' class='fep_cf_add' value='Add More' /></td><td>(Username of person who will receive messages of that Department)</td></tr>";
-	  if(count($records)){
+	  if($records){
 		 foreach($records as $key => $eachRecord){
 		echo "	<tr>
 				<td><input type='text'  pattern='.{3,}' required name='dp_name[]' value='".stripslashes($key)."'/></td>

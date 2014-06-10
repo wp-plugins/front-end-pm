@@ -96,8 +96,9 @@ if (!class_exists("fep_main_class"))
 	  
         echo "<a class='fep-button' href='".$this->pageURL."'>".__("Inbox", "fep")."".$numNew."</a>
 		<a class='fep-button' href='".$this->actionURL."viewannouncements'>".__("Announcement", "fep")."".$numAnn."</a>";
-		if (in_array($user_login,$tocheck))
-		echo "<a class='fep-button' href='".$this->actionURL."mycontactmgs'>".sprintf(__("Contact Message%s", "fep"),$myconNew) . "</a>";
+		if ($tocheck){
+		if (in_array($user_login,$tocheck)){
+		echo "<a class='fep-button' href='".$this->actionURL."mycontactmgs'>".sprintf(__("Contact Message%s", "fep"),$myconNew) . "</a>";}}
 		if (current_user_can('manage_options'))
 		echo "<a class='fep-button' href='".$this->actionURL."newemail'>".__("Send Email", "fep") . "</a>";
 		
@@ -1513,8 +1514,9 @@ function dispDirectory()
       $menu = "<div id='fep-menu'>";
 	  $menu .= "<a class='fep-button' href='".$this->actionURL."newmessage'>".__("New Message", "fep")."</a>";
       $menu .= "<a class='fep-button' href='".$this->pageURL."'>".sprintf(__("Message Box%s", "fep"),$numNew)."</a>";
-	  if (in_array($user_login,$tocheck))
-	  $menu .= "<a class='fep-button' href='".$this->actionURL."mycontactmgs'>".sprintf(__("Contact Message%s", "fep"),$myconNew) . "</a>";
+	  if ($tocheck){
+	  if (in_array($user_login,$tocheck)){
+	  $menu .= "<a class='fep-button' href='".$this->actionURL."mycontactmgs'>".sprintf(__("Contact Message%s", "fep"),$myconNew) . "</a>";}}
       $menu .= "<a class='fep-button' href='".$this->actionURL."viewannouncements'>".sprintf(__("Announcements%s", "fep"),$numAnn)."</a>";
 	  if($this->adminOps['hide_directory'] != 'on' || current_user_can('manage_options'))
       $menu .= "<a class='fep-button' href='".$this->actionURL."directory'>".__("Directory", "fep")."</a>";

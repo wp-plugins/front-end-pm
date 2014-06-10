@@ -192,6 +192,7 @@ if (!class_exists("fep_cf_class"))
       }
       if (is_user_logged_in() || $adminOps['fep_cf_logged'] != 'on')
       {
+	  $message_to = ( isset( $_REQUEST['message_to'] ) ) ? $_REQUEST['message_to']: '';
 	  $message_from = ( isset( $_REQUEST['message_from'] ) ) ? $_REQUEST['message_from']: '';
 	  $message_email = ( isset( $_REQUEST['message_email'] ) ) ? $_REQUEST['message_email']: '';
 	  $website = ( isset( $_REQUEST['website'] ) ) ? $_REQUEST['website']: '';
@@ -203,8 +204,8 @@ if (!class_exists("fep_cf_class"))
         $newMsg .= __("Department", "fep")."<font color='red'>*</font>: <br />";
 		if($records){
 		 foreach($records as $key=>$eachRecord){
-		$newMsg .="<label><input type='radio' name='message_to' value='$eachRecord' /> ".stripslashes($key)."</label>
-		<input type='hidden' name='department' value='".stripslashes($key)."' /><br />";}
+		 if ( $eachRecord.',,'.stripslashes($key) == $message_to){$check='checked';} else {$check='';}
+		$newMsg .="<label><input type='radio' name='message_to' value='$eachRecord,,".stripslashes($key)."' $check/> ".stripslashes($key)."</label><br />";}
 		} else {
 		$newMsg .=__("Please add departments from FEP contact form settings in backend.","fep")."<br />";}
 		
@@ -256,9 +257,11 @@ if (!class_exists("fep_cf_class"))
 		
 		$adminOps = $this->getAdminOps();
 		
-		$preTo = trim($_POST['message_to']);
+		$messageArrayTo = explode(',,',$_POST['message_to']);
+		
+		$preTo = trim($messageArrayTo[0]);
 		$to = $fep->convertToID($preTo);
-		$department = trim($_POST['department']);
+		$department = trim($messageArrayTo[1]);
 		$fromAddress = $fep->input_filter($_POST['address']);
 		$title = $fep->input_filter($_POST['message_title']);
       	$content = $fep->input_filter($_POST['message_content']);

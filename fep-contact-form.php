@@ -204,8 +204,8 @@ if (!class_exists("fep_cf_class"))
         $newMsg .= __("Department", "fep")."<font color='red'>*</font>: <br />";
 		if($records){
 		 foreach($records as $key=>$eachRecord){
-		 if ( $eachRecord.',,'.stripslashes($key) == $message_to){$check='checked';} else {$check='';}
-		$newMsg .="<label><input type='radio' name='message_to' value='$eachRecord,,".stripslashes($key)."' $check/> ".stripslashes($key)."</label><br />";}
+		 if ( $eachRecord.','.stripslashes($key) == $message_to){$check='checked';} else {$check='';}
+		$newMsg .="<label><input type='radio' name='message_to' value='$eachRecord,".stripslashes($key)."' $check/> ".stripslashes($key)."</label><br />";}
 		} else {
 		$newMsg .=__("Please add departments from FEP contact form settings in backend.","fep")."<br />";}
 		
@@ -257,7 +257,7 @@ if (!class_exists("fep_cf_class"))
 		
 		$adminOps = $this->getAdminOps();
 		
-		$messageArrayTo = explode(',,',$_POST['message_to']);
+		$messageArrayTo = explode(',',$_POST['message_to']);
 		
 		$preTo = trim($messageArrayTo[0]);
 		$to = $fep->convertToID($preTo);

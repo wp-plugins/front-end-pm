@@ -331,7 +331,7 @@ if (!class_exists("fep_cf_class"))
 
 	foreach ($badwords as $badword) {
 		$word = trim($badword);
-		if ( stripos($fromAddress, $word) !== false || stripos($title, $word) !== false || stripos($content, $word) !== false || stripos($fromName, $word) !== false )
+		if ( stripos($fromName, $word) !== false || stripos($fromAddress, $word) !== false || stripos($title, $word) !== false || stripos($content, $word) !== false )
 			$points += 2; }
 
 	if (stripos($content, "http://") !== false || stripos($content, "www.") !== false)

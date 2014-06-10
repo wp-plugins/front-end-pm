@@ -106,7 +106,7 @@ if (!class_exists("fep_main_class"))
       echo $args['after_widget'];
     }
 	
-	    function widget_text($args)
+	  function widget_text($args)
     {
       global $user_ID;
       $uData = get_userdata($user_ID);
@@ -117,16 +117,21 @@ if (!class_exists("fep_main_class"))
         echo __("Login to view your messages", "fep");
       else
       {
+	  	$tocheck = get_option('fep_cf_to_field');
         $numNew = $this->getNewMsgs();
         $numAnn = $this->getAnnouncementsNum();
 		$numNewadm = $this->getNewMsgs_admin();
+		$myconNew = $this->mycontact_new();
 		$conNew = $this->getcontact_new();
         echo __("Hi", "fep")." ".$uData->display_name.",<br/>".
         __("You have", "fep")." <a href='".$this->pageURL."'>(<font color='red'>".$numNew."</font>) ".__("new message(s)", "fep")."</a><br/>".
         __("There are", "fep")." <a href='".$this->actionURL."viewannouncements'>(<font color='red'>".$numAnn."</font>) ".__("announcement(s)", "fep")."</a><br/>";
+		if ($tocheck){
+		if (in_array($uData->user_login,$tocheck)){
+		echo "<a href='".$this->actionURL."mycontactmgs'>".sprintf(__("Contact Message%s", "fep"),$myconNew) . "</a><br/>";}}
 		if (current_user_can('manage_options')){
-		echo "<a href='".$this->actionURL."viewallmgs'>".__("All Message", "fep")."".$numNewadm."</a><br/>";
-		echo "<a href='".$this->actionURL."contactmgs'>".sprintf(__("All Contact Message%s", "fep"),$conNew) . "</a><br/>";}
+		echo "<a href='".$this->actionURL."contactmgs'>".sprintf(__("All Contact Message%s", "fep"),$conNew) . "</a><br/>";
+		echo "<a href='".$this->actionURL."viewallmgs'>".__("All Message", "fep")."".$numNewadm."</a><br/>";}
 		
       } 
       echo $args['after_widget'];

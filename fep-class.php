@@ -506,7 +506,7 @@ if (!class_exists("fep_main_class"))
 		<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='$message_top' /><br/>
         <div id='fep-result'></div>";
 		} else {
-		$newMsg .="<br/><input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='".$this->convertToUser($to)."".$message_to."' /><br/>";}
+		$newMsg .="<br/><input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='$message_to' /><br/>";}
 		
         $newMsg .= __("Subject", "fep")."<font color='red'>*</font>:<br/>
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='$message_title' /><br/>".

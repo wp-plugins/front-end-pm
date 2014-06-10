@@ -329,11 +329,12 @@ if (!class_exists("fep_cf_class"))
 	$badwords = explode(',', $adminOps['fep_cf_bad']);
 	$badwords = array_unique($badwords);
 
-	foreach ($badwords as $word) {
-		if ( strpos(strtolower($fromAddress), trim(strtolower($word))) !== false || strpos(strtolower($title), trim(strtolower($word))) !== false || strpos(strtolower($content), trim(strtolower($word))) !== false || strpos(strtolower($fromName), trim(strtolower($word))) !== false )
+	foreach ($badwords as $badword) {
+		$word = trim($badword);
+		if ( stripos($fromAddress, $word) !== false || stripos($title, $word) !== false || stripos($content, $word) !== false || stripos($fromName, $word) !== false )
 			$points += 2; }
 
-	if (strpos(strtolower($content), "http://") !== false || strpos(strtolower($content), "www.") !== false)
+	if (stripos($content, "http://") !== false || stripos($content, "www.") !== false)
 		$points += 2;
 	if (isset($_POST['nojs']))
 		$points += 1;

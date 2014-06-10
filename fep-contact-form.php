@@ -201,7 +201,7 @@ if (!class_exists("fep_cf_class"))
 	
 		$newMsg = "<form name='contact_message' action='' method='post'>";
         $newMsg .= __("Department", "fep")."<font color='red'>*</font>: <br />";
-		if(count($records)){
+		if($records){
 		 foreach($records as $key=>$eachRecord){
 		$newMsg .="<label><input type='radio' name='message_to' value='$eachRecord' /> ".stripslashes($key)."</label>
 		<input type='hidden' name='department' value='".stripslashes($key)."' /><br />";}

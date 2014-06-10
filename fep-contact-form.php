@@ -58,9 +58,9 @@ if (!class_exists("fep_cf_class"))
           <tr><th width='30%'>".__("Setting", "fep")."</th><th width='70%'>".__("Value", "fep")."</th></tr>
           </thead>
 		  <tr><td>".__("Required Fields", "fep")."<br/><small>".__("Name, Email, Subject, Message always required.", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_req' value='".$viewAdminOps['fep_cf_req']."' /><br/><small>".__("Separated by comma. Available (Address,Website)", "fep")."</small></td></tr>
-		  <tr><td>".__("Bad words", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_cf_bad'>".$viewAdminOps['fep_cf_bad']." </TEXTAREA></td></tr>
+		  <tr><td>".__("Bad words", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_cf_bad'>".$viewAdminOps['fep_cf_bad']." </TEXTAREA><br /><small>".__("It will match inside words, so \"press\" will match \"WordPress\"", "fep")."</small></td></tr>
 		  <tr><td>".__("Email Footer", "fep")."<br /><small>".__("For sending email", "fep")."</small></td><td><TEXTAREA name='fep_cf_efoot'>".$viewAdminOps['fep_cf_efoot']." </TEXTAREA></td></tr>
-		  <tr><td>".__("Block IP", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA></td></tr>
+		  <tr><td>".__("Block IP", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA><br /><small>".__("You can use full or part of IP. \"127.0.0\" will match \"127.0.0.1\"", "fep")."</small></td></tr>
 		  <tr><td>".__("Maximum points before mark as spam", "fep")."<br /></td><td><input type='text' size='30' name='fep_cf_point' value='".$viewAdminOps['fep_cf_point']."' /><br /><small>".__("Default: 4", "fep")."</small></td></tr>
 		  <tr><td>".__("Time delay between two messages send by a user via FEP Contact Form in minutes (0 = No delay required)", "fep")."<br /></td><td><input type='text' size='30' name='cf_time_delay' value='".$viewAdminOps['cf_time_delay']."' /><br /><small>".__("Applicable only for registered users", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_cap' ".checked($viewAdminOps['fep_cf_cap'], 'on', false)." /> ".__("Enable CAPTCHA?", "fep")."<br /><small>".__("Configure CAPTCHA below", "fep")."</small></td></tr>
@@ -319,8 +319,12 @@ if (!class_exists("fep_cf_class"))
 		  
 		  $ipBlock = explode(',', $adminOps['fep_ip_block']);
 		  $ipBlock = array_unique($ipBlock);
-		  if(in_array($ip, $ipBlock))
+		  foreach ($ipBlock as $blockip) {
+		  		$Blockedip = trim($blockip);
+				//check is ip blocked
+				if ( stripos($ip, $Blockedip) !== false )
 			$errors->add('ipBlock', sprintf(__("Your IP %s is Blocked.", "fep"), $ip ));
+			}
 		  
 	// lets check a few things - not enough to trigger an error on their own, but worth assigning a spam score..
 	// score quickly adds up therefore allowing genuine users with 'accidental' score through but cutting out real spam :)

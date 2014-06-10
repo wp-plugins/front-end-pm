@@ -950,9 +950,9 @@ if (!class_exists("fep_main_class"))
       return;
     }
 	
-	function dispDelMsg_admin()
+	function deleteMessage()
     {
-      global $wpdb, $user_ID;
+      global $wpdb;
 
       $delID = preg_replace('/\D/', '',$_GET['id']);
 	  if (!$this->fep_verify_nonce($_GET['token'])){
@@ -1326,7 +1326,7 @@ if (!class_exists("fep_main_class"))
 	  } elseif ($_GET['fepaction'] === 'spam' && current_user_can('manage_options')){
 	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8 ORDER BY send_date DESC LIMIT %d, %d", $start, $end));
 	  } elseif ($_GET['fepaction'] === 'mycontactmgs'){
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE (message_read = 5 OR message_read = 6) AND to_user = %d ORDER BY send_date DESC LIMIT %d, %d", $user_ID, $start, $end));
+	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE to_user = %d AND to_del = 0 AND (message_read = 5 OR message_read = 6) ORDER BY send_date DESC LIMIT %d, %d", $user_ID, $start, $end));
 	  }
 
       return $get_messages;
@@ -1609,7 +1609,7 @@ function dispDirectory()
             $out .= $this->dispDelMsg();
             break;
 		case 'deletemessageadmin':
-            $out .= $this->dispDelMsg_admin();
+            $out .= $this->deleteMessage();
             break;
           case 'directory':
 		  if($this->adminOps['hide_directory'] != 'on' || current_user_can('manage_options'))

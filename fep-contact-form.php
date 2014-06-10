@@ -62,7 +62,7 @@ if (!class_exists("fep_cf_class"))
 		  <tr><td>".__("Email Footer", "fep")."<br /><small>".__("For sending email", "fep")."</small></td><td><TEXTAREA name='fep_cf_efoot'>".$viewAdminOps['fep_cf_efoot']." </TEXTAREA></td></tr>
 		  <tr><td>".__("Block IP", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA><br /><small>".__("You can use full or part of IP. \"127.0.0\" will match \"127.0.0.1\"", "fep")."</small></td></tr>
 		  <tr><td>".__("Maximum points before mark as spam", "fep")."<br /></td><td><input type='text' size='30' name='fep_cf_point' value='".$viewAdminOps['fep_cf_point']."' /><br /><small>".__("Default: 4", "fep")."</small></td></tr>
-		  <tr><td>".__("Time delay between two messages send by a user via FEP Contact Form in minutes (0 = No delay required)", "fep")."<br /></td><td><input type='text' size='30' name='cf_time_delay' value='".$viewAdminOps['cf_time_delay']."' /><br /><small>".__("Applicable only for registered users", "fep")."</small></td></tr>
+		  <tr><td>".__("Time delay between two messages send by a user via FEP Contact Form in minutes", "fep")."<br /></td><td><input type='text' size='30' name='cf_time_delay' value='".$viewAdminOps['cf_time_delay']."' /><br /><small>".__("0 = No delay required", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_cap' ".checked($viewAdminOps['fep_cf_cap'], 'on', false)." /> ".__("Enable CAPTCHA?", "fep")."<br /><small>".__("Configure CAPTCHA below", "fep")."</small></td></tr>
 		  <tr><td>".__("CAPTCHA Question", "fep")."<br /><small>".__("It will show on FEP Contact Form", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_capqs' value='".$viewAdminOps['fep_cf_capqs']."' /></td></tr>
 		  <tr><td>".__("CAPTCHA Answer", "fep")."<br /><small>".__("Have to be same answer to send contact message.", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_capans' value='".$viewAdminOps['fep_cf_capans']."' /></td></tr>
@@ -312,7 +312,14 @@ if (!class_exists("fep_cf_class"))
 	  if ($timeDelay['diffr'] < $adminOps['cf_time_delay'] && !current_user_can('manage_options'))
       {
 	  $errors->add('TimeDelay', sprintf(__('Please wait at least more %s to send another message!', 'fep'), $timeDelay['time']));
-      }}
+      }} else {
+	  //use nonce to check time delay for non logged in users
+	  $nonce = wp_create_nonce('fep_cf_time_delay');
+	  //get value exists
+	  $transient = get_transient('fep_cf_'.$nonce);
+	  if ($transient == 1 )
+		$errors->add('loggedOutDelay', sprintf(__('Please wait at least %s minutes between two messages!', 'fep'), $adminOps['cf_time_delay']));
+		}
 		  
 		if ($this->isBot() !== false)
 		  $errors->add('Bots', sprintf(__("No bots please! UA reported as: %s", "fep"), $_SERVER['HTTP_USER_AGENT'] ));
@@ -409,6 +416,8 @@ if (current_user_can('manage_options'))
 		$message_id = $wpdb->insert_id;
 		if ($message_id) {
 		$wpdb->query($wpdb->prepare('INSERT INTO '.$fep->cfTable.' (message_id, field_name, field_value) VALUES ( %d, "ip", %s ),( %1$d, "address", %s ),( %1$d, "website", %s ),( %1$d, "browser", %s ),( %1$d, "referer", %s ),( %1$d, "Spam Points", %s )', $message_id, $ip, $fromAddress, $website, $browser, $referer, $points));
+		if ( !is_user_logged_in() && $adminOps['cf_time_delay'] !=0 )
+		set_transient( 'fep_cf_'.$nonce, 1, $adminOps['cf_time_delay'] * 60 ); //set to check time delay for non logged in users
 		if ( $read == 5 )
 		$this->sendDepartmentEmail($to, $fromName, $title, $content, $referer);
 		} else {

@@ -200,7 +200,7 @@ if (!class_exists("fep_cf_class"))
 	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
 	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
 	
-		$newMsg = "<form name='contact_message' action='' method='post'>";
+		$newMsg = "<form name='message' action='' method='post'>";
         $newMsg .= __("Department", "fep")."<font color='red'>*</font>: <br />";
 		if($records){
 		 foreach($records as $key=>$eachRecord){

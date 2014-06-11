@@ -46,7 +46,7 @@ function FEPsurroundText(text1, text2, textarea)
 	}
 }
 
-//START AUTO COMPLETE
+//START AUTO SUGGEST
 function FEPautosuggest(link) {
 	q = document.getElementById('search-q').value;
 	// Set the random number to add to URL request
@@ -69,6 +69,7 @@ function FEPcreateObject() {
 
 var http = FEPcreateObject();
 
+//Show auto suggest
 function FEPautosuggestReply() {
 	if(http.readyState == 4){
 		var response = http.responseText;
@@ -87,13 +88,15 @@ function fepfillText(vv,v) {
 	fillTextq(v);
 	fillTextqq(vv)
 }
-	
+
+//Fill user display name
 function fillTextq(v) {
 	e = document.getElementById('search-q');
 	e.value=v;
 	document.getElementById('fep-result').style.display="none";
 }
 
+//Fill user login
 function fillTextqq(v) {
 	e = document.getElementById('search-qq');
 	e.value=v;

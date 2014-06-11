@@ -86,7 +86,7 @@ function FEPautosuggestReply() {
 function fepfillText(vv,v) {
 	
 	fillTextq(v);
-	fillTextqq(vv)
+	fillTextqq(vv);
 }
 
 //Fill user display name

@@ -298,14 +298,14 @@ if (!class_exists("fep_main_class"))
                               'messages_page' => $_POST['messages_page'],
 							  'user_page' => $_POST['user_page'],
 							  'time_delay' => $_POST['time_delay'],
-                              'hide_branding' => $_POST['hide_branding'],
-							  'hide_directory' => $_POST['hide_directory'],
-							  'hide_autosuggest' => $_POST['hide_autosuggest'],
-							  'disable_new' => $_POST['disable_new'],
+							  'have_permission' => $_POST['have_permission'],
 							  'ann_to' => $_POST['ann_to'],
 							  'min_cap' => trim($_POST['min_cap']),
-							  'notify_ann' => $_POST['notify_ann'],
-							  'have_permission' => $_POST['have_permission']
+							  'notify_ann' => ( isset( $_POST['notify_ann'] ) ) ? $_POST['notify_ann']: false,
+							  'hide_directory' => ( isset( $_POST['hide_directory'] ) ) ? $_POST['hide_directory']: false,
+							  'hide_autosuggest' => ( isset( $_POST['hide_autosuggest'] ) ) ? $_POST['hide_autosuggest']: false,
+							  'disable_new' => ( isset( $_POST['disable_new'] ) ) ? $_POST['disable_new']: false,
+							  'hide_branding' => ( isset( $_POST['hide_branding'] ) ) ? $_POST['hide_branding']: false
         );
 		$postedToken = filter_input(INPUT_POST, 'token');
 		if($this->fep_verify_nonce($postedToken)){
@@ -321,14 +321,14 @@ if (!class_exists("fep_main_class"))
                           'messages_page' => 15,
 						  'user_page' => 50,
 						  'time_delay' => 5,
-						  'hide_directory' => false,
+						  'have_permission' => '',
 						  'ann_to' => get_bloginfo("admin_email"),
 						  'min_cap' => 'read',
 						  'notify_ann' => false,
+						  'hide_directory' => false,
 						  'hide_autosuggest' => false,
 						  'disable_new' => false,
-                          'hide_branding' => false,
-						  'have_permission' => ''
+                          'hide_branding' => false
       );
 
       //Get old values if they exist

@@ -97,11 +97,11 @@ if (!class_exists("fep_cf_class"))
 							  'fep_ip_block' => $_POST['fep_ip_block'],
 							  'fep_cf_point' => $_POST['fep_cf_point'],
 							  'cf_time_delay' => $_POST['cf_time_delay'],
-							  'fep_cf_cap' => $_POST['fep_cf_cap'],
+							  'fep_cf_cap' => ( isset( $_POST['fep_cf_cap'] ) ) ? $_POST['fep_cf_cap']: false,
 							  'fep_cf_capqs' => $_POST['fep_cf_capqs'],
                               'fep_cf_capans' => $_POST['fep_cf_capans'],
-							  'fep_cf_logged' => $_POST['fep_cf_logged'],
-							  'fep_cf_akismet' => $_POST['fep_cf_akismet']
+							  'fep_cf_logged' => ( isset( $_POST['fep_cf_logged'] ) ) ? $_POST['fep_cf_logged']: false,
+							  'fep_cf_akismet' => ( isset( $_POST['fep_cf_akismet'] ) ) ? $_POST['fep_cf_akismet']: false
         );
         update_option($this->adminOpsName, $saveAdminOps);
       } 

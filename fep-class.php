@@ -503,7 +503,7 @@ if (!class_exists("fep_main_class"))
 		if($this->adminOps['hide_autosuggest'] != 'on' || current_user_can('manage_options')) { 
 		$newMsg .="<noscript>Username of recipient</noscript><br/>";
         $newMsg .="<input type='hidden' id='search-qq' name='message_to' autocomplete='off' value='$message_to' />
-		<input type='text' id='search-q' onkeyup='javascript:autosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='$message_top' /><br/>
+		<input type='text' id='search-q' onkeyup='javascript:FEPautosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='$message_top' /><br/>
         <div id='fep-result'></div>";
 		} else {
 		$newMsg .="<br/><input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='$message_to' /><br/>";}
@@ -620,14 +620,18 @@ if (!class_exists("fep_main_class"))
 
     function convertToUser($to)
     {
+	$result = '';
+	if ($to){
       $user = get_user_by( 'login' , $to );
-	  $result = $user->user_login;
+	  $result = $user->user_login;}
       return $result;
     }
 	function convertToDisplay($to)
     {
+	$result = '';
+	if ($to){
 	$user = get_user_by( 'login' , $to );
-	$result = $user->display_name;
+	$result = $user->display_name;}
       return $result;
     }
 /******************************************READ MESSAGE PAGE END******************************************/
@@ -1732,19 +1736,19 @@ function dispDirectory()
     function get_form_buttons()
     {
       $button = '
-      <a title="'.__("Bold", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[b]", "[/b]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/b.png" /></a>
-      <a title="'.__("Italic", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[i]", "[/i]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/i.png" /></a>
-      <a title="'.__("Underline", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[u]", "[/u]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/u.png" /></a>
-      <a title="'.__("Strikethrough", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[s]", "[/s]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/s.png" /></a>
-      <a title="'.__("Code", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[code]", "[/code]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/code.png" /></a>
-      <a title="'.__("Quote", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[quote]", "[/quote]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/quote.png" /></a>
-      <a title="'.__("List", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[list]", "[/list]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/list.png" /></a>
-      <a title="'.__("List item", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[*]", "", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/li.png" /></a>
-      <a title="'.__("Link", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[url]", "[/url]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/url.png" /></a>
-      <a title="'.__("Image", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[img]", "[/img]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/img.png" /></a>
-      <a title="'.__("Email", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[email]", "[/email]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/email.png" /></a>
-      <a title="'.__("Add Hex Color", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[color=#]", "[/color]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/color.png" /></a>
-            <a title="'.__("Embed", "fep").'" href="javascript:void(0);" onclick=\'surroundTheText("[embed]", "[/embed]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/embed.png" /></a>';
+      <a title="'.__("Bold", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[b]", "[/b]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/b.png" /></a>
+      <a title="'.__("Italic", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[i]", "[/i]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/i.png" /></a>
+      <a title="'.__("Underline", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[u]", "[/u]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/u.png" /></a>
+      <a title="'.__("Strikethrough", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[s]", "[/s]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/s.png" /></a>
+      <a title="'.__("Code", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[code]", "[/code]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/code.png" /></a>
+      <a title="'.__("Quote", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[quote]", "[/quote]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/quote.png" /></a>
+      <a title="'.__("List", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[list]", "[/list]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/list.png" /></a>
+      <a title="'.__("List item", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[*]", "", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/li.png" /></a>
+      <a title="'.__("Link", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[url]", "[/url]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/url.png" /></a>
+      <a title="'.__("Image", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[img]", "[/img]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/img.png" /></a>
+      <a title="'.__("Email", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[email]", "[/email]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/email.png" /></a>
+      <a title="'.__("Add Hex Color", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[color=#]", "[/color]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/color.png" /></a>
+            <a title="'.__("Embed", "fep").'" href="javascript:void(0);" onclick=\'FEPsurroundText("[embed]", "[/embed]", document.forms.message.message_content); return false;\'><img src="'.$this->pluginURL.'/images/bbc/embed.png" /></a>';
 
       return $button;
     }

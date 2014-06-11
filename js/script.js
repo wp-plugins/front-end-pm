@@ -1,5 +1,5 @@
 // Surrounds the selected text with text1 and text2.
-function surroundTheText(text1, text2, textarea)
+function FEPsurroundText(text1, text2, textarea)
 {
 	// Can a text range be created?
 	if (typeof(textarea.caretPos) != "undefined" && textarea.createTextRange)
@@ -47,16 +47,16 @@ function surroundTheText(text1, text2, textarea)
 }
 
 //START AUTO COMPLETE
-function autosuggest(link) {
+function FEPautosuggest(link) {
 	q = document.getElementById('search-q').value;
 	// Set the random number to add to URL request
 	nocache = Math.random();
 	http.open('get', link+'newmessage&fepjscript=1&q='+q+'&nocache = '+nocache);
-	http.onreadystatechange = autosuggestReply;
+	http.onreadystatechange = FEPautosuggestReply;
 	http.send(null);
 }
 
-function createObject() {
+function FEPcreateObject() {
 	var request_type;
 	var browser = navigator.appName;
 	if(browser == "Microsoft Internet Explorer"){
@@ -67,9 +67,9 @@ function createObject() {
 	return request_type;
 }
 
-var http = createObject();
+var http = FEPcreateObject();
 
-function autosuggestReply() {
+function FEPautosuggestReply() {
 	if(http.readyState == 4){
 		var response = http.responseText;
 		e = document.getElementById('fep-result');

@@ -268,7 +268,7 @@ if (!class_exists("fep_cf_class"))
 		$website = esc_url(trim($_POST['website']));
 		$send_date = current_time('mysql');
 		$ip = $this->get_ip();
-		$browser = $_SERVER['HTTP_USER_AGENT'];
+		$browser = esc_attr($_SERVER['HTTP_USER_AGENT']);
 		$referer = $_SERVER['HTTP_REFERER'];
 		$read = 5;
 		
@@ -321,11 +321,11 @@ if (!class_exists("fep_cf_class"))
 	  //get value exists
 	  $transient = get_transient('fep_cf_'.$nonce);
 	  if ($transient == 1 )
-		$errors->add('loggedOutDelay', sprintf(__('Please wait at least %s minutes between two messages!', 'fep'), $adminOps['cf_time_delay']));
+		$errors->add('loggedOutDelay', sprintf(__('Please wait at least %s between two messages!', 'fep'), human_time_diff(time(),time()+($adminOps['cf_time_delay']*60))));
 		}
 		  
 		if ($this->isBot() !== false)
-		  $errors->add('Bots', sprintf(__("No bots please! UA reported as: %s", "fep"), $_SERVER['HTTP_USER_AGENT'] ));
+		  $errors->add('Bots', sprintf(__("No bots please! UA reported as: %s", "fep"), esc_attr($_SERVER['HTTP_USER_AGENT'] )));
 		  
 		  $ipBlock = explode(',', $adminOps['fep_ip_block']);
 		  $ipBlock = array_unique($ipBlock);

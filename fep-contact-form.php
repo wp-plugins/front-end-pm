@@ -238,6 +238,9 @@ if (!class_exists("fep_cf_class"))
 		$newMsg .= "<input type='hidden' name='token' value='$token' /><br/>
         <input type='submit' name='contact_message' value='".__("Send Message", "fep")."' />
         </form>";
+		if($fep->adminOps['hide_branding'] != 'on'){
+	  	$version = $fep->get_version();
+        $newMsg .= "<div id='fep-footer'><a href='http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/'>Front End PM ".$version['version']."</a></div>";}
         
         return $newMsg;
       }

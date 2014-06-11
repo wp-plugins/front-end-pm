@@ -1028,7 +1028,7 @@ if (!class_exists("fep_main_class"))
           "<br/><strong>".__("Date", "fep").":</strong> ".$this->formatDate($announcement->send_date);
           if (current_user_can('manage_options')) {
 		  $announce .= "<br/><strong>".__("Added by", "fep").":</strong> ".get_userdata($announcement->from_user)->display_name;
-            $announce .= "<br/><a href='".$this->actionURL."viewannouncements&del=1&id=".$announcement->id."&token=$tokan' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a>"; }
+            $announce .= "<br/><a href='".$this->actionURL."viewannouncements&del=1&id=".$announcement->id."&token=$token' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a>"; }
           $announce .= "<hr/>";
           $announce .= "<strong>".__("Message", "fep").":</strong><br/>".apply_filters("comment_text", $this->output_filter($announcement->message_contents))."</td></tr>";
           if ($a) $a = 0; else $a = 1; //Alternate table colors

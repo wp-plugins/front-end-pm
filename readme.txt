@@ -1,9 +1,9 @@
 === Front End PM ===
 Contributors: shamim51
-Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail,contact form, secure contact form, simple contact form
+Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail,contact form, secure contact form, simple contact form,akismet check,akismet
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&item_name=Front%20End%20PM&item_number=Front%20End%20PM&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 2.8
-Tested up to: 3.9
+Tested up to: 3.9.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -42,6 +42,8 @@ Front End PM is a Private Messaging system and a secure contact form to your Wor
 * Can select department and to whom message will be send for that department.
 * Manual and AKISMET check of contact message.
 * Reply directly to Email address from front end.
+* IP, Email blacklist, Whitelist.
+* Time delay between two messages send by same user/visitor.
 
 **Translation**
 
@@ -81,6 +83,15 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 9. FEP Contact Form
 
 == Changelog ==
+
+= 2.1 =
+
+* IP blacklist now support range and wildcard.
+* Email address blacklist,whitelist.
+* Time delay for logged out visitors also.
+* Double name when auto suggestion off fixes.
+* Department name bug fixes.
+* Other some small bug fixes.
 
 = 2.0 =
 
@@ -125,6 +136,15 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Initial release.
 
 == Upgrade Notice ==
+
+= 2.1 =
+
+* IP blacklist now support range and wildcard.
+* Email address blacklist,whitelist.
+* Time delay for logged out visitors also.
+* Double name when auto suggestion off fixes.
+* Department name bug fixes.
+* Other some small bug fixes.
 
 = 2.0 =
 

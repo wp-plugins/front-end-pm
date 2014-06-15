@@ -60,14 +60,16 @@ if (!class_exists("fep_cf_class"))
 		  <tr><td>".__("Required Fields", "fep")."<br/><small>".__("Name, Email, Subject, Message always required.", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_req' value='".$viewAdminOps['fep_cf_req']."' /><br/><small>".__("Separated by comma. Available (Address,Website)", "fep")."</small></td></tr>
 		  <tr><td>".__("Bad words", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_cf_bad'>".$viewAdminOps['fep_cf_bad']." </TEXTAREA><br /><small>".__("It will match inside words, so \"press\" will match \"WordPress\"", "fep")."</small></td></tr>
 		  <tr><td>".__("Email Footer", "fep")."<br /><small>".__("For sending email", "fep")."</small></td><td><TEXTAREA name='fep_cf_efoot'>".$viewAdminOps['fep_cf_efoot']." </TEXTAREA></td></tr>
-		  <tr><td>".__("Block IP", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA><br /><small>".__("You can use full or part of IP. \"127.0.0\" will match \"127.0.0.1\"", "fep")."</small></td></tr>
+		  <tr><td>".__("IP Blacklist", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA><br /><small>".__("You can use range and wildcard(e.g. 192.168.10-20.*)", "fep")."</small></td></tr>
+		  <tr><td><input type='checkbox' name='email_blacklist_check' value='1' ".checked($viewAdminOps['email_blacklist_check'], '1', false)." />".__("Email Blacklist", "cfp")."<br/><small>".__("Separated by comma.", "cfp")."</small></td><td><TEXTAREA name='email_blacklist'>".$viewAdminOps['email_blacklist']." </TEXTAREA><br /><small>".__("You can use wildcard. (e.g. *@badsite.com)", "fep")."</small></td></tr>
+		  <tr><td><input type='checkbox' name='email_whitelist_check' value='1' ".checked($viewAdminOps['email_whitelist_check'], '1', false)." />".__("Email Whitelist", "cfp")."<br/><small>".__("Separated by comma. (If both email blacklist and whitelist are checked, email whitelist will be used).", "cfp")."</small></td><td><TEXTAREA name='email_whitelist'>".$viewAdminOps['email_whitelist']." </TEXTAREA><br /><small>".__("You can use wildcard. (e.g. *@goodsite.com)", "fep")."</small></td></tr>
 		  <tr><td>".__("Maximum points before mark as spam", "fep")."<br /></td><td><input type='text' size='30' name='fep_cf_point' value='".$viewAdminOps['fep_cf_point']."' /><br /><small>".__("Default: 4", "fep")."</small></td></tr>
 		  <tr><td>".__("Time delay between two messages send by a user via FEP Contact Form in minutes", "fep")."<br /></td><td><input type='text' size='30' name='cf_time_delay' value='".$viewAdminOps['cf_time_delay']."' /><br /><small>".__("0 = No delay required", "fep")."</small></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_cap' ".checked($viewAdminOps['fep_cf_cap'], 'on', false)." /> ".__("Enable CAPTCHA?", "fep")."<br /><small>".__("Configure CAPTCHA below", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_cap' value='1' ".checked($viewAdminOps['fep_cf_cap'], '1', false)." /> ".__("Enable CAPTCHA?", "fep")."<br /><small>".__("Configure CAPTCHA below", "fep")."</small></td></tr>
 		  <tr><td>".__("CAPTCHA Question", "fep")."<br /><small>".__("It will show on FEP Contact Form", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_capqs' value='".$viewAdminOps['fep_cf_capqs']."' /></td></tr>
 		  <tr><td>".__("CAPTCHA Answer", "fep")."<br /><small>".__("Have to be same answer to send contact message.", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_capans' value='".$viewAdminOps['fep_cf_capans']."' /></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_logged' ".checked($viewAdminOps['fep_cf_logged'], 'on', false)." /> ".__("Require logged in to send contact message?", "fep")."</td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_akismet' ".checked($viewAdminOps['fep_cf_akismet'], 'on', false)." /> ".__("Enable AKISMET check?", "fep")."<br /><small>".__("Need AKISMET plugin installed.", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_logged' value='1' ".checked($viewAdminOps['fep_cf_logged'], '1', false)." /> ".__("Require logged in to send contact message?", "fep")."</td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_akismet' value='1' ".checked($viewAdminOps['fep_cf_akismet'], '1', false)." /> ".__("Enable AKISMET check?", "fep")."<br /><small>".__("Need AKISMET plugin installed.", "fep")."</small></td></tr>
 		  
           <tr><td colspan='2'><span><input class='button-primary' type='submit' name='fep-admin-save' value='".__("Save Options", "fep")."' /></span></td><td><input type='hidden' name='token' value='$token' /></td></tr>
           </table>
@@ -83,7 +85,10 @@ if (!class_exists("fep_cf_class"))
 	  $fep = new fep_main_class();
 	  $postedToken = filter_input(INPUT_POST, 'token');
 	  
-	  if ( !$fep->fep_verify_nonce($postedToken)) {
+	  if (!current_user_can('manage_options')) {
+  		wp_die("<div id='message' class='error'><p>".__("No permission", "fep")."</p></div>"); }
+		
+	  if ( !$fep->fep_verify_nonce($postedToken) || !current_user_can('manage_options')) {
   		wp_die("<div id='message' class='error'><p>".__("Sorry, your nonce did not verify", "fep")."</p></div>"); }
 		
 	  if (isset($_POST['fep-admin-save'])){
@@ -95,6 +100,10 @@ if (!class_exists("fep_cf_class"))
                               'fep_cf_bad' => $_POST['fep_cf_bad'],
 							  'fep_cf_efoot' => $_POST['fep_cf_efoot'],
 							  'fep_ip_block' => $_POST['fep_ip_block'],
+							  'email_blacklist_check' => ( isset( $_POST['email_blacklist_check'] ) ) ? $_POST['email_blacklist_check']: false,
+							  'email_blacklist' => $_POST['email_blacklist'],
+							  'email_whitelist_check' => ( isset( $_POST['email_whitelist_check'] ) ) ? $_POST['email_whitelist_check']: false,
+							  'email_whitelist' => $_POST['email_whitelist'],
 							  'fep_cf_point' => $_POST['fep_cf_point'],
 							  'cf_time_delay' => $_POST['cf_time_delay'],
 							  'fep_cf_cap' => ( isset( $_POST['fep_cf_cap'] ) ) ? $_POST['fep_cf_cap']: false,
@@ -136,6 +145,10 @@ if (!class_exists("fep_cf_class"))
                           'fep_cf_bad' => 'ahole,anus,ash0le,ash0les,asholes,ass,Aazzhole,bassterds,bastard,bastards,bastardz,basterds,basterdz,Biatch,bitch,Blow Job,boffing,butthole,buttwipe,c0ck,c0cks,c0k,Carpet Muncher,cawk,cawks,Clit,cnts,cntz,cock,cockhead,cock-head,cocks,CockSucker,cock-sucker,crap,cum,cunt,cunts,cuntz,dick,dild0,dild0s,dildo,dildos,dilld0,dilld0s,dominatricks,dominatrics,dominatrix,dyke,enema,f u c k,f u c k e r,fag,fag1t,faget,fagg1t,faggit,faggot,fagit,fags,fagz,faig,faigs,fart,flipping the bird,fuck,Fudge Packer,fuk,g00k,gay,God-damned,h00r,h0ar,h0re,hells,hoar,hoor,hoore,jackoff,jap,japs,jerk-off,jisim,jiss,jizm,jizz,kunt,kunts,kuntz,Lesbian,Lezzian,Lipshits,Lipshitz,masochist,masokist,massterbait,masstrbait,masstrbate,masterbaiter,masterbate,masterbates,Motha Fucker,Motha Fuker,Motha Fukkah,Motha Fukker,Mother Fucker,Mother Fukah,Mother Fuker,Mother Fukkah,Mother Fukker,mother-fucker,Mutha Fucker,Fuker,Fukker,orgasim;,orgasm,orgasum,peeenus,peenus,peinus,pen1s,penas,penis,penus,penuus,Phuc,Phuck,Phuk,Phuker,Phukker,pusse,pussy,puuke,puuker,queer,qweir,recktum,rectum,screwing,semen,sex,Sh!t,sh1t,sh1ts,sh1tz,shit,shits,slut,tit,turd,va1jina,vag1na,vagiina,vagina,vaj1na,vajina,vullva,vulva,w0p,wh00r,wh0re,whore,xrated,xxx,b!+ch,blowjob,clit,arschloch,shit,b!tch,b17ch,b1tch,bastard,bi+ch,boiolas,buceta,c0ck,cawk,chink,cipa,clits,cock,cum,cunt,dildo,dirsa,ejakulate,fatass,fcuk,fux0r,hoer,hore,l3itch,l3i+ch,lesbian,masturbate,masterbat,masterbat3,motherfucker,pusse,scrotum,shemale,shi+,sh!+,smut,teets,boob,b00bs,w00se,jackoff,wank,whoar,dyke,shit,@$$,amcik,ayir,bi7ch,bollock,breasts,butt-pirate,Cock,cunt,d4mn,dike,foreskin,Fotze,Fu(,futkretzn,h0r,h4x0r,hell,helvete,hoer,honkey,jizz,lesbo,mamhoon,piss,poontsee,poop,porn,p0rn,pr0n,preteen,pula,pule,puta,puto,screw',
 						  'fep_cf_efoot' => 'Please DO NOT reply to this email directly because we do not check inbox of this email.',
 						  'fep_ip_block' => '',
+						  'email_blacklist_check' => false,
+						  'email_blacklist' => '',
+						  'email_whitelist_check' => false,
+						  'email_whitelist' => '',
 						  'fep_cf_point' => 4,
 						  'cf_time_delay' => 10,
 						  'fep_cf_cap' => false,
@@ -184,21 +197,23 @@ if (!class_exists("fep_cf_class"))
 	  $fep = new fep_main_class();
 	  $token = $fep->fep_create_nonce();
       $adminOps = $this->getAdminOps();
-	  //get department names and usernames of those departments users
-	  $records = get_option('fep_cf_to_field');
+	  
 		if (!$fep->have_permission())
 		{
 		return '<div id="fep-error">' .__("You cannot send messages because you are blocked by administrator!", "fep"). ' </div>';
       }
-      if (is_user_logged_in() || $adminOps['fep_cf_logged'] != 'on')
+      if (is_user_logged_in() || $adminOps['fep_cf_logged'] != '1')
       {
+	  //get department names and usernames of those departments users
+	  $records = get_option('fep_cf_to_field');
+	  
 	  $message_to = ( isset( $_REQUEST['message_to'] ) ) ? $_REQUEST['message_to']: '';
 	  $message_from = ( isset( $_REQUEST['message_from'] ) ) ? $_REQUEST['message_from']: '';
 	  $message_email = ( isset( $_REQUEST['message_email'] ) ) ? $_REQUEST['message_email']: '';
 	  $website = ( isset( $_REQUEST['website'] ) ) ? $_REQUEST['website']: '';
 	  $address = ( isset( $_REQUEST['address'] ) ) ? $_REQUEST['address']: '';
-	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
-	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
+	  $message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
+	  $message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
 	
 		$newMsg = "<form name='message' action='' method='post'>";
         $newMsg .= __("Department", "fep")."<font color='red'>*</font>: <br />";
@@ -229,7 +244,7 @@ if (!class_exists("fep_cf_class"))
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='$message_title' /><br/>".
         __("Message", "fep")."<font color='red'>*</font>:<br/>".$fep->get_form_buttons()."<br/>
         <textarea name='message_content' placeholder='Message Content'>$message_content</textarea><br/>";
-		if ($adminOps['fep_cf_cap'] == 'on')
+		if ($adminOps['fep_cf_cap'] == '1')
       {
 		$newMsg .= __("CAPTCHA question", "fep").":<br/>";
 		$newMsg .= $adminOps['fep_cf_capqs']."<br />";
@@ -238,7 +253,7 @@ if (!class_exists("fep_cf_class"))
 		$newMsg .= "<input type='hidden' name='token' value='$token' /><br/>
         <input type='submit' name='contact_message' value='".__("Send Message", "fep")."' />
         </form>";
-		if($fep->adminOps['hide_branding'] != 'on'){
+		if($fep->adminOps['hide_branding'] != '1'){
 	  	$version = $fep->get_version();
         $newMsg .= "<div id='fep-footer'><a href='http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/'>Front End PM ".$version['version']."</a></div>";}
         
@@ -305,7 +320,7 @@ if (!class_exists("fep_cf_class"))
 		if (!isset($_POST[$field]) || empty($_POST[$field]))
 			$errors->add('invalidReq', sprintf(__('%s is required.', 'fep'), ucwords($field)));
 	} }
-	if ($adminOps['fep_cf_cap'] == 'on')
+	if ($adminOps['fep_cf_cap'] == '1')
       {
 		if (!isset($_POST['cap_ans']) || $_POST['cap_ans'] != $adminOps['fep_cf_capans'] )
 		  $errors->add('capCheck', __('CAPTCHA answer is incorrect.', 'fep'));}
@@ -325,19 +340,27 @@ if (!class_exists("fep_cf_class"))
 	  $transient = get_transient('fep_cf_'.$nonce);
 	  if ($transient == 1 )
 		$errors->add('loggedOutDelay', sprintf(__('Please wait at least %s between two messages!', 'fep'), human_time_diff(time(),time()+($adminOps['cf_time_delay']*60))));
-		}
+	
 		  
 		if ($this->isBot() !== false)
 		  $errors->add('Bots', sprintf(__("No bots please! UA reported as: %s", "fep"), esc_attr($_SERVER['HTTP_USER_AGENT'] )));
 		  
-		  $ipBlock = explode(',', $adminOps['fep_ip_block']);
-		  $ipBlock = array_unique($ipBlock);
-		  foreach ($ipBlock as $blockip) {
-		  		$Blockedip = trim($blockip);
-				//check is ip blocked
-				if ( stripos($ip, $Blockedip) !== false )
-			$errors->add('ipBlock', sprintf(__("Your IP %s is Blocked.", "fep"), $ip ));
-			}
+		  //check is ip blacklisted
+		if ( $this->is_ip_blacklisted($ip) !== false )
+		$errors->add('ipBlock', sprintf(__("Your IP %s is Blacklisted for this website.", "fep"), $ip ));
+		
+		//check is email blacklisted
+		if ($adminOps['email_blacklist_check'] == '1' && $adminOps['email_whitelist_check'] != '1' && is_email($fromEmail)){
+		if ( $this->is_email_blacklisted($fromEmail) !== false )
+		$errors->add('emailBlock', sprintf(__("Your email %s is Blacklisted for this website.", "fep"), $fromEmail ));}
+		
+		//check is email whitelisted
+		if ($adminOps['email_whitelist_check'] == '1' && is_email($fromEmail)){
+		if ( $this->is_email_whitelisted($fromEmail) == false )
+		$errors->add('emailWhitelist', sprintf(__("Your email %s is not Whitelisted for this website.", "fep"), $fromEmail ));}
+		}
+		
+		
 		  
 	// lets check a few things - not enough to trigger an error on their own, but worth assigning a spam score..
 	// score quickly adds up therefore allowing genuine users with 'accidental' score through but cutting out real spam :)
@@ -365,7 +388,7 @@ if (!class_exists("fep_cf_class"))
 	if ( $points > $adminOps['fep_cf_point'] )
 	$errors->add('spamPoints', __("Your message looks too much like spam, and could not be sent this time. [$points]", 'fep'));
 	
-	if ( $adminOps['fep_cf_akismet'] == 'on' ) {
+	if ( $adminOps['fep_cf_akismet'] == '1' ) {
 	// Check if Akismet is installed with the corresponding API key
 if( function_exists( 'akismet_http_post' ))
 {   
@@ -418,7 +441,7 @@ if (current_user_can('manage_options'))
 
 		if((count($errors->get_error_codes())==0) &&  $fep->fep_verify_nonce($postedToken)){
 		 
-		 $wpdb->query($wpdb->prepare("INSERT INTO {$fep->fepTable} (from_user, from_name, from_email, to_user, department, last_sender, send_date, last_date, message_title, message_contents, message_read) VALUES ( %d, %s, %s, %d, %s, %d, %s, %s, %s, %s, %d)", $fromID, $fromName, $fromEmail, $to, $department, $fromID, $send_date, $send_date, $title, $content, $read));
+		 $wpdb->query($wpdb->prepare("INSERT INTO {$fep->fepTable} (from_user, from_name, from_email, to_user, department, last_sender, send_date, last_date, message_title, message_contents, status) VALUES ( %d, %s, %s, %d, %s, %d, %s, %s, %s, %s, %d)", $fromID, $fromName, $fromEmail, $to, $department, $fromID, $send_date, $send_date, $title, $content, $read));
 		$message_id = $wpdb->insert_id;
 		if ($message_id) {
 		$wpdb->query($wpdb->prepare('INSERT INTO '.$fep->cfTable.' (message_id, field_name, field_value) VALUES ( %d, "ip", %s ),( %1$d, "address", %s ),( %1$d, "website", %s ),( %1$d, "browser", %s ),( %1$d, "referer", %s ),( %1$d, "Spam Points", %s )', $message_id, $ip, $fromAddress, $website, $browser, $referer, $points));
@@ -620,6 +643,84 @@ $errors->add('noMessage', __("Please enter your message in \"Message\" field!", 
 	return false;
 }
 
+		function is_ip_blacklisted($ip) {
+		$adminOps = $this->getAdminOps();
+        $ipBlacklist = explode(',', $adminOps['fep_ip_block']);
+		  $ipBlacklist = array_unique($ipBlacklist);
+		  
+        $ip_blocks = explode(".", $ip);
+        if(count($ip_blocks)==4) {
+            foreach($ipBlacklist as $Blockip) {
+			$Blockip = trim($Blockip);
+                if($Blockip!='') {
+                    $blocks = explode(".", $Blockip);
+                    if(count($blocks)==4) {
+                        $matched = true;
+                        for($k=0;$k<4;$k++) {
+                            if(preg_match('|([0-9]+)-([0-9]+)|', $blocks[$k], $match)) {
+                                if($ip_blocks[$k]<$match[1] || $ip_blocks[$k]>$match[2]) {
+                                    $matched = false;
+                                    break;
+                                }
+                            } else if($blocks[$k]!="*" && $blocks[$k]!=$ip_blocks[$k]) {
+                                $matched = false;
+                                break;
+                            }
+                        }
+                        if($matched) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+	
+	function is_email_blacklisted($email) {
+        $adminOps = $this->getAdminOps();
+        $emailBlacklist = explode(',', $adminOps['email_blacklist']);
+		  $emailBlacklist = array_unique($emailBlacklist);
+		  
+        $email = strtolower($email);
+        foreach($emailBlacklist as $rule) {
+            $rule = str_replace("*", ".*", str_replace(".", "\.", strtolower(trim($rule))));
+            if($rule!='') {
+                if(substr($rule,0,1)=="!") {
+                    $rule = '|^((?'.$rule.').*)$|';
+                } else {
+                    $rule = '|^'.$rule.'$|';
+                }
+                if(preg_match($rule, $email)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+	
+	function is_email_whitelisted($email) {
+        $adminOps = $this->getAdminOps();
+        $emailWhitelisted = explode(',', $adminOps['email_whitelist']);
+		  $emailWhitelisted = array_unique($emailWhitelisted);
+		  
+        $email = strtolower($email);
+        foreach($emailWhitelisted as $rule) {
+            $rule = str_replace("*", ".*", str_replace(".", "\.", strtolower(trim($rule))));
+            if($rule!='') {
+                if(substr($rule,0,1)=="!") {
+                    $rule = '|^((?'.$rule.').*)$|';
+                } else {
+                    $rule = '|^'.$rule.'$|';
+                }
+                if(preg_match($rule, $email)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 		function Error($wp_error){
 	if(!is_wp_error($wp_error)){
 		return '';
@@ -669,14 +770,14 @@ function fep_weekly_spam_delete()
 	  $fep = new fep_main_class();
 	  $prev = time()-604800;
 	  $prevdate = date("Y-m-d H:i:s", $prev);
-	  $spams = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$fep->fepTable} WHERE send_date < %s AND (message_read = 7 OR message_read = 8) ORDER BY id ASC", $prevdate));
+	  $spams = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$fep->fepTable} WHERE send_date < %s AND (status = 7 OR status = 8) ORDER BY id ASC", $prevdate));
 	  $spamID = array();
 	  foreach ($spams as $spam) {
 	  $spamID[] = $spam->id;
 	  }
 	  $query = implode(",", $spamID);
 	  $wpdb->query("DELETE FROM {$fep->cfTable} WHERE message_id IN ({$query})");
-	  $wpdb->query($wpdb->prepare("DELETE FROM {$fep->fepTable} WHERE send_date < %s AND (message_read = 7 OR message_read = 8)", $prevdate));
+	  $wpdb->query($wpdb->prepare("DELETE FROM {$fep->fepTable} WHERE send_date < %s AND (status = 7 OR status = 8)", $prevdate));
 	  
       return;
     }

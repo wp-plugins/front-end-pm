@@ -44,7 +44,7 @@ if (!class_exists("fep_main_class"))
             last_date datetime NOT NULL default '0000-00-00 00:00:00',
             message_title varchar(250) NOT NULL,
             message_contents longtext NOT NULL,
-            message_read int(11) NOT NULL default '0',
+            status int(11) NOT NULL default '0',
             to_del int(11) NOT NULL default '0',
             from_del int(11) NOT NULL default '0',
             PRIMARY KEY (id))
@@ -252,11 +252,11 @@ if (!class_exists("fep_main_class"))
 		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='have_permission'>".$viewAdminOps['have_permission']." </TEXTAREA></td></tr>
 		  <tr><td>".__("Valid email address for \"to\" field of announcement email", "fep")."<br /><small>".__("All users email will be in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='30' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
 		  <tr><td>".__("Minimum Capability to use messaging", "fep")."<br /><small>".sprintf(__("see <a href='%s' target='_blank'>WORDPRESS CAPABILITIES</a> to get capabilities (use only one capability)", "fep"),esc_url($capUrl))."</small></td><td><input type='text' size='30' name='min_cap' value='".$viewAdminOps['min_cap']."' /><br /><small>".__("Keep blank if allowed for all users", "fep")."</small></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='notify_ann' ".checked($viewAdminOps['notify_ann'], 'on', false)." /> ".__("Send email to all users when a new announcement is published?", "fep")."</td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' ".checked($viewAdminOps['hide_directory'], 'on', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' ".checked($viewAdminOps['hide_autosuggest'], 'on', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
-		  <tr><td colspan='2'><input type='checkbox' name='disable_new' ".checked($viewAdminOps['disable_new'], 'on', false)." /> ".__("Disable \"send new message\" for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
-          <tr><td colspan='2'><input type='checkbox' name='hide_branding' ".checked($viewAdminOps['hide_branding'], 'on', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='notify_ann' value='1' ".checked($viewAdminOps['notify_ann'], '1', false)." /> ".__("Send email to all users when a new announcement is published?", "fep")."</td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' value='1' ".checked($viewAdminOps['hide_directory'], '1', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' value='1' ".checked($viewAdminOps['hide_autosuggest'], '1', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
+		  <tr><td colspan='2'><input type='checkbox' name='disable_new' value='1' ".checked($viewAdminOps['disable_new'], '1', false)." /> ".__("Disable \"send new message\" for all users except admins?", "fep")."<br /><small>".__("Users can send reply", "fep")."</small></td></tr>
+          <tr><td colspan='2'><input type='checkbox' name='hide_branding' value='1' ".checked($viewAdminOps['hide_branding'], '1', false)." /> ".__("Hide Branding Footer?", "fep")."</td></tr>
           <tr><td colspan='2'><span><input class='button-primary' type='submit' name='fep-admin-save' value='".__("Save Options", "fep")."' /></span></td><td><input type='hidden' name='token' value='$token' /></td></tr>
           </table>
 		  </form>
@@ -308,7 +308,7 @@ if (!class_exists("fep_main_class"))
 							  'hide_branding' => ( isset( $_POST['hide_branding'] ) ) ? $_POST['hide_branding']: false
         );
 		$postedToken = filter_input(INPUT_POST, 'token');
-		if($this->fep_verify_nonce($postedToken)){
+		if($this->fep_verify_nonce($postedToken) && current_user_can('manage_options')){
         update_option($this->adminOpsName, $saveAdminOps);
         return true;}
       }
@@ -485,7 +485,7 @@ if (!class_exists("fep_main_class"))
         $this->error = __("You cannot send messages because you are blocked by administrator!", "fep");
         return;
       }
-	  if ($this->adminOps['disable_new'] == 'on' && !current_user_can('manage_options'))
+	  if ($this->adminOps['disable_new'] == '1' && !current_user_can('manage_options'))
 		{
         $this->error = __("Send new message is disabled for users!", "fep");
         return;
@@ -500,7 +500,7 @@ if (!class_exists("fep_main_class"))
         $newMsg = "<p><strong>".__("Create New Message", "fep").":</strong></p>";
         $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post'>".
         __("To", "fep")."<font color='red'>*</font>: ";
-		if($this->adminOps['hide_autosuggest'] != 'on' || current_user_can('manage_options')) { 
+		if($this->adminOps['hide_autosuggest'] != '1' || current_user_can('manage_options')) { 
 		$newMsg .="<noscript>Username of recipient</noscript><br/>";
         $newMsg .="<input type='hidden' id='search-qq' name='message_to' autocomplete='off' value='$message_to' />
 		<input type='text' id='search-q' onkeyup='javascript:FEPautosuggest(\"".$this->actionURL."\")' name='message_top' placeholder='Name of recipient' autocomplete='off' value='$message_top' /><br/>
@@ -596,8 +596,8 @@ if (!class_exists("fep_main_class"))
         $this->error = __("You cannot send messages because you are blocked by administrator!", "fep");
       }
 
-      if ($post->message_read == 0 && $user_ID == $post->to_user) //Update only if the reader is the reciever 
-        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET message_read = 1 WHERE id = %d", $pID));
+      if ($post->status == 0 && $user_ID == $post->to_user) //Update only if the reader is the reciever 
+        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 1 WHERE id = %d", $pID));
 
       return $threadOut;
     }
@@ -606,7 +606,7 @@ if (!class_exists("fep_main_class"))
     function getWholeThread($id)
     {
       global $wpdb;
-      $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE id = %d OR parent_id = %d ORDER BY id ASC", $id, $id));
+      $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE id = %d OR parent_id = %d ORDER BY send_date ASC", $id, $id));
       return $results;
     }
 	
@@ -714,7 +714,7 @@ if (!class_exists("fep_main_class"))
         $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, to_user, message_title, message_contents, parent_id, last_sender, send_date, last_date) VALUES ( %d, %d, %s, %s, %d, %d, %s, %s )", $from, $to, $title, $content, $parentID, $from, $send_date, $send_date));
       } else {
         $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, to_user, message_title, message_contents, parent_id, send_date) VALUES ( %d, %d, %s, %s, %d, %s)", $from, $to, $title, $content, $parentID, $send_date));
-        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET message_read = 0,last_sender = %d,last_date = %s, to_del = 0, from_del = 0 WHERE id = %d", $from, $send_date, $parentID));
+        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 0,last_sender = %d,last_date = %s, to_del = 0, from_del = 0 WHERE id = %d", $from, $send_date, $parentID));
       }
 	  $this->sendEmail($to, $fromName, $title); }
 
@@ -816,7 +816,7 @@ if (!class_exists("fep_main_class"))
 		$a = 0;
         foreach ($msgs as $msg)
         {
-          if ($msg->message_read == 0 && $msg->last_sender != $user_ID)
+          if ($msg->status == 0 && $msg->last_sender != $user_ID)
             $read = "<font color='#FF0000'>".__("Unread", "fep")."</font>";
           else
             $read = __("Read", "fep");
@@ -835,7 +835,7 @@ if (!class_exists("fep_main_class"))
 		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessage&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>".$read."</small></td>";
 		  $msgsOut .= "<td>" .$uLast->display_name. "<br/><small>".$this->formatDate($msg->last_date)."</small></td>";
 		  
-		  if ($_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
+		  if (( isset( $_GET['fepaction'] ) ) ? $_GET['fepaction']: '' === 'viewallmgs' && current_user_can('manage_options')){
               $msgsOut .= "<td><a href='".$this->actionURL."deletemessageadmin&id=".$msg->id."&token=$token' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>";
 			  } else {
 			  $msgsOut .= "<td><a href='".$this->actionURL."deletemessage&id=".$msg->id."&token=$token' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>";
@@ -858,10 +858,10 @@ if (!class_exists("fep_main_class"))
 	function getUserNumMsgs()
     {
       global $wpdb, $user_ID;
-	  if ($_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE parent_id = 0 AND (message_read = 0 OR message_read = 1)", $user_ID, $user_ID));
+	  if (( isset( $_GET['fepaction'] ) ) ? $_GET['fepaction']: '' === 'viewallmgs' && current_user_can('manage_options')){
+	  $get_messages = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE parent_id = 0 AND (status = 0 OR status = 1)");
 	  } else {
-      $get_messages = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE ((to_user = %d AND parent_id = 0 AND to_del = 0) OR (from_user = %d AND parent_id = 0 AND from_del = 0)) AND (message_read = 0 OR message_read = 1)", $user_ID, $user_ID));}
+      $get_messages = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE ((to_user = %d AND parent_id = 0 AND to_del = 0) OR (from_user = %d AND parent_id = 0 AND from_del = 0)) AND (status = 0 OR status = 1)", $user_ID, $user_ID));}
       $num = $wpdb->num_rows;
       return $num;
     }
@@ -877,10 +877,10 @@ if (!class_exists("fep_main_class"))
       $start = $page * $adminOps['messages_page'];
       $end = $adminOps['messages_page'];
 	  
-	  if ($_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE parent_id = 0 AND (message_read = 0 OR message_read = 1) ORDER BY last_date DESC LIMIT %d, %d", $start, $end));
+	  if (( isset( $_GET['fepaction'] ) ) ? $_GET['fepaction']: '' === 'viewallmgs' && current_user_can('manage_options')){
+	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE parent_id = 0 AND (status = 0 OR status = 1) ORDER BY last_date DESC LIMIT %d, %d", $start, $end));
 	  } else {
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE ((to_user = %d AND parent_id = 0 AND to_del = 0) OR (from_user = %d AND parent_id = 0 AND from_del = 0)) AND (message_read = 0 OR message_read = 1) ORDER BY last_date DESC LIMIT %d, %d", $user_ID, $user_ID, $start, $end));
+	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE ((to_user = %d AND parent_id = 0 AND to_del = 0) OR (from_user = %d AND parent_id = 0 AND from_del = 0)) AND (status = 0 OR status = 1) ORDER BY last_date DESC LIMIT %d, %d", $user_ID, $user_ID, $start, $end));
 	  }
 
       return $get_messages;
@@ -890,7 +890,7 @@ if (!class_exists("fep_main_class"))
     {
       global $wpdb, $user_ID;
 
-      $get_pms = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE (to_user = %d AND parent_id = 0 AND to_del = 0 AND message_read = 0 AND last_sender <> %d) OR (from_user = %d AND parent_id = 0 AND from_del = 0 AND message_read = 0 AND last_sender <> %d)", $user_ID, $user_ID, $user_ID, $user_ID));
+      $get_pms = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE (to_user = %d AND parent_id = 0 AND to_del = 0 AND status = 0 AND last_sender <> %d) OR (from_user = %d AND parent_id = 0 AND from_del = 0 AND status = 0 AND last_sender <> %d)", $user_ID, $user_ID, $user_ID, $user_ID));
       return $wpdb->num_rows;
     }
 	function getNewMsgs_btn(){
@@ -908,7 +908,7 @@ if (!class_exists("fep_main_class"))
     {
       global $wpdb, $user_ID;
 
-      $get_pmss = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 0 AND parent_id = 0");
+      $get_pmss = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 0 AND parent_id = 0");
 	  if ($wpdb->num_rows){
 	  	$newmgs = " (<font color='red'>";
 		$newmgs .= $wpdb->num_rows;
@@ -980,14 +980,14 @@ if (!class_exists("fep_main_class"))
 	  if (!$this->fep_verify_nonce($_GET['token'])){
 	  return "<div id='fep-error'>".__("Invalid Token!", "fep")."</div>";}
 	  
-	  $spams = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8 ORDER BY id ASC");
+	  $spams = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 7 OR status = 8 ORDER BY id ASC");
 	  $spamID = array();
 	  foreach ($spams as $spam) {
 	  $spamID[] = $spam->id;
 	  }
 	  $query = implode(",", $spamID);
 	  $wpdb->query("DELETE FROM {$this->cfTable} WHERE message_id IN ({$query})");
-	  $wpdb->query("DELETE FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8");
+	  $wpdb->query("DELETE FROM {$this->fepTable} WHERE status = 7 OR status = 8");
 	  $this->success = __("All spam messages successfully deleted!", "fep");
       return;
     }
@@ -1067,15 +1067,15 @@ if (!class_exists("fep_main_class"))
 
     function getAnnouncements()
     {
-      global $wpdb; //message_read = 2 indicates that the msg is an announcement :)
-      $results = $wpdb->get_results("SELECT * FROM {$this->fepTable} WHERE message_read = 2 ORDER BY id DESC");
+      global $wpdb; //status = 2 indicates that the msg is an announcement :)
+      $results = $wpdb->get_results("SELECT * FROM {$this->fepTable} WHERE status = 2 ORDER BY id DESC");
       return $results;
     }
 
     function getAnnouncementsNum()
     {
-      global $wpdb; //message_read = 2 indicates that the msg is an announcement :)
-      $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 2 ORDER BY id DESC");
+      global $wpdb; //status = 2 indicates that the msg is an announcement :)
+      $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 2 ORDER BY id DESC");
       return $wpdb->num_rows;
     }
 	function getAnnouncementsNum_btn(){
@@ -1124,9 +1124,9 @@ if (!class_exists("fep_main_class"))
         return;
   			}
 		//if nothing wrong continue
-        $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, message_title, message_contents, send_date, message_read) VALUES ( %s, %s, %s, %s, %d )",$from, $title, $contents, $send_date, $read));
+        $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, message_title, message_contents, send_date, status) VALUES ( %s, %s, %s, %s, %d )",$from, $title, $contents, $send_date, $read));
 
-	  if ($adminOps['notify_ann'] == 'on') {
+	  if ($adminOps['notify_ann'] == '1') {
 	  $this->notify_users($title);
 	  $this->success = __("The announcement was successfully added and sent email to all users!", "fep");
         return;
@@ -1229,7 +1229,7 @@ if (!class_exists("fep_main_class"))
 		$a = 0;
         foreach ($msgs as $msg)
         {
-          if ($msg->message_read == 5 || $msg->message_read == 7)
+          if ($msg->status == 5 || $msg->status == 7)
             $read = "<font color='#FF0000'>".__("Unread", "fep")."</font>";
           else
             $read = __("Read", "fep");
@@ -1308,10 +1308,10 @@ if (!class_exists("fep_main_class"))
       <input type='submit' value='".__("Send Message", "fep")."' />
       </form>";
 	  }
-	  if ($fullMgs->message_read == 5 && $fullMgs->to_user == $user_ID){
-        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET message_read = 6 WHERE id = %d", $pID));
-		} elseif($fullMgs->message_read == 7 && $fullMgs->to_user == $user_ID){
-        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET message_read = 8 WHERE id = %d", $pID));}
+	  if ($fullMgs->status == 5 && $fullMgs->to_user == $user_ID){
+        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 6 WHERE id = %d", $pID));
+		} elseif($fullMgs->status == 7 && $fullMgs->to_user == $user_ID){
+        $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 8 WHERE id = %d", $pID));}
 	  return $threadOut;
 	  }
 	
@@ -1323,14 +1323,14 @@ if (!class_exists("fep_main_class"))
 	  }else{$page = 0;}
       $adminOps = $this->getAdminOps();
       $start = $page * $adminOps['messages_page'];
-      $end = $adminOps['messages_page']; //message_read = 5/6 indicates that the msg is a contact message, 7/8 indicates that the msg is a spam :)
+      $end = $adminOps['messages_page']; //status = 5/6 indicates that the msg is a contact message, 7/8 indicates that the msg is a spam :)
 	  $get_messages = '';
 	  if ($_GET['fepaction'] === 'contactmgs' && current_user_can('manage_options')){
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE message_read = 5 OR message_read = 6 ORDER BY send_date DESC LIMIT %d, %d", $start, $end));
+	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE status = 5 OR status = 6 ORDER BY send_date DESC LIMIT %d, %d", $start, $end));
 	  } elseif ($_GET['fepaction'] === 'spam' && current_user_can('manage_options')){
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8 ORDER BY send_date DESC LIMIT %d, %d", $start, $end));
+	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE status = 7 OR status = 8 ORDER BY send_date DESC LIMIT %d, %d", $start, $end));
 	  } elseif ($_GET['fepaction'] === 'mycontactmgs'){
-	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE to_user = %d AND to_del = 0 AND (message_read = 5 OR message_read = 6) ORDER BY send_date DESC LIMIT %d, %d", $user_ID, $start, $end));
+	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE to_user = %d AND to_del = 0 AND (status = 5 OR status = 6) ORDER BY send_date DESC LIMIT %d, %d", $user_ID, $start, $end));
 	  }
 
       return $get_messages;
@@ -1351,22 +1351,22 @@ if (!class_exists("fep_main_class"))
 	
 	function getcontact_mgsNum()
     {
-      global $wpdb, $user_ID; //message_read = 5/6 indicates that the msg is a contact message, 7/8 indicates that the msg is a spam :)
+      global $wpdb, $user_ID; //status = 5/6 indicates that the msg is a contact message, 7/8 indicates that the msg is a spam :)
 	  
 	  if ($_GET['fepaction'] === 'contactmgs' && current_user_can('manage_options')){
-	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 5 OR message_read = 6");
+	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 5 OR status = 6");
 	  } elseif ($_GET['fepaction'] === 'spam' && current_user_can('manage_options')){
-	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 7 OR message_read = 8");
+	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 7 OR status = 8");
 	  } elseif ($_GET['fepaction'] === 'mycontactmgs'){
-	  $results = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE to_user = %d AND to_del = 0 AND (message_read = 5 OR message_read = 6)", $user_ID));
+	  $results = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE to_user = %d AND to_del = 0 AND (status = 5 OR status = 6)", $user_ID));
 	  }
       return $wpdb->num_rows;
     }
 	function getcontact_new()
     {
-      global $wpdb; //message_read = 5 indicates that the msg is a new contact message :)
+      global $wpdb; //status = 5 indicates that the msg is a new contact message :)
 	  
-	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 5");
+	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 5");
 	  
 	  if ($wpdb->num_rows){
 	  	$newmgs = " (<font color='red'>";
@@ -1378,9 +1378,9 @@ if (!class_exists("fep_main_class"))
     }
 	function getSpam_new()
     {
-      global $wpdb; //message_read = 7 indicates that the msg is a new spam message :)
+      global $wpdb; //status = 7 indicates that the msg is a new spam message :)
 	  
-	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE message_read = 7");
+	  $results = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE status = 7");
 	  
 	  if ($wpdb->num_rows){
 	  	$newmgs = " (<font color='red'>";
@@ -1392,9 +1392,9 @@ if (!class_exists("fep_main_class"))
     }
 	function mycontact_new()
     {
-      global $wpdb, $user_ID; //message_read = 5 indicates that the msg is a new contact message :)
+      global $wpdb, $user_ID; //status = 5 indicates that the msg is a new contact message :)
 	  
-	  $results = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE to_user = %d AND message_read = 5 AND to_del = 0", $user_ID));
+	  $results = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE to_user = %d AND status = 5 AND to_del = 0", $user_ID));
 	  
 	  if ($wpdb->num_rows){
 	  	$newmgs = " (<font color='red'>";
@@ -1408,11 +1408,11 @@ if (!class_exists("fep_main_class"))
     {
 	global $wpdb;
 	if (isset($_GET['id'])){$id = preg_replace('/\D/', '',$_GET['id']);}else{ $id = 0; }
-      $read = $wpdb->get_var($wpdb->prepare("SELECT message_read FROM {$this->fepTable} WHERE id = %d", $id));
+      $read = $wpdb->get_var($wpdb->prepare("SELECT status FROM {$this->fepTable} WHERE id = %d", $id));
 	  if ( $read == 7 && current_user_can('manage_options')){
-	  $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET message_read = 5 WHERE id = %d", $id));
+	  $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 5 WHERE id = %d", $id));
 	  } elseif ( $read == 8 && current_user_can('manage_options')){
-	  $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET message_read = 6 WHERE id = %d", $id));}
+	  $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 6 WHERE id = %d", $id));}
 	  $this->success = __("Your message was successfully moved to Contact Message!", "fep");
         return;
 	
@@ -1424,7 +1424,7 @@ if (!class_exists("fep_main_class"))
 
 function dispDirectory()
     {
-	if($this->adminOps['hide_directory'] == 'on' && !current_user_can('manage_options'))
+	if($this->adminOps['hide_directory'] == '1' && !current_user_can('manage_options'))
 	  return;
       $users = $this->get_users();
 	  $result = count_users();
@@ -1527,7 +1527,7 @@ function dispDirectory()
 	  if (in_array($user_login,$tocheck)){
 	  $menu .= "<a class='fep-button' href='".$this->actionURL."mycontactmgs'>".sprintf(__("Contact Message%s", "fep"),$myconNew) . "</a>";}}
       $menu .= "<a class='fep-button' href='".$this->actionURL."viewannouncements'>".sprintf(__("Announcements%s", "fep"),$numAnn)."</a>";
-	  if($this->adminOps['hide_directory'] != 'on' || current_user_can('manage_options'))
+	  if($this->adminOps['hide_directory'] != '1' || current_user_can('manage_options'))
       $menu .= "<a class='fep-button' href='".$this->actionURL."directory'>".__("Directory", "fep")."</a>";
       $menu .= "<a class='fep-button' href='".$this->actionURL."settings'>".__("Settings", "fep")."</a>";
 	  if(current_user_can('manage_options')){
@@ -1557,7 +1557,7 @@ function dispDirectory()
         if ($this->error != "" || $this->success != "")
           $footer .= $this->dispNotify();
       
-      if($this->adminOps['hide_branding'] != 'on'){
+      if($this->adminOps['hide_branding'] != '1'){
 	  $version = $this->get_version();
         $footer .= "<div id='fep-footer'><a href='http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/'>Front End PM ".$version['version']."</a></div>";}
       
@@ -1616,7 +1616,7 @@ function dispDirectory()
             $out .= $this->deleteMessage();
             break;
           case 'directory':
-		  if($this->adminOps['hide_directory'] != 'on' || current_user_can('manage_options'))
+		  if($this->adminOps['hide_directory'] != '1' || current_user_can('manage_options'))
             $out .= $this->dispDirectory();
 			else
 			$out .= $this->dispMsgBox();
@@ -1802,6 +1802,9 @@ function dispDirectory()
     function checkDB()
     {
 	global $wpdb;
+	$Col = $wpdb->get_var("SHOW COLUMNS FROM {$this->fepTable} LIKE 'message_read'");
+	if ($Col)
+	$wpdb->query("ALTER TABLE {$this->fepTable} CHANGE COLUMN message_read status INT(11) NOT NULL default '0'" );
 	$version = $this->get_version();
       if ( get_option( "fep_db_version" ) != $version['dbversion'] || get_option( "fep_cf_db_version" ) != $version['cfversion'] )
 	  $this->fepActivate();

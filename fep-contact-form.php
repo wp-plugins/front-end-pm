@@ -58,11 +58,12 @@ if (!class_exists("fep_cf_class"))
           <tr><th width='30%'>".__("Setting", "fep")."</th><th width='70%'>".__("Value", "fep")."</th></tr>
           </thead>
 		  <tr><td>".__("Required Fields", "fep")."<br/><small>".__("Name, Email, Subject, Message always required.", "fep")."</small></td><td><input type='text' size='30' name='fep_cf_req' value='".$viewAdminOps['fep_cf_req']."' /><br/><small>".__("Separated by comma. Available (Address,Website)", "fep")."</small></td></tr>
-		  <tr><td>".__("Bad words", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_cf_bad'>".$viewAdminOps['fep_cf_bad']." </TEXTAREA><br /><small>".__("It will match inside words, so \"press\" will match \"WordPress\"", "fep")."</small></td></tr>
-		  <tr><td>".__("Email Footer", "fep")."<br /><small>".__("For sending email", "fep")."</small></td><td><TEXTAREA name='fep_cf_efoot'>".$viewAdminOps['fep_cf_efoot']." </TEXTAREA></td></tr>
-		  <tr><td>".__("IP Blacklist", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']." </TEXTAREA><br /><small>".__("You can use range and wildcard(e.g. 192.168.10-50.*)", "fep")."</small></td></tr>
-		  <tr><td><input type='checkbox' name='email_blacklist_check' value='1' ".checked($viewAdminOps['email_blacklist_check'], '1', false)." />".__("Email Blacklist", "cfp")."<br/><small>".__("Separated by comma.", "cfp")."</small></td><td><TEXTAREA name='email_blacklist'>".$viewAdminOps['email_blacklist']." </TEXTAREA><br /><small>".__("You can use wildcard. (e.g. *@badsite.com)", "fep")."</small></td></tr>
-		  <tr><td><input type='checkbox' name='email_whitelist_check' value='1' ".checked($viewAdminOps['email_whitelist_check'], '1', false)." />".__("Email Whitelist", "cfp")."<br/><small>".__("Separated by comma. (If both email blacklist and whitelist are checked, email whitelist will be used).", "cfp")."</small></td><td><TEXTAREA name='email_whitelist'>".$viewAdminOps['email_whitelist']." </TEXTAREA><br /><small>".__("You can use wildcard. (e.g. *@goodsite.com)", "fep")."</small></td></tr>
+		  <tr><td>".__("Bad words", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_cf_bad'>".$viewAdminOps['fep_cf_bad']."</TEXTAREA><br /><small>".__("It will match inside words, so \"press\" will match \"WordPress\"", "fep")."</small></td></tr>
+		  <tr><td>".__("Email Footer", "fep")."<br /><small>".__("For sending email", "fep")."</small></td><td><TEXTAREA name='fep_cf_efoot'>".$viewAdminOps['fep_cf_efoot']."</TEXTAREA></td></tr>
+		  <tr><td>".__("IP Blacklist", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='fep_ip_block'>".$viewAdminOps['fep_ip_block']."</TEXTAREA><br /><small>".__("You can use range and wildcard(e.g. 192.168.10-50.*)", "fep")."</small></td></tr>
+		  <tr><td><input type='checkbox' name='email_blacklist_check' value='1' ".checked($viewAdminOps['email_blacklist_check'], '1', false)." />".__("Email Blacklist", "cfp")."<br/><small>".__("Separated by comma.", "cfp")."</small></td><td><TEXTAREA name='email_blacklist'>".$viewAdminOps['email_blacklist']."</TEXTAREA><br /><small>".__("You can use wildcard. (e.g. *@badsite.com)", "fep")."</small></td></tr>
+		  <tr><td><input type='checkbox' name='email_whitelist_check' value='1' ".checked($viewAdminOps['email_whitelist_check'], '1', false)." />".__("Email Whitelist", "cfp")."<br/><small>".__("Separated by comma. (If both email blacklist and whitelist are checked, email whitelist will be used).", "cfp")."</small></td><td><TEXTAREA name='email_whitelist'>".$viewAdminOps['email_whitelist']."</TEXTAREA><br /><small>".__("You can use wildcard. (e.g. *@goodsite.com)", "fep")."</small></td></tr>
+		  <tr><td><input type='checkbox' name='allow_attachment' value='1' ".checked($viewAdminOps['allow_attachment'], '1', false)." />".__("Allow to send attachment", "fep")."<br /><small>".__("Set maximum size of attachment", "fep")."</small></td><td><input type='text' size='30' name='attachment_size' value='".$viewAdminOps['attachment_size']."' /><br /><small>".__("Use KB, MB or GB.(eg. 4MB)", "fep")."</small></td></tr>
 		  <tr><td>".__("Maximum points before mark as spam", "fep")."<br /></td><td><input type='text' size='30' name='fep_cf_point' value='".$viewAdminOps['fep_cf_point']."' /><br /><small>".__("Default: 4", "fep")."</small></td></tr>
 		  <tr><td>".__("Time delay between two messages send by a user via FEP Contact Form in minutes", "fep")."<br /></td><td><input type='text' size='30' name='cf_time_delay' value='".$viewAdminOps['cf_time_delay']."' /><br /><small>".__("0 = No delay required", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='fep_cf_cap' value='1' ".checked($viewAdminOps['fep_cf_cap'], '1', false)." /> ".__("Enable CAPTCHA?", "fep")."<br /><small>".__("Configure CAPTCHA below", "fep")."</small></td></tr>
@@ -104,6 +105,8 @@ if (!class_exists("fep_cf_class"))
 							  'email_blacklist' => $_POST['email_blacklist'],
 							  'email_whitelist_check' => ( isset( $_POST['email_whitelist_check'] ) ) ? $_POST['email_whitelist_check']: false,
 							  'email_whitelist' => $_POST['email_whitelist'],
+							  'attachment_size' => trim($_POST['attachment_size']),
+							  'allow_attachment' => ( isset( $_POST['allow_attachment'] ) ) ? $_POST['allow_attachment']: false,
 							  'fep_cf_point' => $_POST['fep_cf_point'],
 							  'cf_time_delay' => $_POST['cf_time_delay'],
 							  'fep_cf_cap' => ( isset( $_POST['fep_cf_cap'] ) ) ? $_POST['fep_cf_cap']: false,
@@ -143,12 +146,14 @@ if (!class_exists("fep_cf_class"))
     {
       $pmAdminOps = array('fep_cf_req' => '',
                           'fep_cf_bad' => 'ahole,anus,ash0le,ash0les,asholes,ass,Aazzhole,bassterds,bastard,bastards,bastardz,basterds,basterdz,Biatch,bitch,Blow Job,boffing,butthole,buttwipe,c0ck,c0cks,c0k,Carpet Muncher,cawk,cawks,Clit,cnts,cntz,cock,cockhead,cock-head,cocks,CockSucker,cock-sucker,crap,cum,cunt,cunts,cuntz,dick,dild0,dild0s,dildo,dildos,dilld0,dilld0s,dominatricks,dominatrics,dominatrix,dyke,enema,f u c k,f u c k e r,fag,fag1t,faget,fagg1t,faggit,faggot,fagit,fags,fagz,faig,faigs,fart,flipping the bird,fuck,Fudge Packer,fuk,g00k,gay,God-damned,h00r,h0ar,h0re,hells,hoar,hoor,hoore,jackoff,jap,japs,jerk-off,jisim,jiss,jizm,jizz,kunt,kunts,kuntz,Lesbian,Lezzian,Lipshits,Lipshitz,masochist,masokist,massterbait,masstrbait,masstrbate,masterbaiter,masterbate,masterbates,Motha Fucker,Motha Fuker,Motha Fukkah,Motha Fukker,Mother Fucker,Mother Fukah,Mother Fuker,Mother Fukkah,Mother Fukker,mother-fucker,Mutha Fucker,Fuker,Fukker,orgasim;,orgasm,orgasum,peeenus,peenus,peinus,pen1s,penas,penis,penus,penuus,Phuc,Phuck,Phuk,Phuker,Phukker,pusse,pussy,puuke,puuker,queer,qweir,recktum,rectum,screwing,semen,sex,Sh!t,sh1t,sh1ts,sh1tz,shit,shits,slut,tit,turd,va1jina,vag1na,vagiina,vagina,vaj1na,vajina,vullva,vulva,w0p,wh00r,wh0re,whore,xrated,xxx,b!+ch,blowjob,clit,arschloch,shit,b!tch,b17ch,b1tch,bastard,bi+ch,boiolas,buceta,c0ck,cawk,chink,cipa,clits,cock,cum,cunt,dildo,dirsa,ejakulate,fatass,fcuk,fux0r,hoer,hore,l3itch,l3i+ch,lesbian,masturbate,masterbat,masterbat3,motherfucker,pusse,scrotum,shemale,shi+,sh!+,smut,teets,boob,b00bs,w00se,jackoff,wank,whoar,dyke,shit,@$$,amcik,ayir,bi7ch,bollock,breasts,butt-pirate,Cock,cunt,d4mn,dike,foreskin,Fotze,Fu(,futkretzn,h0r,h4x0r,hell,helvete,hoer,honkey,jizz,lesbo,mamhoon,piss,poontsee,poop,porn,p0rn,pr0n,preteen,pula,pule,puta,puto,screw',
-						  'fep_cf_efoot' => 'Please DO NOT reply to this email directly because we do not check inbox of this email.',
+						  'fep_cf_efoot' => 'Please DO NOT reply to this email directly. Use our contact form instead',
 						  'fep_ip_block' => '',
 						  'email_blacklist_check' => false,
 						  'email_blacklist' => '',
 						  'email_whitelist_check' => false,
 						  'email_whitelist' => '',
+						  'attachment_size' => '4MB',
+						  'allow_attachment' => false,
 						  'fep_cf_point' => 4,
 						  'cf_time_delay' => 10,
 						  'fep_cf_cap' => false,
@@ -215,7 +220,7 @@ if (!class_exists("fep_cf_class"))
 	  $message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
 	  $message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
 	
-		$newMsg = "<form name='message' action='' method='post'>";
+		$newMsg = "<form name='message' action='' method='post' enctype='multipart/form-data'>";
         $newMsg .= __("Department", "fep")."<font color='red'>*</font>: <br />";
 		if($records){
 		 foreach($records as $key=>$eachRecord){
@@ -244,6 +249,8 @@ if (!class_exists("fep_cf_class"))
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='$message_title' /><br/>".
         __("Message", "fep")."<font color='red'>*</font>:<br/>".$fep->get_form_buttons()."<br/>
         <textarea name='message_content' placeholder='Message Content'>$message_content</textarea><br/>";
+		if ($adminOps['allow_attachment'] == '1') {
+		$newMsg .="<input type='file' name='fep_cf_upload' /><br/>";}
 		if ($adminOps['fep_cf_cap'] == '1')
       {
 		$newMsg .= __("CAPTCHA question", "fep").":<br/>";
@@ -288,7 +295,7 @@ if (!class_exists("fep_cf_class"))
 		$ip = $this->get_ip();
 		$browser = esc_attr($_SERVER['HTTP_USER_AGENT']);
 		$referer = $_SERVER['HTTP_REFERER'];
-		$read = 5;
+		$status = 5;
 		
 		if (is_user_logged_in()) {
 		//$fromID = $user_ID;
@@ -420,7 +427,7 @@ if( function_exists( 'akismet_http_post' ))
     $result = ( is_array( $response ) && isset( $response[1] ) ) ? $response[1] : 'false';
 	
 	if ($result == true )
-	$read = 7;
+	$status = 7;
 	} else {
 	if (current_user_can('manage_options'))
 	 print '<div id="fep-error">' .__("AKISMET KEY is not configured.", "fep"). ' </div>';
@@ -431,7 +438,18 @@ if (current_user_can('manage_options'))
  }
  }
 	
-
+		if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		$uploadedfile = $_FILES['fep_cf_upload'];
+		$upload_overrides = array( 'test_form' => false );
+		
+		add_filter('upload_dir', array(&$this, 'fep_upload_dir'));
+		add_filter( 'wp_handle_upload_prefilter', array(&$this, 'fep_upload_size' ));
+		$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+		remove_filter( 'wp_handle_upload_prefilter', array(&$this, 'fep_upload_size' ));
+		remove_filter('upload_dir', array(&$this, 'fep_upload_dir'));
+		
+		if ( $uploadedfile['tmp_name'] && (!$movefile || $movefile['error']))
+		$errors->add('attachmentError', sprintf(__("Attachment error. %s", "fep"),$movefile['error']));
 		 // Check if a form has been sent
 		$postedToken = filter_input(INPUT_POST, 'token');
 	  if (empty($postedToken))
@@ -441,13 +459,15 @@ if (current_user_can('manage_options'))
 
 		if((count($errors->get_error_codes())==0) &&  $fep->fep_verify_nonce($postedToken)){
 		 
-		 $wpdb->query($wpdb->prepare("INSERT INTO {$fep->fepTable} (from_user, from_name, from_email, to_user, department, last_sender, send_date, last_date, message_title, message_contents, status) VALUES ( %d, %s, %s, %d, %s, %d, %s, %s, %s, %s, %d)", $fromID, $fromName, $fromEmail, $to, $department, $fromID, $send_date, $send_date, $title, $content, $read));
+		 $wpdb->query($wpdb->prepare("INSERT INTO {$fep->fepTable} (from_user, from_name, from_email, to_user, department, last_sender, send_date, last_date, message_title, message_contents, status) VALUES ( %d, %s, %s, %d, %s, %d, %s, %s, %s, %s, %d)", $fromID, $fromName, $fromEmail, $to, $department, $fromID, $send_date, $send_date, $title, $content, $status));
 		$message_id = $wpdb->insert_id;
 		if ($message_id) {
-		$wpdb->query($wpdb->prepare('INSERT INTO '.$fep->cfTable.' (message_id, field_name, field_value) VALUES ( %d, "ip", %s ),( %1$d, "address", %s ),( %1$d, "website", %s ),( %1$d, "browser", %s ),( %1$d, "referer", %s ),( %1$d, "Spam Points", %s )', $message_id, $ip, $fromAddress, $website, $browser, $referer, $points));
+		$wpdb->query($wpdb->prepare('INSERT INTO '.$fep->metaTable.' (message_id, field_name, field_value) VALUES ( %d, "ip", %s ),( %1$d, "address", %s ),( %1$d, "website", %s ),( %1$d, "browser", %s ),( %1$d, "referer", %s ),( %1$d, "Spam Points", %s )', $message_id, $ip, $fromAddress, $website, $browser, $referer, $points));
+		if ($message_id && $movefile['url'] && $movefile['file'] && $adminOps['allow_attachment'] == '1') {
+		$wpdb->query($wpdb->prepare('INSERT INTO '.$fep->metaTable.' (message_id, attachment_type, attachment_url, attachment_path) VALUES ( %d, %s, %s, %s )', $message_id, $movefile['type'], $movefile['url'], $movefile['file']));}
 		if ( !is_user_logged_in() && $adminOps['cf_time_delay'] !=0 )
 		set_transient( 'fep_cf_'.$nonce, 1, $adminOps['cf_time_delay'] * 60 ); //set to check time delay for non logged in users
-		if ( $read == 5 )
+		if ( $status == 5 )
 		$this->sendDepartmentEmail($to, $fromName, $title, $content, $referer);
 		} else {
 		$errors->add('someWrong', __('Something wrong please try again!', 'fep'));}
@@ -457,10 +477,39 @@ if (current_user_can('manage_options'))
       }
 	
 	}
+	function fep_upload_dir($upload) {
+	/* Append year/month folders if that option is set */
+		$subdir = '';
+        if ( get_option( 'uploads_use_yearmonth_folders' ) ) {
+                $time = current_time( 'mysql' );
+
+            $y = substr( $time, 0, 4 );
+            $m = substr( $time, 5, 2 );
+
+            $subdir = "/$y/$m";    
+        }
+	$upload['subdir']	= '/front-end-pm/contact-form' . $subdir;
+	$upload['path']		= $upload['basedir'] . $upload['subdir'];
+	$upload['url']		= $upload['baseurl'] . $upload['subdir'];
+	return $upload;
+	}	
+
+	function fep_upload_size($file)
+	{
+	$adminOps = $this->getAdminOps();
+	$filesize = $file['size']; // bytes
+	$allowed = $adminOps['attachment_size'];
+	$allowedsize = wp_convert_hr_to_bytes( $allowed );
+	if ( $filesize > $allowedsize)
+	$file['error'] = sprintf(__('Maximum allowed attachment size is %s!'),$allowed);
+
+    return $file;
+	}
 	
 	function sendDepartmentEmail($to, $fromName, $title, $content, $referer)
     {
 	$fep = new fep_main_class();
+	$fep->setPageURLs();
 	
       $toOptions = $fep->getUserOps($to);
       $notify = $toOptions['allow_emails'];
@@ -480,7 +529,7 @@ if (current_user_can('manage_options'))
 		$message .= "Message: ".wordwrap($content, 70). "\r\n";
 		$message .= "Referrer: ".$referer. "\r\n";
 		$message .= "Please Click the following link to view full Message. \r\n";
-		$message .= get_permalink($fep->getPageID)."&fepaction=mycontactmgs\r\n";	
+		$message .= $fep->actionURL."mycontactmgs \r\n";	
         $mUser = get_userdata($to);
         $mailTo = $mUser->user_email;
 		
@@ -776,8 +825,13 @@ function fep_weekly_spam_delete()
 	  $spamID[] = $spam->id;
 	  }
 	  $query = implode(",", $spamID);
-	  $wpdb->query("DELETE FROM {$fep->cfTable} WHERE message_id IN ({$query})");
-	  $wpdb->query($wpdb->prepare("DELETE FROM {$fep->fepTable} WHERE send_date < %s AND (status = 7 OR status = 8)", $prevdate));
+	  $results = $wpdb->get_col("SELECT attachment_path FROM {$fep->metaTable} WHERE message_id IN ({$query})" );
+	  foreach ($results as $result){
+		if ($result)
+		unlink($result);
+		}
+	  $wpdb->query("DELETE FROM {$fep->metaTable} WHERE message_id IN ({$query})");
+	  $wpdb->query("DELETE FROM {$fep->fepTable} WHERE id IN ({$query})");
 	  
       return;
     }

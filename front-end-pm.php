@@ -3,9 +3,9 @@
 Plugin Name: Front End PM
 Plugin URI: http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/
 Description: Front End PM is a Private Messaging system and a secure contact form to your WordPress site.This is full functioning messaging system from front end. The messaging is done entirely through the front-end of your site rather than the Dashboard. This is very helpful if you want to keep your users out of the Dashboard area.
-Version: 2.1
-dbVersion: 2
-cfVersion: 2
+Version: 2.2
+dbVersion: 2.2
+metaVersion: 2.2
 Author: Shamim
 Author URI: http://www.banglardokan.com/blog/recent/project/front-end-pm-2215/
 Text Domain: fep

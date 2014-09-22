@@ -3,7 +3,7 @@ Contributors: shamim51
 Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail,contact form, secure contact form, simple contact form,akismet check,akismet
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&item_name=Front%20End%20PM&item_number=Front%20End%20PM&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 2.8
-Tested up to: 3.9.1
+Tested up to: 4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -84,6 +84,13 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 
 == Changelog ==
 
+= 2.2 =
+
+* New option to send attachment in both pm and contact form.
+* Attachment in stored in front-end-pm folder inside upload folder and contact form attachment is stored inside front-end-pm/contact-form folder.
+* Message count in header bug fixes.
+* Security bug fixes where non-admin user could see all messages.
+
 = 2.1 =
 
 * IP blacklist now support range and wildcard.
@@ -136,6 +143,13 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 * Initial release.
 
 == Upgrade Notice ==
+
+= 2.2 =
+
+* New option to send attachment in both pm and contact form.
+* Attachment in stored in front-end-pm folder inside upload folder and contact form attachment is stored inside front-end-pm/contact-form folder.
+* Message count in header bug fixes.
+* Security bug fixes where non-admin user could see all messages.
 
 = 2.1 =
 

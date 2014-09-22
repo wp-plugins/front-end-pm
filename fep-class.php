@@ -27,22 +27,22 @@ if (!class_exists("fep_main_class"))
           $charset_collate .= " COLLATE $wpdb->collate";
       }
 	  $installed_ver = get_option( "fep_db_version" );
-	  $installed_cf_ver = get_option( "fep_cf_db_version" );
+	  $installed_meta_ver = get_option( "fep_meta_db_version" );
 
-	if( $installed_ver < $version['dbversion'] || $wpdb->get_var("SHOW TABLES LIKE '".$this->fepTable."'") != $this->fepTable) {
+	if( $installed_ver != $version['dbversion'] || $wpdb->get_var("SHOW TABLES LIKE '".$this->fepTable."'") != $this->fepTable) {
 
       $sqlMsgs = 	"CREATE TABLE ".$this->fepTable." (
             id int(11) NOT NULL auto_increment,
             parent_id int(11) NOT NULL default '0',
             from_user int(11) NOT NULL default '0',
-			from_name varchar(250) NOT NULL,
-			from_email varchar(250) NOT NULL,
+			from_name varchar(256) NOT NULL,
+			from_email varchar(256) NOT NULL,
             to_user int(11) NOT NULL default '0',
-			department varchar(250) NOT NULL,
+			department varchar(256) NOT NULL,
             last_sender int(11) NOT NULL default '0',
             send_date datetime NOT NULL default '0000-00-00 00:00:00',
             last_date datetime NOT NULL default '0000-00-00 00:00:00',
-            message_title varchar(250) NOT NULL,
+            message_title varchar(256) NOT NULL,
             message_contents longtext NOT NULL,
             status int(11) NOT NULL default '0',
             to_del int(11) NOT NULL default '0',
@@ -56,20 +56,23 @@ if (!class_exists("fep_main_class"))
 	  update_option( "fep_db_version", $version['dbversion'] );
 	  }
 	  
-	  	if( $installed_cf_ver < $version['cfversion'] || $wpdb->get_var("SHOW TABLES LIKE '".$this->cfTable."'") != $this->cfTable) {
+	  	if( $installed_meta_ver != $version['metaversion'] || $wpdb->get_var("SHOW TABLES LIKE '".$this->metaTable."'") != $this->metaTable) {
 
-      $sqlCF = 	"CREATE TABLE ".$this->cfTable." (
+      $sqlCF = 	"CREATE TABLE ".$this->metaTable." (
             id int(11) NOT NULL auto_increment,
             message_id int(11) NOT NULL default '0',
-            field_name varchar(100) NOT NULL,
+            field_name varchar(128) NOT NULL,
             field_value longtext NOT NULL,
+			attachment_type varchar(128) NOT NULL,
+			attachment_url varchar(512) NOT NULL,
+			attachment_path varchar(512) NOT NULL,
             PRIMARY KEY (id))
             {$charset_collate};";
 
       require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
       dbDelta($sqlCF);
-	  update_option( "fep_cf_db_version", $version['cfversion'] );
+	  update_option( "fep_meta_db_version", $version['metaversion'] );
 	  }
     }
 	
@@ -155,7 +158,7 @@ if (!class_exists("fep_main_class"))
     var $jsURL = "";
 
     var $fepTable = "";
-	var $cfTable = "";
+	var $metaTable = "";
 
     function jsInit()
     {
@@ -177,7 +180,7 @@ if (!class_exists("fep_main_class"))
       $this->jsURL = $this->pluginURL."js/";
 
       $this->fepTable = $wpdb->prefix."fep_messages";
-	  $this->cfTable = $wpdb->prefix."fep_cf_meta";
+	  $this->metaTable = $wpdb->prefix."fep_meta";
     }
 
     function fep_enqueue_scripts()
@@ -229,17 +232,6 @@ if (!class_exists("fep_main_class"))
           <h2>".__("Front End PM Settings", "fep")."</h2>
 		  <h4>".sprintf(__("For FEP Contact Form Settings <a href='%s' >Click Here</a>", "fep"),esc_url($cfURL))."</h4>
 		  <h5>".sprintf(__("If you like this plugin please <a href='%s' target='_blank'>Review in Wordpress.org</a> and give 5 star", "fep"),esc_url($ReviewURL))."</h5>
-		<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top'>
-		<input type='hidden' name='cmd' value='_donations'>
-		<input type='hidden' name='business' value='4HKBQ3QFSCPHJ'>
-		<input type='hidden' name='lc' value='US'>
-		<input type='hidden' name='item_name' value='Front End PM'>
-		<input type='hidden' name='item_number' value='Front End PM'>
-		<input type='hidden' name='currency_code' value='USD'>
-		<input type='hidden' name='bn' value='PP-DonationsBF:btn_donateCC_LG.gif:NonHosted'>
-		<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!'>
-		<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
-		</form>
           <form id='fep-admin-save-form' name='fep-admin-save-form' method='post' action=''>
           <table class='widefat'>
           <thead>
@@ -252,6 +244,7 @@ if (!class_exists("fep_main_class"))
 		  <tr><td>".__("Block Username", "fep")."<br /><small>".__("Separated by comma", "fep")."</small></td><td><TEXTAREA name='have_permission'>".$viewAdminOps['have_permission']." </TEXTAREA></td></tr>
 		  <tr><td>".__("Valid email address for \"to\" field of announcement email", "fep")."<br /><small>".__("All users email will be in \"Bcc\" field", "fep")."</small></td><td><input type='text' size='30' name='ann_to' value='".$viewAdminOps['ann_to']."' /></td></tr>
 		  <tr><td>".__("Minimum Capability to use messaging", "fep")."<br /><small>".sprintf(__("see <a href='%s' target='_blank'>WORDPRESS CAPABILITIES</a> to get capabilities (use only one capability)", "fep"),esc_url($capUrl))."</small></td><td><input type='text' size='30' name='min_cap' value='".$viewAdminOps['min_cap']."' /><br /><small>".__("Keep blank if allowed for all users", "fep")."</small></td></tr>
+		  <tr><td><input type='checkbox' name='allow_attachment' value='1' ".checked($viewAdminOps['allow_attachment'], '1', false)." />".__("Allow to send attachment", "fep")."<br /><small>".__("Set maximum size of attachment", "fep")."</small></td><td><input type='text' size='30' name='attachment_size' value='".$viewAdminOps['attachment_size']."' /><br /><small>".__("Use KB, MB or GB.(eg. 4MB)", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='notify_ann' value='1' ".checked($viewAdminOps['notify_ann'], '1', false)." /> ".__("Send email to all users when a new announcement is published?", "fep")."</td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_directory' value='1' ".checked($viewAdminOps['hide_directory'], '1', false)." /> ".__("Hide Directory from front end?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
 		  <tr><td colspan='2'><input type='checkbox' name='hide_autosuggest' value='1' ".checked($viewAdminOps['hide_autosuggest'], '1', false)." /> ".__("Hide Autosuggestion when typing recipient name?", "fep")."<br /><small>".__("Always shown to Admins", "fep")."</small></td></tr>
@@ -301,6 +294,8 @@ if (!class_exists("fep_main_class"))
 							  'have_permission' => $_POST['have_permission'],
 							  'ann_to' => $_POST['ann_to'],
 							  'min_cap' => trim($_POST['min_cap']),
+							  'attachment_size' => trim($_POST['attachment_size']),
+							  'allow_attachment' => ( isset( $_POST['allow_attachment'] ) ) ? $_POST['allow_attachment']: false,
 							  'notify_ann' => ( isset( $_POST['notify_ann'] ) ) ? $_POST['notify_ann']: false,
 							  'hide_directory' => ( isset( $_POST['hide_directory'] ) ) ? $_POST['hide_directory']: false,
 							  'hide_autosuggest' => ( isset( $_POST['hide_autosuggest'] ) ) ? $_POST['hide_autosuggest']: false,
@@ -324,6 +319,8 @@ if (!class_exists("fep_main_class"))
 						  'have_permission' => '',
 						  'ann_to' => get_bloginfo("admin_email"),
 						  'min_cap' => 'read',
+						  'attachment_size' => '4MB',
+						  'allow_attachment' => false,
 						  'notify_ann' => false,
 						  'hide_directory' => false,
 						  'hide_autosuggest' => false,
@@ -496,9 +493,10 @@ if (!class_exists("fep_main_class"))
 	$message_top = ( isset( $_REQUEST['message_top'] ) ) ? $_REQUEST['message_top']: $this->convertToDisplay($to);
 	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? $_REQUEST['message_title']: '';
 	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? $_REQUEST['message_content']: '';
+	$parent_id = ( isset( $_REQUEST['parent_id'] ) ) ? $_REQUEST['parent_id']: 0;
 	
         $newMsg = "<p><strong>".__("Create New Message", "fep").":</strong></p>";
-        $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post'>".
+        $newMsg .= "<form name='message' action='".$this->actionURL."checkmessage' method='post' enctype='multipart/form-data'>".
         __("To", "fep")."<font color='red'>*</font>: ";
 		if($this->adminOps['hide_autosuggest'] != '1' || current_user_can('manage_options')) { 
 		$newMsg .="<noscript>Username of recipient</noscript><br/>";
@@ -511,9 +509,13 @@ if (!class_exists("fep_main_class"))
         $newMsg .= __("Subject", "fep")."<font color='red'>*</font>:<br/>
         <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='$message_title' /><br/>".
         __("Message", "fep")."<font color='red'>*</font>:<br/>".$this->get_form_buttons()."<br/>
-        <textarea name='message_content' placeholder='Message Content'>$message_content</textarea>
-        <input type='hidden' name='message_from' value='$user_ID' />
-        <input type='hidden' name='parent_id' value='0' />
+        <textarea name='message_content' placeholder='Message Content'>$message_content</textarea>";
+		
+		if ($adminOps['allow_attachment'] == '1') {
+		$newMsg .="<br/><input type='file' name='fep_upload' />";}
+		
+        $newMsg .="<input type='hidden' name='message_from' value='$user_ID' />
+        <input type='hidden' name='parent_id' value='$parent_id' />
 		<input type='hidden' name='token' value='$token' /><br/>
         <input type='submit' id='submit' value='".__("Send Message", "fep")."' />
         </form>";
@@ -542,6 +544,7 @@ if (!class_exists("fep_main_class"))
 
       foreach ($wholeThread as $post)
       {
+	  $msgsMeta = $this->getcontact_meta($post->id);
         //Check for privacy errors first
         if ($post->to_user != $user_ID && $post->from_user != $user_ID && !current_user_can( 'manage_options' ))
         {
@@ -567,11 +570,23 @@ if (!class_exists("fep_main_class"))
 
         if ($post->parent_id == 0) //If it is the parent message
         {
-          $threadOut .= "<td class='pmtext'><strong>".__("Subject", "fep").": </strong>".$this->output_filter($post->message_title)."<hr/>".apply_filters("comment_text", $this->autoembed($this->output_filter($post->message_contents)))."</td></tr>";
+          $threadOut .= "<td class='pmtext'><strong>".__("Subject", "fep").": </strong>".$this->output_filter($post->message_title)."<hr/>".apply_filters("comment_text", $this->autoembed($this->output_filter($post->message_contents)))."";
+		  foreach ($msgsMeta as $meta){
+		if ($meta->attachment_url ) {
+		$attachment_id = $meta->id; 
+		$threadOut .= "<hr /><strong>" . __("Attachment", "fep") . ":</strong><br />";
+		$threadOut .= "<a href='{$this->pluginURL}attachment-download.php?attachment_id=$attachment_id' title='Download ". basename($meta->attachment_url)."'>". basename($meta->attachment_url)."</a>"; } }
+		$threadOut .="</td></tr>";
         }
         else
         {
-          $threadOut .= "<td class='pmtext'>".apply_filters("comment_text", $this->autoembed($this->output_filter($post->message_contents)))."</td></tr>";
+          $threadOut .= "<td class='pmtext'>".apply_filters("comment_text", $this->autoembed($this->output_filter($post->message_contents)))."";
+		  foreach ($msgsMeta as $meta){
+		if ($meta->attachment_url ) {
+		$attachment_id = $meta->id; 
+		$threadOut .= "<hr /><strong>" . __("Attachment", "fep") . ":</strong><br />";
+		$threadOut .= "<a href='{$this->pluginURL}attachment-download.php?attachment_id=$attachment_id' title='Download ". basename($meta->attachment_url)."'>". basename($meta->attachment_url)."</a>"; } }
+		$threadOut .="</td></tr>";
         }
       }
 
@@ -581,9 +596,14 @@ if (!class_exists("fep_main_class"))
 	  if ($this->have_permission()){
       $threadOut .= "
       <p><strong>".__("Add Reply", "fep").":</strong></p>
-      <form name='message' action='".$this->actionURL."checkmessage' method='post'>".
+      <form name='message' action='".$this->actionURL."checkmessage' method='post' enctype='multipart/form-data'>".
       $this->get_form_buttons()."<br/>
-      <textarea name='message_content'></textarea>
+      <textarea name='message_content'></textarea>";
+		
+		if ($this->adminOps['allow_attachment'] == '1') {
+		$threadOut .="<br/><input type='file' name='fep_upload' />";}
+		
+        $threadOut .="
       <input type='hidden' name='message_to' value='".get_userdata($to)->user_login."' />
 	  <input type='hidden' name='message_top' value='".get_userdata($to)->display_name."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
@@ -700,6 +720,20 @@ if (!class_exists("fep_main_class"))
           return;
         }
 		}
+		if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		$uploadedfile = $_FILES['fep_upload'];
+		$upload_overrides = array( 'test_form' => false );
+		
+		add_filter('upload_dir', array(&$this, 'fep_upload_dir'));
+		add_filter( 'wp_handle_upload_prefilter', array(&$this, 'fep_upload_size' ));
+		$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+		remove_filter( 'wp_handle_upload_prefilter', array(&$this, 'fep_upload_size' ));
+		remove_filter('upload_dir', array(&$this, 'fep_upload_dir'));
+		
+		if ( $uploadedfile['tmp_name'] && (!$movefile || $movefile['error'])) {
+		$this->error = sprintf(__("Attachment error. %s", "fep"),$movefile['error']);
+        return;
+		}
 	  // Check if a form has been sent
 		$postedToken = filter_input(INPUT_POST, 'token');
 	  if (empty($postedToken))
@@ -712,8 +746,16 @@ if (!class_exists("fep_main_class"))
 	  if($this->fep_verify_nonce($postedToken)){
       if ($parentID == 0){
         $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, to_user, message_title, message_contents, parent_id, last_sender, send_date, last_date) VALUES ( %d, %d, %s, %s, %d, %d, %s, %s )", $from, $to, $title, $content, $parentID, $from, $send_date, $send_date));
+		$message_id = $wpdb->insert_id;
+		if ($message_id && $movefile['url'] && $movefile['file'] && $adminOps['allow_attachment'] == '1') {
+		$wpdb->query($wpdb->prepare('INSERT INTO '.$this->metaTable.' (message_id, attachment_type, attachment_url, attachment_path) VALUES ( %d, %s, %s, %s )', $message_id, $movefile['type'], $movefile['url'], $movefile['file']));}
       } else {
         $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, to_user, message_title, message_contents, parent_id, send_date) VALUES ( %d, %d, %s, %s, %d, %s)", $from, $to, $title, $content, $parentID, $send_date));
+		
+		$mgs_id = $wpdb->insert_id;
+		if ($mgs_id && $movefile['url'] && $movefile['file'] && $adminOps['allow_attachment'] == '1') {
+		$wpdb->query($wpdb->prepare('INSERT INTO '.$this->metaTable.' (message_id, attachment_type, attachment_url, attachment_path) VALUES ( %d, %s, %s, %s )', $mgs_id, $movefile['type'], $movefile['url'], $movefile['file']));}
+		
         $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 0,last_sender = %d,last_date = %s, to_del = 0, from_del = 0 WHERE id = %d", $from, $send_date, $parentID));
       }
 	  $this->sendEmail($to, $fromName, $title); }
@@ -722,6 +764,35 @@ if (!class_exists("fep_main_class"))
 
       return;
     }
+	
+	function fep_upload_dir($upload) {
+	/* Append year/month folders if that option is set */
+		$subdir = '';
+        if ( get_option( 'uploads_use_yearmonth_folders' ) ) {
+                $time = current_time( 'mysql' );
+
+            $y = substr( $time, 0, 4 );
+            $m = substr( $time, 5, 2 );
+
+            $subdir = "/$y/$m";    
+        }
+	$upload['subdir']	= '/front-end-pm' . $subdir;
+	$upload['path']		= $upload['basedir'] . $upload['subdir'];
+	$upload['url']		= $upload['baseurl'] . $upload['subdir'];
+	return $upload;
+	}	
+
+	function fep_upload_size($file)
+	{
+	$adminOps = $this->getAdminOps();
+	$filesize = $file['size']; // bytes
+	$allowed = $adminOps['attachment_size'];
+	$allowedsize = wp_convert_hr_to_bytes( $allowed );
+	if ( $filesize > $allowedsize)
+	$file['error'] = sprintf(__('Maximum allowed attachment size is %s!'),$allowed);
+
+    return $file;
+	}
 
     function isBoxFull($to, $boxSize, $parentID)
     {
@@ -789,7 +860,11 @@ if (!class_exists("fep_main_class"))
 	  
       if ($numMsgs)
       {
-        $msgsOut = "<p><strong>".__("Your Messages", "fep").": ($numMsgs)</strong></p>";
+	  if ($_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
+              $msgsOut .= "<p><strong>".__("All Messages", "fep").": ($numMsgs)</strong></p>";
+			  } else {
+			  $msgsOut .= "<p><strong>".__("Your Messages", "fep").": ($numMsgs)</strong></p>";
+			  }
         $numPgs = $numMsgs / $adminOps['messages_page'];
         if ($numPgs > 1)
         {
@@ -817,9 +892,9 @@ if (!class_exists("fep_main_class"))
         foreach ($msgs as $msg)
         {
           if ($msg->status == 0 && $msg->last_sender != $user_ID)
-            $read = "<font color='#FF0000'>".__("Unread", "fep")."</font>";
+            $status = "<font color='#FF0000'>".__("Unread", "fep")."</font>";
           else
-            $read = __("Read", "fep");
+            $status = __("Read", "fep");
           $uSend = get_userdata($msg->from_user);
           $uLast = get_userdata($msg->last_sender);
           $toUser = get_userdata($msg->to_user);
@@ -832,10 +907,10 @@ if (!class_exists("fep_main_class"))
           $msgsOut .= "<td><a href='".get_author_posts_url( $toUser->ID )."'>" .$toUser->display_name. "</a></td>";}
 		  else {
 		  $msgsOut .= "<td>" .$toUser->display_name. "</td>";}
-		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessage&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>".$read."</small></td>";
+		  $msgsOut .= "<td><a href='".$this->actionURL."viewmessage&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>".$status."</small></td>";
 		  $msgsOut .= "<td>" .$uLast->display_name. "<br/><small>".$this->formatDate($msg->last_date)."</small></td>";
 		  
-		  if (( isset( $_GET['fepaction'] ) ) ? $_GET['fepaction']: '' === 'viewallmgs' && current_user_can('manage_options')){
+		  if ( $_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
               $msgsOut .= "<td><a href='".$this->actionURL."deletemessageadmin&id=".$msg->id."&token=$token' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>";
 			  } else {
 			  $msgsOut .= "<td><a href='".$this->actionURL."deletemessage&id=".$msg->id."&token=$token' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>";
@@ -858,14 +933,12 @@ if (!class_exists("fep_main_class"))
 	function getUserNumMsgs()
     {
       global $wpdb, $user_ID;
-	  if (( isset( $_GET['fepaction'] ) ) ? $_GET['fepaction']: '' === 'viewallmgs' && current_user_can('manage_options')){
+	  if ($_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
 	  $get_messages = $wpdb->get_results("SELECT id FROM {$this->fepTable} WHERE parent_id = 0 AND (status = 0 OR status = 1)");
 	  } else {
       $get_messages = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE ((to_user = %d AND parent_id = 0 AND to_del = 0) OR (from_user = %d AND parent_id = 0 AND from_del = 0)) AND (status = 0 OR status = 1)", $user_ID, $user_ID));}
-      $num = $wpdb->num_rows;
-      return $num;
+      return $wpdb->num_rows;
     }
-	
 
     function getMsgs()
     {
@@ -877,7 +950,7 @@ if (!class_exists("fep_main_class"))
       $start = $page * $adminOps['messages_page'];
       $end = $adminOps['messages_page'];
 	  
-	  if (( isset( $_GET['fepaction'] ) ) ? $_GET['fepaction']: '' === 'viewallmgs' && current_user_can('manage_options')){
+	  if ($_GET['fepaction'] === 'viewallmgs' && current_user_can('manage_options')){
 	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE parent_id = 0 AND (status = 0 OR status = 1) ORDER BY last_date DESC LIMIT %d, %d", $start, $end));
 	  } else {
 	  $get_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->fepTable} WHERE ((to_user = %d AND parent_id = 0 AND to_del = 0) OR (from_user = %d AND parent_id = 0 AND from_del = 0)) AND (status = 0 OR status = 1) ORDER BY last_date DESC LIMIT %d, %d", $user_ID, $user_ID, $start, $end));
@@ -934,17 +1007,35 @@ if (!class_exists("fep_main_class"))
 
       if ($result->to_user == $user_ID)
       {
-        if ($result->from_del == 0)
+        if ($result->from_del == 0){
           $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET to_del = 1 WHERE id = %d", $delID));
-        else
+        } else {
+		$ids = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE id = %d OR parent_id = %d", $delID, $delID));
+	  $id = implode(',',$ids);
+	  $results = $wpdb->get_col("SELECT attachment_path FROM {$this->metaTable} WHERE message_id IN ({$id})" );
+	  foreach ($results as $result){
+		if ($result)
+		unlink($result);
+		}
           $wpdb->query($wpdb->prepare("DELETE FROM {$this->fepTable} WHERE id = %d OR parent_id = %d", $delID, $delID));
+		  $wpdb->query("DELETE FROM {$this->metaTable} WHERE message_id IN ({$id})");
+		  }
       }
       elseif ($result->from_user == $user_ID)
       {
-        if ($result->to_del == 0)
+        if ($result->to_del == 0){
           $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET from_del = 1 WHERE id = %d", $delID));
-        else
+        } else {
+		$ids = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE id = %d OR parent_id = %d", $delID, $delID));
+	  $id = implode(',',$ids);
+	  $results = $wpdb->get_col("SELECT attachment_path FROM {$this->metaTable} WHERE message_id IN ({$id})" );
+	  foreach ($results as $result){
+		if ($result)
+		unlink($result);
+		}
           $wpdb->query($wpdb->prepare("DELETE FROM {$this->fepTable} WHERE id = %d OR parent_id = %d", $delID, $delID));
+		  $wpdb->query("DELETE FROM {$this->metaTable} WHERE message_id IN ({$id})");
+		  }
       } else {
 	  $this->error = __("No permission!", "fep");
       return;}
@@ -963,8 +1054,15 @@ if (!class_exists("fep_main_class"))
 	  return "<div id='fep-error'>".__("Invalid Token!", "fep")."</div>";}
 	  
 	  if (current_user_can('manage_options')) {
+	  $ids = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$this->fepTable} WHERE id = %d OR parent_id = %d", $delID, $delID));
+	  $id = implode(',',$ids);
+	  $results = $wpdb->get_col("SELECT attachment_path FROM {$this->metaTable} WHERE message_id IN ({$id})" );
+	  foreach ($results as $result){
+		if ($result)
+		unlink($result);
+		}
 	  $wpdb->query($wpdb->prepare("DELETE FROM {$this->fepTable} WHERE id = %d OR parent_id = %d", $delID, $delID));
-	  $wpdb->query($wpdb->prepare("DELETE FROM {$this->cfTable} WHERE message_id = %d", $delID));
+	  $wpdb->query("DELETE FROM {$this->metaTable} WHERE message_id IN ({$id})");
 
       $this->success = __("Message was successfully deleted!", "fep"); 
 	  } else {
@@ -986,7 +1084,12 @@ if (!class_exists("fep_main_class"))
 	  $spamID[] = $spam->id;
 	  }
 	  $query = implode(",", $spamID);
-	  $wpdb->query("DELETE FROM {$this->cfTable} WHERE message_id IN ({$query})");
+	  $results = $wpdb->get_col("SELECT attachment_path FROM {$this->metaTable} WHERE message_id IN ({$query})" );
+	  foreach ($results as $result){
+		if ($result)
+		unlink($result);
+		}
+	  $wpdb->query("DELETE FROM {$this->metaTable} WHERE message_id IN ({$query})");
 	  $wpdb->query("DELETE FROM {$this->fepTable} WHERE status = 7 OR status = 8");
 	  $this->success = __("All spam messages successfully deleted!", "fep");
       return;
@@ -1097,7 +1200,7 @@ if (!class_exists("fep_main_class"))
       $contents = $this->input_filter($_POST['message_content']);
 	  $from = $_POST['message_from'];
       $send_date = current_time('mysql');
-      $read = '2';
+      $status = '2';
 	  
 	  if (!$title || !$contents || $from != $user_ID)
       {
@@ -1124,7 +1227,7 @@ if (!class_exists("fep_main_class"))
         return;
   			}
 		//if nothing wrong continue
-        $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, message_title, message_contents, send_date, status) VALUES ( %s, %s, %s, %s, %d )",$from, $title, $contents, $send_date, $read));
+        $wpdb->query($wpdb->prepare("INSERT INTO {$this->fepTable} (from_user, message_title, message_contents, send_date, status) VALUES ( %s, %s, %s, %s, %d )",$from, $title, $contents, $send_date, $status));
 
 	  if ($adminOps['notify_ann'] == '1') {
 	  $this->notify_users($title);
@@ -1230,9 +1333,9 @@ if (!class_exists("fep_main_class"))
         foreach ($msgs as $msg)
         {
           if ($msg->status == 5 || $msg->status == 7)
-            $read = "<font color='#FF0000'>".__("Unread", "fep")."</font>";
+            $status = "<font color='#FF0000'>".__("Unread", "fep")."</font>";
           else
-            $read = __("Read", "fep");
+            $status = __("Read", "fep");
 		if ($msg->from_user != 0)
             $reg = __("Registered", "fep");
           else
@@ -1241,7 +1344,7 @@ if (!class_exists("fep_main_class"))
 		  $msgsOut .= "<tr class='trodd".$a."'>";
 		  $msgsOut .= "<td>" .$msg->from_name. "<br/><small>$reg</small><br /><small>".$this->formatDate($msg->send_date)."</small></td>";
           $msgsOut .= "<td>$toUser->display_name<br/><small>$msg->department</small></td>";
-		  $msgsOut .= "<td><a href='".$this->actionURL."viewcontact&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>$read</small></td><td>";
+		  $msgsOut .= "<td><a href='".$this->actionURL."viewcontact&id=".$msg->id."'>".$this->output_filter($msg->message_title)."</a><br/><small>$status</small></td><td>";
 		  if ($_GET['fepaction'] === 'contactmgs' && current_user_can('manage_options')){
 		  $msgsOut .= "<a href='".$this->actionURL."deletemessageadmin&id=".$msg->id."&token=$token' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", "fep")."</a></td>";
 		  } elseif ($_GET['fepaction'] === 'spam' && current_user_can('manage_options')){
@@ -1290,15 +1393,24 @@ if (!class_exists("fep_main_class"))
         $threadOut .= "<tr><td>$fullMgs->from_name<br/>$reg<br /><small>".$this->formatDate($fullMgs->send_date)."</small><br/>".get_avatar($fullMgs->from_email, 60)."</td>";
 		$threadOut .= "<td class='pmtext'><strong>".__("Subject", "fep").": </strong>".$this->output_filter($fullMgs->message_title)."<hr/>".apply_filters("comment_text", $this->autoembed($this->output_filter($fullMgs->message_contents)))."";
 		foreach ($fullMgsMeta as $meta){
+		if ($meta->attachment_url ) {
+		$attachment_id = $meta->id; 
+		$threadOut .= "<hr /><strong>" . __("Attachment", "fep") . ":</strong><br />";
+		$threadOut .= "<a href='{$this->pluginURL}attachment-download.php?attachment_id=$attachment_id' title='Download ". basename($meta->attachment_url)."'>". basename($meta->attachment_url)."</a>"; }
 		if ($meta->field_value)
 		$threadOut .="<strong>". ucwords($meta->field_name) . ":</strong> " . apply_filters("comment_text",$this->output_filter($meta->field_value)) . ""; }
 	  $threadOut .= "</td></tr></table>";
 	  if ($this->have_permission() && $uData){
       $threadOut .= "
       <p><strong>".__("Add Reply", "fep").":</strong></p>
-      <form name='message' action='".$this->actionURL."checkmessage' method='post'>".
+      <form name='message' action='".$this->actionURL."checkmessage' method='post' enctype='multipart/form-data'>".
       $this->get_form_buttons()."<br/>
-      <textarea name='message_content'></textarea>
+      <textarea name='message_content'></textarea>";
+		
+		if ($this->adminOps['allow_attachment'] == '1') {
+		$threadOut .="<br/><input type='file' name='fep_upload' />";}
+		
+        $threadOut .="
       <input type='hidden' name='message_to' value='".get_userdata($to)->user_login."' />
 	  <input type='hidden' name='message_top' value='".get_userdata($to)->display_name."' />
       <input type='hidden' name='message_title' value='".$re.$message_title."' />
@@ -1345,7 +1457,7 @@ if (!class_exists("fep_main_class"))
 	function getcontact_meta($id)
     {
       global $wpdb;
-	  $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->cfTable} WHERE message_id = %d", $id));
+	  $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$this->metaTable} WHERE message_id = %d", $id));
       return $results;
     }
 	
@@ -1408,10 +1520,10 @@ if (!class_exists("fep_main_class"))
     {
 	global $wpdb;
 	if (isset($_GET['id'])){$id = preg_replace('/\D/', '',$_GET['id']);}else{ $id = 0; }
-      $read = $wpdb->get_var($wpdb->prepare("SELECT status FROM {$this->fepTable} WHERE id = %d", $id));
-	  if ( $read == 7 && current_user_can('manage_options')){
+      $status = $wpdb->get_var($wpdb->prepare("SELECT status FROM {$this->fepTable} WHERE id = %d", $id));
+	  if ( $status == 7 && current_user_can('manage_options')){
 	  $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 5 WHERE id = %d", $id));
-	  } elseif ( $read == 8 && current_user_can('manage_options')){
+	  } elseif ( $status == 8 && current_user_can('manage_options')){
 	  $wpdb->query($wpdb->prepare("UPDATE {$this->fepTable} SET status = 6 WHERE id = %d", $id));}
 	  $this->success = __("Your message was successfully moved to Contact Message!", "fep");
         return;
@@ -1802,11 +1914,8 @@ function dispDirectory()
     function checkDB()
     {
 	global $wpdb;
-	$Col = $wpdb->get_var("SHOW COLUMNS FROM {$this->fepTable} LIKE 'message_read'");
-	if ($Col)
-	$wpdb->query("ALTER TABLE {$this->fepTable} CHANGE COLUMN message_read status INT(11) NOT NULL default '0'" );
 	$version = $this->get_version();
-      if ( get_option( "fep_db_version" ) != $version['dbversion'] || get_option( "fep_cf_db_version" ) != $version['cfversion'] )
+      if ( get_option( "fep_db_version" ) != $version['dbversion'] || get_option( "fep_meta_db_version" ) != $version['metaversion'] )
 	  $this->fepActivate();
     }
 
@@ -1817,9 +1926,9 @@ function dispDirectory()
         $version = trim($version[1]);
 		if (preg_match("|dbVersion:(.*)|i", $plugin_data, $dbversion))
         $dbversion = trim($dbversion[1]);
-		if (preg_match("|cfVersion:(.*)|i", $plugin_data, $cfversion))
-        $cfversion = trim($cfversion[1]);
-      return array('version' => $version, 'dbversion' => $dbversion, 'cfversion' => $cfversion);
+		if (preg_match("|metaVersion:(.*)|i", $plugin_data, $metaversion))
+        $metaversion = trim($metaversion[1]);
+      return array('version' => $version, 'dbversion' => $dbversion, 'metaversion' => $metaversion);
     }
 /******************************************MISC. FUNCTIONS END******************************************/
   } //END CLASS

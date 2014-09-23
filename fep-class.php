@@ -1538,11 +1538,23 @@ function dispDirectory()
     {
 	if($this->adminOps['hide_directory'] == '1' && !current_user_can('manage_options'))
 	  return;
-      $users = $this->get_users();
+	  if (isset($_GET['upage'])){
+	  $page = preg_replace('/\D/', '',$_GET['upage']);
+	  }else{$page = 0;}
+      $adminOps = $this->getAdminOps();
+      $offset = $page * $adminOps['user_page'];
+	  $args = array(
+					'number' => $adminOps['user_page'],
+					'offset' => $offset,
+					'orderby' => 'display_name',
+					'order' => 'ASC'
+		);
+
+	// The Query
+	$user_query = new WP_User_Query( $args );
 	  $result = count_users();
 	  $total = $result['total_users'];
-	  $adminOps = $this->getAdminOps();
-      if ($total)
+      if (! empty( $user_query->results))
       {
         $directory = "<p><strong>".__("Total Users", "fep").": (".$total.")</strong></p>";
         $numPgs = $total / $adminOps['user_page'];
@@ -1561,7 +1573,7 @@ function dispDirectory()
         <th width='50%'>".__("Send Message", "fep")."</th></tr>";
 		$a=0;
 
-      foreach($users as $u)
+      foreach($user_query->results as $u)
       {
 	  $directory .= "<tr class='trodd".$a."'><td>".$u->display_name."</td>";
           $directory .= "<td><a href='".$this->actionURL."newmessage&to=".$u->user_login."'>".__("Send Message", "fep")."</a></td></tr>";
@@ -1573,22 +1585,9 @@ function dispDirectory()
       }
       else
       {
-        $this->error = __("No User!", "fep");
+        $this->error = __("No users found.", "fep");
         return;
       }
-    }
-	
-	function get_users()
-    {
-      global $wpdb;
-	  if (isset($_GET['upage'])){
-	  $page = preg_replace('/\D/', '',$_GET['upage']);
-	  }else{$page = 0;}
-      $adminOps = $this->getAdminOps();
-      $start = $page * $adminOps['user_page'];
-      $end = $adminOps['user_page'];
-      $users = $wpdb->get_results($wpdb->prepare("SELECT display_name, user_login, ID FROM $wpdb->users ORDER BY display_name ASC LIMIT %d, %d",$start,$end));
-	  return $users;	
     }
 	
 /******************************************DIRECTORY DISPLAY END******************************************/

@@ -147,7 +147,7 @@ please visit [Front End PM](http://www.banglardokan.com/blog/recent/project/fron
 = 2.2 =
 
 * New option to send attachment in both pm and contact form.
-* Attachment in stored in front-end-pm folder inside upload folder and contact form attachment is stored inside front-end-pm/contact-form folder.
+* Attachment is stored in front-end-pm folder inside upload folder and contact form attachment is stored inside front-end-pm/contact-form folder.
 * Message count in header bug fixes.
 * Security bug fixes where non-admin user could see all messages.
 

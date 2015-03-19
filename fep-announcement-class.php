@@ -427,6 +427,11 @@ if (!class_exists('fep_announcement_class'))
 			elseif (!current_user_can('manage_options') && fep_verify_nonce($_GET['token'], 'announcement') )
 			
 	  			{
+					if ( !$this->is_seen( $delID ) ){
+	    			echo '<div id="fep-error">' .__("Something wrong. Please try again.", 'fep'). ' </div>';
+      				return false;
+						}
+					
 	  				$userDel = $wpdb->get_row($wpdb->prepare("SELECT meta_id, field_value FROM ".FEP_META_TABLE." WHERE message_id = %d AND field_name = %s LIMIT 1", $delID,'announcement_deleted_user_id'));
 					
 	  			$user_array = maybe_unserialize($userDel->field_value);

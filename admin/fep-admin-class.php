@@ -17,6 +17,7 @@ if (!class_exists('fep_admin_class'))
     function actions_filters()
     {
 	add_action('admin_menu', array(&$this, 'addAdminPage'));
+	add_action('plugin_action_links', array(&$this, 'add_settings_link'), 10, 2 );
     }
 
 
@@ -191,6 +192,16 @@ if (!class_exists('fep_admin_class'))
 		
 		}
 	}
+	
+function add_settings_link( $links, $file ) {
+	//add settings link in plugins page
+	$plugin_file = 'front-end-pm/front-end-pm.php';
+	if ( $file == $plugin_file ) {
+		$settings_link = '<a href="' . admin_url( 'admin.php?page=fep-admin-settings' ) . '">' .__( 'Settings', 'fep' ) . '</a>';
+		array_unshift( $links, $settings_link );
+	}
+	return $links;
+}
 /******************************************ADMIN SETTINGS PAGE END******************************************/
 
   } //END CLASS

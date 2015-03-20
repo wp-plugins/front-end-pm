@@ -109,7 +109,7 @@ function fep_notification()
 				$show = __("You have", 'fep');
 	
 			if ( $New_mgs )
-				$show .= "<a href='".fep_action_url()."'>".sprintf(__(" %d new message%s", 'fep'), $New_mgs, $sm ).'</a>';
+				$show .= "<a href='".fep_action_url('messagebox')."'>".sprintf(__(" %d new message%s", 'fep'), $New_mgs, $sm ).'</a>';
 	
 			if ( $New_mgs && $New_ann )
 				$show .= __(' and', 'fep');

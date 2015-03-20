@@ -215,7 +215,7 @@ if (!class_exists("fep_main_class"))
 	  
       $to = (isset($_GET['to']))? $_GET['to']:'';
 	  
-	$message_to = ( isset( $_POST['message_to'] ) ) ? esc_html( $_POST['message_to'] ): fep_get_userdata( $to );
+	$message_to = ( isset( $_POST['message_to'] ) ) ? esc_html( $_POST['message_to'] ): fep_get_userdata( $to, 'user_login' );
 	$message_top = ( isset( $_POST['message_top'] ) ) ? esc_html( $_POST['message_top'] ): fep_get_userdata($to, 'display_name');
 	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? esc_html( $_REQUEST['message_title'] ): '';
 	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? esc_textarea( $_REQUEST['message_content'] ): '';

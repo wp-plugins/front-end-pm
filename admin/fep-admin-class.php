@@ -17,7 +17,7 @@ if (!class_exists('fep_admin_class'))
     function actions_filters()
     {
 	add_action('admin_menu', array(&$this, 'addAdminPage'));
-	add_action('plugin_action_links', array(&$this, 'add_settings_link'), 10, 2 );
+	add_filter('plugin_action_links', array(&$this, 'add_settings_link'), 10, 2 );
     }
 
 

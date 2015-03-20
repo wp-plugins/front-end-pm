@@ -47,7 +47,9 @@ if (!class_exists('fep_directory_class'))
 					'orderby' => 'display_name',
 					'order' => 'ASC'
 		);
-
+	
+	$args = apply_filters ('fep_directory_arguments', $args );
+	
 	// The Query
 	$user_query = new WP_User_Query( $args );
 	  $result = count_users();

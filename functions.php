@@ -94,6 +94,9 @@ add_action ('fep_header_note',  'header_note');
 
 function fep_notification() 
 		{
+			if ( ! is_user_logged_in() )
+				return;
+			
 			$New_mgs = fep_get_new_message_number();
 				$sm = ( $New_mgs > 1 ) ? 's': '';
 				

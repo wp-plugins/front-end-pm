@@ -89,7 +89,7 @@ You can visit [Front End PM](https://shamimbiplob.wordpress.com/contact-us/) and
 
 * Many useful hooks are added. so anyone can change almost anything of this plugin without changing any core code of this plugin.
 * Message and announcement editor now support Wp Editor.
-* Now code can be posted between backtics.
+* Now code can be posted between backticks.
 * Multiple attachment in same message.
 * Now you can add multiple attachment in announcement also.
 * Attachment size, amount configurable.
@@ -172,7 +172,7 @@ You can visit [Front End PM](https://shamimbiplob.wordpress.com/contact-us/) and
 
 * Many useful hooks are added. so anyone can change almost anything of this plugin without changing any core code of this plugin.
 * Message and announcement editor now support Wp Editor.
-* Now code can be posted between backtics.
+* Now code can be posted between backticks.
 * Multiple attachment in same message.
 * Now you can add multiple attachment in announcement also.
 * Attachment size, amount configurable.

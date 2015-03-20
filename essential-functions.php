@@ -456,7 +456,7 @@ function fep_format_date($date)
     {
 		$now = current_time('mysql');
       //return date('M d, h:i a', strtotime($date));
-	  $formate = human_time_diff(strtotime($date),strtotime($now)).' ago';
+	  $formate = human_time_diff(strtotime($date),strtotime($now)).' '.__('ago', 'fep');
 	  
 	  return apply_filters( 'fep_formate_date', $formate, $date );
     }

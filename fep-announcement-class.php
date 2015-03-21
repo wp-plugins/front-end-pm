@@ -29,8 +29,9 @@ if (!class_exists('fep_announcement_class'))
 	function header_note() 
 		{
 			$numNew = $this->getAnnouncementsNum();
+			$sa = ( $numNew > 1 ) ? __('new announcements', 'fep'): __('new announcement', 'fep');
 	
-			echo ' '. __('and', 'fep')." (<font color='red'>$numNew</font>) ".__("new", 'fep').' '. $sa = ( $numNew > 1 ) ? __('announcements', 'fep'): __('announcement', 'fep');
+			echo ' '. __('and', 'fep')." (<font color='red'>$numNew</font>) $sa"; 
 		}
 	
 	function menu() 

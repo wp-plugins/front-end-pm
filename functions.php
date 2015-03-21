@@ -86,8 +86,9 @@ add_action('wp_ajax_fep_autosuggestion_ajax','fep_autosuggestion_ajax');
 
 function header_note() {
 	$numNew = fep_get_new_message_number();
+	$sm = ( $numNew > 1 ) ? __('new messages', 'fep'): __('new message', 'fep');
 	
-	echo __('You have', 'fep')." (<font color='red'>$numNew</font>) ".__("new", 'fep').' '. $sm = ( $numNew > 1 ) ? __('messages', 'fep'): __('message', 'fep');;
+	echo __('You have', 'fep')." (<font color='red'>$numNew</font>) $sm";
 	}
 add_action ('fep_header_note',  'header_note');
 
@@ -97,22 +98,24 @@ function fep_notification()
 				return;
 			
 			$New_mgs = fep_get_new_message_number();
+			$sm = ( $New_mgs > 1 ) ? __('new messages', 'fep'): __('new message', 'fep');
 				
 				$New_ann = 0;
 			if( class_exists('fep_announcement_class') )
 				$New_ann = fep_announcement_class::init()->getAnnouncementsNum();
+				$sa = ( $New_ann > 1 ) ? __('new announcements', 'fep'): __('new announcement', 'fep');
 	
 			if ( $New_mgs || $New_ann ) {
 				$show = __("You have", 'fep');
 	
 			if ( $New_mgs )
-				$show .= "<a href='".fep_action_url('messagebox')."'> $New_mgs ".__("new", 'fep').' '.$sm = ( $New_mgs > 1 ) ? __('messages', 'fep'): __('message', 'fep').'</a>';
+				$show .= "<a href='".fep_action_url('messagebox')."'> $New_mgs $sm</a>";
 	
 			if ( $New_mgs && $New_ann )
 				$show .= ' ' .__('and', 'fep');
 	
 			if ( $New_ann )
-				$show .= "<a href='".fep_action_url('announcements')."'> $New_ann ".__("new", 'fep').' '.$sa = ( $New_ann > 1 ) ? __('announcements', 'fep'): __('announcement', 'fep').'</a>';
+				$show .= "<a href='".fep_action_url('announcements')."'> $New_ann $sa</a>";
 	
 			echo "<div id='fep-notification-bar'>$show</div>";
 				}

@@ -64,7 +64,7 @@
 function fep_translation()
 	{
 	//SETUP TEXT DOMAIN FOR TRANSLATIONS
-	load_plugin_textdomain('fep', false, FEP_PLUGIN_DIR.'languages/');
+	load_plugin_textdomain('fep', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 	
 function fep_enqueue_scripts()
@@ -368,7 +368,7 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
       }
       else
       {
-        return "<div id='fep-error'>".__("$title empty", 'fep')."</div>";
+        return "<div id='fep-error'>".sprintf(__("%s empty", 'fep'), $title )."</div>";
       }
 	
 }

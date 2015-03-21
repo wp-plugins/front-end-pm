@@ -86,9 +86,9 @@ add_action('wp_ajax_fep_autosuggestion_ajax','fep_autosuggestion_ajax');
 
 function header_note() {
 	$numNew = fep_get_new_message_number();
-	$s = ( $numNew > 1 ) ? 's': '';
+	$s = ( $numNew > 1 ) ? __('s', 'fep'): '';
 	
-	echo __('You have', 'fep')." (<font color='red'>$numNew</font>) ".__("new message{$s}", 'fep');
+	echo __('You have', 'fep')." (<font color='red'>$numNew</font>) ".sprintf(__("new message%s", 'fep'), $s );
 	}
 add_action ('fep_header_note',  'header_note');
 
@@ -98,12 +98,12 @@ function fep_notification()
 				return;
 			
 			$New_mgs = fep_get_new_message_number();
-				$sm = ( $New_mgs > 1 ) ? 's': '';
+				$sm = ( $New_mgs > 1 ) ? __('s', 'fep'): '';
 				
 				$New_ann = 0;
 			if( class_exists('fep_announcement_class') )
 				$New_ann = fep_announcement_class::init()->getAnnouncementsNum();
-				$sa = ( $New_ann > 1 ) ? 's': '';
+				$sa = ( $New_ann > 1 ) ? __('s', 'fep'): '';
 	
 			if ( $New_mgs || $New_ann ) {
 				$show = __("You have", 'fep');
@@ -112,7 +112,7 @@ function fep_notification()
 				$show .= "<a href='".fep_action_url('messagebox')."'>".sprintf(__(" %d new message%s", 'fep'), $New_mgs, $sm ).'</a>';
 	
 			if ( $New_mgs && $New_ann )
-				$show .= __(' and', 'fep');
+				$show .= ' ' .__('and', 'fep');
 	
 			if ( $New_ann )
 				$show .= "<a href='".fep_action_url('announcements')."'>".sprintf(__(" %d new announcement%s", 'fep'), $New_ann, $sa ).'</a>';
@@ -163,7 +163,7 @@ add_action('plugins_loaded', 'fep_check_db');
 
 function fep_show_code_post_help()
     {
-	echo '<p>Put code in between <code>`backticks`</code></p>';
+	echo '<p>' . __('Put code in between', 'fep'). ' <code>`'. __('backticks', 'fep').'`</code></p>';
     }	
 
 add_action('fep_message_form_after_content', 'fep_show_code_post_help', 5 );

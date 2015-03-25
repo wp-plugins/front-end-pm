@@ -418,6 +418,8 @@ if (!class_exists('fep_announcement_class'))
 	  
         			$wpdb->query($wpdb->prepare("DELETE FROM ".FEP_MESSAGES_TABLE." WHERE id = %d", $delID));
 					$wpdb->query($wpdb->prepare("DELETE FROM ".FEP_META_TABLE." WHERE message_id = %d", $delID));
+					
+					delete_transient("fep_announcements_with_seen");
 					delete_transient("fep_announcements_with_deleted");
 		
 					echo '<div id="fep-success">' .__("Announcement successfully Deleted.", 'fep'). ' </div>';

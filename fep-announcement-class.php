@@ -80,8 +80,8 @@ if (!class_exists('fep_announcement_class'))
         {
           $msgsOut .= "<p><strong>".__("Page", 'fep').": </strong> ";
           for ($i = 0; $i < $numPgs; $i++)
-            if ($_GET['page'] != $i){
-              $msgsOut .= "<a href='".fep_action_url()."announcements&page=".$i."'>".($i+1)."</a> ";
+            if ($_GET['feppage'] != $i){
+              $msgsOut .= "<a href='".fep_action_url()."announcements&feppage=".$i."'>".($i+1)."</a> ";
             } else {
               $msgsOut .= "[<b>".($i+1)."</b>] ";}
           $msgsOut .= "</p>";
@@ -95,7 +95,7 @@ if (!class_exists('fep_announcement_class'))
         <th width='10%'>".__("Action", 'fep')."</th></tr>";
         
 		$a = 0;
-		$page = (isset( $_GET['page']) && $_GET['page'] ) ? absint( $_GET['page'] ) : 0;
+		$page = (isset( $_GET['feppage']) && $_GET['feppage'] ) ? absint( $_GET['feppage'] ) : 0;
 		$offset = $page * fep_get_option('messages_page', 50 );
 		
 	  $sliced_announcement = array_slice( $announcements, $offset, fep_get_option('user_page', 50 ), true );

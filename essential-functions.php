@@ -319,8 +319,8 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
         {
           $msgsOut .= "<p><strong>".__("Page", 'fep').": </strong> ";
           for ($i = 0; $i < $numPgs; $i++)
-            if ($_GET['page'] != $i){
-			  $msgsOut .= "<a href='".esc_url( fep_action_url($action) )."&page=".$i."'>".($i+1)."</a> ";
+            if ($_GET['feppage'] != $i){
+			  $msgsOut .= "<a href='".esc_url( fep_action_url($action) )."&feppage=".$i."'>".($i+1)."</a> ";
             } else {
               $msgsOut .= "[<b>".($i+1)."</b>] ";}
           $msgsOut .= "</p>";
@@ -410,7 +410,7 @@ function fep_get_user_messages( $action = 'messagebox', $userID = 0 )
 	  if ( !$userID )
 	  $userID = $user_ID;
 	  
-	  $page = ( isset ($_GET['page']) && $_GET['page']) ? absint($_GET['page']) : 0;
+	  $page = ( isset ($_GET['feppage']) && $_GET['feppage']) ? absint($_GET['feppage']) : 0;
 	  
       $start = $page * fep_get_option('messages_page', 50);
       $end = fep_get_option('messages_page', 50);

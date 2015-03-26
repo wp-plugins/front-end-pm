@@ -21,7 +21,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * [FAQ](http://frontendpm.blogspot.com/2015/03/frequently-asked-questions.html)
 * [Front End PM actions](http://frontendpm.blogspot.com/2015/03/front-end-pm-actions.html)
 * [Front End PM filters](http://frontendpm.blogspot.com/2015/03/front-end-pm-filters.html)
-* [Front End PM remove action] (http://frontendpm.blogspot.com/2015/03/front-end-pm-remove-action.html)
+* [Front End PM remove action](http://frontendpm.blogspot.com/2015/03/front-end-pm-remove-action.html)
 
 * If you want paid support you can contact with me through [Front End PM paid support](http://frontendpm.blogspot.com/p/contact-us.html)
 

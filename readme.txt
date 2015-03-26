@@ -13,6 +13,20 @@ Front End PM is a Private Messaging system and a secure contact form to your Wor
 == Description ==
 Front End PM is a Private Messaging system to your WordPress site.This is full functioning messaging system from front end. The messaging is done entirely through the front-end of your site rather than the Dashboard. This is very helpful if you want to keep your users out of the Dashboard area.
 
+**Some Useful Link**
+
+* [Front End PM](http://frontendpm.blogspot.com/2015/03/front-end-pm.html)
+* [How to install](http://frontendpm.blogspot.com/2015/03/how-to-install.html)
+* [Changelog](http://frontendpm.blogspot.com/2015/03/changelog-of-front-end-pm.html)
+* [FAQ](http://frontendpm.blogspot.com/2015/03/frequently-asked-questions.html)
+* [Front End PM actions](http://frontendpm.blogspot.com/2015/03/front-end-pm-actions.html)
+* [Front End PM filters](http://frontendpm.blogspot.com/2015/03/front-end-pm-filters.html)
+* [Front End PM remove action] (http://frontendpm.blogspot.com/2015/03/front-end-pm-remove-action.html)
+
+* If you want paid support you can contact with me through [Front End PM paid support](http://frontendpm.blogspot.com/p/contact-us.html)
+
+**Features**
+
 * Works through a Page rather than the dashboard. This is very helpful if you want to keep your users out of the Dashboard area!
 * Users can privately message one another
 * Threaded messages
@@ -46,7 +60,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 * Simplified Chinese thanks to Changmeng Hu.
 
 
-You can visit [Front End PM](https://shamimbiplob.wordpress.com/contact-us/) and contact with me for paid support.
+You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) and contact with me for paid support.
 
 == Installation ==
 1. Upload "front-end-pm" to the "/wp-content/plugins/" directory.
@@ -57,7 +71,7 @@ You can visit [Front End PM](https://shamimbiplob.wordpress.com/contact-us/) and
 
 Or you can create page for Front End PM by one click. Go to **Front End PM>Instruction** give a Title(required) for Front End PM page and Slug(optional) then click "Create Page". It will automatically create a page for your Message. If you keep Slug field blank, slug of page will be automatically created based on your given title.
 
-Need more instruction? you can visit [Front End PM](https://shamimbiplob.wordpress.com/contact-us/) and contact with me for paid support.
+Need more instruction? you can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) and contact with me for paid support.
 
 == Frequently Asked Questions ==
 = Can i use this plugin to my language? =
@@ -70,7 +84,7 @@ Yes. this plugin is translate ready. But If your language is not available you c
 I am very busy with my job. In my leisure i code for plugins. If you want to help to add comments to the code you are welcome.(only add comments and line space change, no code change. if you want code change you can suggest me).
 
 = Where to contact for paid support? =
-You can visit [Front End PM](https://shamimbiplob.wordpress.com/contact-us/) and contact with me for paid support.
+You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) and contact with me for paid support.
 
 == Screenshots ==
 1. Admin settings page.

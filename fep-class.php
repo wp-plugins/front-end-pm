@@ -420,8 +420,8 @@ function dispReadMsg()
 		  
 		$threadOut .="</td></tr>";
 		
-      if ($post->status == 0 && $user_ID == $post->to_user) //Update only if the reader is the reciever 
-	  	$wpdb->update( FEP_MESSAGES_TABLE, array( 'status' => 1 ), array( 'id' => $pID ), array( '%d' ), array( '%d' ));
+      if ($post->status == 0 && $user_ID != $post->last_sender && ( $user_ID == $post->from_user || $user_ID == $post->to_user )) //Update only if the reader is not last sender
+	  	$wpdb->update( FEP_MESSAGES_TABLE, array( 'status' => 1 ), array( 'id' => $post->id ), array( '%d' ), array( '%d' ));
         }
         else
         {

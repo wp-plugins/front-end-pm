@@ -25,6 +25,8 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 
 * If you want paid support you can contact with me through [Front End PM paid support](http://frontendpm.blogspot.com/p/contact-us.html)
 
+[youtube http://youtu.be/IMAP1Whjd0M]
+
 **Features**
 
 * Works through a Page rather than the dashboard. This is very helpful if you want to keep your users out of the Dashboard area!

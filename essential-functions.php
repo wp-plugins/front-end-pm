@@ -463,9 +463,11 @@ function fep_format_date($date)
 	
 	function fep_output_filter($string, $title = false)
     {
-	  if ($title)
+		$string = stripslashes($string);
+		
+	  if ($title) {
 	  $html = apply_filters('fep_filter_display_title', $string);
-	  else {
+	  } else {
 	  $html = apply_filters('fep_filter_display_message', $string);
 	  }
       return $html;

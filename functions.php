@@ -3,7 +3,7 @@
 
 function fep_backticker_encode($text) {
 	$text = $text[1];
-    $text = stripslashes($text);
+    //$text = stripslashes($text); //already done
     $text = str_replace('&amp;lt;', '&lt;', $text);
     $text = str_replace('&amp;gt;', '&gt;', $text);
 	$text = htmlspecialchars($text, ENT_QUOTES);

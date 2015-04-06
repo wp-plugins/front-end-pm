@@ -207,5 +207,5 @@ function add_settings_link( $links, $file ) {
   } //END CLASS
 } //ENDIF
 
-add_action('plugins_loaded', array(fep_admin_class::init(), 'actions_filters'));
+add_action('wp_loaded', array(fep_admin_class::init(), 'actions_filters'));
 ?>

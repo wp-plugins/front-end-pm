@@ -85,5 +85,5 @@ if (!class_exists('fep_email_class'))
   } //END CLASS
 } //ENDIF
 
-add_action('plugins_loaded', array(fep_email_class::init(), 'actions_filters'));
+add_action('wp_loaded', array(fep_email_class::init(), 'actions_filters'));
 ?>

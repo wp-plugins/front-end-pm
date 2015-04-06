@@ -95,5 +95,5 @@ if (!class_exists('fep_between_class'))
   } //END CLASS
 } //ENDIF
 
-add_action('plugins_loaded', array(fep_between_class::init(), 'actions_filters'));
+add_action('wp_loaded', array(fep_between_class::init(), 'actions_filters'));
 ?>

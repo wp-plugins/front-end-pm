@@ -467,6 +467,6 @@ if (!class_exists('fep_announcement_class'))
   } //END CLASS
 } //ENDIF
 
-add_action('plugins_loaded', array(fep_announcement_class::init(), 'actions_filters'));
+add_action('wp_loaded', array(fep_announcement_class::init(), 'actions_filters'));
 
 ?>

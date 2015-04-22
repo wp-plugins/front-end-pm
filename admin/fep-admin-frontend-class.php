@@ -22,7 +22,7 @@ if (!class_exists('fep_admin_frontend_class'))
 	add_filter('fep_message_headline', array(&$this, "title"), 10, 2 );
 	add_filter('fep_user_total_message_count_allmessages', array(&$this, "total"), 10, 2 );
 	add_filter('fep_user_messages_allmessages', array(&$this, "messages"), 10, 2 );
-	add_filter('fep_delete_message_url', array(&$this, "delete_url"), 10, 3 );
+	add_filter('fep_delete_message_url', array(&$this, "delete_url"), 10, 2 );
 	add_filter('fep_filter_status_display', array(&$this, "status"), 10, 3 );
 	add_action('fep_switch_deletemessageadmin', array(&$this, "delete"));
 		}
@@ -91,9 +91,10 @@ if (!class_exists('fep_admin_frontend_class'))
 		return $messages;
 		}
 		
-	function delete_url( $del_url, $id, $action ) {
+	function delete_url( $del_url, $id ) {
 	
-		if ( $action == 'allmessages' && current_user_can('manage_options') ) {
+		
+		if ( current_user_can('manage_options') ) {
 		$token = fep_create_nonce('delete_message_admin');
 		$del_url = fep_action_url("deletemessageadmin&id=$id&token=$token");
 		
@@ -122,6 +123,10 @@ if (!class_exists('fep_admin_frontend_class'))
 	  
 	  if (!fep_verify_nonce($_GET['token'], 'delete_message_admin')){
 	  echo "<div id='fep-error'>".__("Invalid Token!", 'fep')."</div>";
+	  return;}
+	  
+	  if ( 0 == $delID ){
+	  echo "<div id='fep-error'>".__("Invalid message id!", 'fep')."</div>";
 	  return;}
 	  
 

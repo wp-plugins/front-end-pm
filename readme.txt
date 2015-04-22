@@ -3,7 +3,7 @@ Contributors: shamim51
 Tags: front end pm,front-end-pm,pm,private message,personal message,front end,frontend pm,frontend,message,email,mail,contact form, secure contact form, simple contact form,akismet check,akismet
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4HKBQ3QFSCPHJ&lc=US&item_name=Front%20End%20PM&item_number=Front%20End%20PM&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 3.3
-Tested up to: 4.1.1
+Tested up to: 4.1.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,7 @@ Front End PM is a Private Messaging system to your WordPress site.This is full f
 **FEP Contact Form**
 
 * "FEP Contact Form" is now a separate plugin from version 3.1, so that you can use that plugin with "Front End PM" or without.
+* Download [FEP Contact Form](https://wordpress.org/plugins/fep-contact-form/) from wordpress.
 
 **Translation**
 
@@ -100,6 +101,17 @@ You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) a
 9. FEP Contact Form
 
 == Changelog ==
+
+= 3.2 =
+
+* Security update. Admin could accidently delete all messages from database. fixed.
+* Now header notification is in real time by ajax.
+* FEP Contact Form link added.
+* Translation issues fixed.
+* Admin page changed.
+* Some CSS and JS bug fixes.
+* Other some minor bug fixes.
+* POT file updated.
 
 = 3.1 =
 
@@ -183,6 +195,17 @@ You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) a
 * Initial release.
 
 == Upgrade Notice ==
+
+= 3.2 =
+
+* Security update. Admin could accidently delete all messages from database. fixed.
+* Now header notification is in real time by ajax.
+* FEP Contact Form link added.
+* Translation issues fixed.
+* Admin page changed.
+* Some CSS and JS bug fixes.
+* Other some minor bug fixes.
+* POT file updated.
 
 = 3.1 =
 

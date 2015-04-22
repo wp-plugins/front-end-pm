@@ -20,7 +20,7 @@ if (!class_exists("fep_main_class"))
 /******************************************MAIN DISPLAY BEGIN******************************************/
 
     //Display the proper contents
-   function displayAll()
+   function main_shortcode_output()
     {
       global $user_ID;
       if ($user_ID)
@@ -57,7 +57,7 @@ if (!class_exists("fep_main_class"))
             $out .= $this->new_message_action();
             break;
           case 'viewmessage':
-            $out .= $this->dispReadMsg();
+            $out .= $this->view_message();
             break;
 		  case 'between':
             $out .= fep_message_box();
@@ -102,8 +102,6 @@ if (!class_exists("fep_main_class"))
 	  $header .= ob_get_contents();
 	  ob_end_clean();
 	  
-      //$header .= __("You have", 'fep')." (<font color='red'>".$numNew."</font>) ".__("new messages", 'fep').
-      //" ".__("and", 'fep')." (<font color='red'>".$numAnn."</font>) ".__("announcement(s)", 'fep')."<br/>";
 	  $header .= '<br />';
       if ($msgBoxTotal == __("Unlimited", 'fep') || $msgBoxSize < $msgBoxTotal)
         $header .= __("Message box size", 'fep').": ".$msgBoxSize." ".__("of", 'fep')." ".$msgBoxTotal."</p>";
@@ -227,24 +225,24 @@ if (!class_exists("fep_main_class"))
 		if(fep_get_option('hide_autosuggest') != '1' || current_user_can('manage_options')) { 
 			wp_enqueue_script( 'fep-script' );
 			
-		$newMsg .="<noscript>Username of recipient</noscript><br/>";
+		$newMsg .="<noscript>".__('Username of recipient', 'fep')."</noscript><br/>";
         $newMsg .="<input type='hidden' id='fep-message-to' name='message_to' autocomplete='off' value='$message_to' />
-		<input type='text' id='fep-message-top' name='message_top' placeholder='Name of recipient' autocomplete='off' value='$message_top' /><img src='".FEP_PLUGIN_URL."images/loading.gif' class='fep-ajax-img' style='display:none;'/><br/>
+		<input type='text' id='fep-message-top' name='message_top' placeholder='".__('Name of recipient', 'fep')."' autocomplete='off' value='$message_top' /><img src='".FEP_PLUGIN_URL."images/loading.gif' class='fep-ajax-img' style='display:none;'/><br/>
         <div id='fep-result'></div>";
 		} else {
-		$newMsg .="<br/><input type='text' name='message_to' placeholder='Username of recipient' autocomplete='off' value='$message_to' /><br/>";}
+		$newMsg .="<br/><input type='text' name='message_to' placeholder='".__('Username of recipient', 'fep')."' autocomplete='off' value='$message_to' /><br/>";}
 		
         $newMsg .= __("Subject", 'fep').":<br/>
-        <input type='text' name='message_title' placeholder='Subject' maxlength='65' value='$message_title' /><br/>";
+        <input type='text' name='message_title' placeholder='".__('Subject', 'fep')."' maxlength='65' value='$message_title' /><br/>";
 		ob_start();
 		do_action('fep_message_form_before_content');
 		echo __("Message", 'fep').":<br/>";
 		if ('wp_editor' == fep_get_option('editor_type') || current_user_can ('manage_options')){
-		wp_editor( $message_content, 'message_content', array('teeny' => false, 'media_buttons' => false, 'textarea_rows' => 8) );
+		wp_editor( $message_content, 'message_content', array('teeny' => false, 'media_buttons' => false) );
 		} elseif ('teeny' == fep_get_option('editor_type','teeny')){ 
-		wp_editor( $message_content, 'message_content', array('teeny' => true, 'media_buttons' => false, 'textarea_rows' => 8) );
+		wp_editor( $message_content, 'message_content', array('teeny' => true, 'media_buttons' => false) );
 		} else {
-        echo  "<textarea name='message_content' placeholder='Message Content'>$message_content</textarea>"; }
+        echo  "<textarea name='message_content' placeholder='".__('Message Content', 'fep')."'>$message_content</textarea>"; }
 		
 		do_action('fep_message_form_after_content');
 		$newMsg .= ob_get_contents();
@@ -370,7 +368,7 @@ function getWholeThread( $id, $order = 'ASC' )
       return $results;
     }
 	
-function dispReadMsg()
+function view_message()
     {
       global $wpdb, $user_ID;
 
@@ -379,9 +377,12 @@ function dispReadMsg()
 	  if ( 'ASC' == $order ) $anti_order = 'DESC'; else $anti_order = 'ASC';
 	  
       $wholeThread = $this->getWholeThread( $pID, $order );
-	  $token = fep_create_nonce();
+	  $token = fep_create_nonce('delete_message');
 
-      $threadOut = "<p><strong>".__("Message Thread", 'fep').":</strong></p>
+      $threadOut = "<p><strong>".__("Message Thread", 'fep').":</strong></p>";
+	  $del_url = fep_action_url("deletemessage&id=$pID&token=$token");
+		  
+      $threadOut .= "<p><a href='".apply_filters('fep_delete_message_url', $del_url, $pID) ."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", 'fep')."</a></p>
       <table><tr><th width='15%'>".__("Sender", 'fep')."</th><th width='85%'>".__("Message", 'fep')."</th></tr>";
 	  
 
@@ -524,5 +525,5 @@ function TimeDelay($DeTime)
 } //ENDIF
 
 //ADD SHORTCODES
-add_shortcode('front-end-pm', array(fep_main_class::init(), 'displayAll' )); //for FRONT END PM
+add_shortcode('front-end-pm', array(fep_main_class::init(), 'main_shortcode_output' )); //for FRONT END PM
 ?>

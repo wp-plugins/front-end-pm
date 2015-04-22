@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once('../../../wp-load.php');
 
 global $wpdb;
@@ -41,7 +42,11 @@ wp_die('Attachment already deleted');
 		header("Content-Length: " . filesize($attachment_path));
 		nocache_headers();
 		
+		//clean all levels of output buffering
+		while (ob_get_level()) {
+    		ob_end_clean();
+		}
+		
 		readfile($attachment_path);
 		
 		exit();
-		?>

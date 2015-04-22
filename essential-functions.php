@@ -3,7 +3,6 @@
     function fep_plugin_activate()
     {
       global $wpdb;
-	  $version = fep_get_version();
 
       $charset_collate = '';
       if( $wpdb->has_cap('collation'))
@@ -16,7 +15,7 @@
 	  $installed_ver = get_option( "fep_db_version" );
 	  $installed_meta_ver = get_option( "fep_meta_db_version" );
 
-	if( $installed_ver != $version['dbversion'] || $wpdb->get_var("SHOW TABLES LIKE '".FEP_MESSAGES_TABLE."'") != FEP_MESSAGES_TABLE) {
+	if( $installed_ver != FEP_DB_VERSION || $wpdb->get_var("SHOW TABLES LIKE '".FEP_MESSAGES_TABLE."'") != FEP_MESSAGES_TABLE) {
 
       $sqlMsgs = 	"CREATE TABLE ".FEP_MESSAGES_TABLE." (
             id int(11) NOT NULL auto_increment,
@@ -37,11 +36,11 @@
       require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
       dbDelta($sqlMsgs);
-	  update_option( "fep_db_version", $version['dbversion'] );
+	  update_option( "fep_db_version", FEP_DB_VERSION );
 	  //var_dump('1');
 	  }
 	  
-	  	if( $installed_meta_ver != $version['metaversion'] || $wpdb->get_var("SHOW TABLES LIKE '".FEP_META_TABLE."'") != FEP_META_TABLE) {
+	  	if( $installed_meta_ver != FEP_META_VERSION || $wpdb->get_var("SHOW TABLES LIKE '".FEP_META_TABLE."'") != FEP_META_TABLE) {
 
       $sql_meta = 	"CREATE TABLE ".FEP_META_TABLE." (
             meta_id int(11) NOT NULL auto_increment,
@@ -55,7 +54,7 @@
       require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
       dbDelta($sql_meta);
-	  update_option( "fep_meta_db_version", $version['metaversion'] );
+	  update_option( "fep_meta_db_version", FEP_META_VERSION );
 	  //var_dump('2');
 	  }
 	  //var_dump('3');
@@ -69,6 +68,7 @@ function fep_translation()
 	
 function fep_enqueue_scripts()
     {
+	if ( !wp_style_is ( 'fep-style' ) )
 	wp_enqueue_style( 'fep-style', FEP_PLUGIN_URL . 'style/style.css' );
 	$custom_css = trim(fep_get_option('custom_css'));
 	wp_add_inline_style( 'fep-style', $custom_css );
@@ -80,13 +80,22 @@ function fep_enqueue_scripts()
 				'nonce' => wp_create_nonce('fep-autosuggestion')
 			) 
 		);
+		
+	wp_register_script( 'fep-notification-script', FEP_PLUGIN_URL . 'js/notification.js', array( 'jquery' ), '3.1', true );
+	wp_localize_script( 'fep-notification-script', 'fep_notification_script', 
+			array( 
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce('fep-notification')
+			) 
+		);
 	
 	
 	wp_register_script( 'fep-attachment-script', FEP_PLUGIN_URL . 'js/attachment.js', array( 'jquery' ), '3.1', true );
 	wp_localize_script( 'fep-attachment-script', 'fep_attachment_script', 
 			array( 
 				'remove' => esc_js(__('Remove', 'fep')),
-				'maximum' => esc_js( fep_get_option('attachment_no', 4) )
+				'maximum' => esc_js( fep_get_option('attachment_no', 4) ),
+				'max_text' => esc_js(__('Maximum file allowed', 'fep'))
 				
 			) 
 		);
@@ -140,6 +149,7 @@ function fep_action_url( $action = '' ) {
 	  return get_permalink(fep_page_id()).$delim."fepaction=$action";
 }
 
+if ( !function_exists('fep_create_nonce') ) :
  /**
  * Creates a token usable in a form
  * return nonce with time
@@ -151,6 +161,9 @@ function fep_action_url( $action = '' ) {
     return $nonce . '-' . $time;
 	}	
 
+endif;
+
+if ( !function_exists('fep_verify_nonce') ) :
  /**
  * Check if a token is valid. Mark it as used
  * @param string $_nonce The token
@@ -194,6 +207,7 @@ function fep_action_url( $action = '' ) {
     update_option( '_fep_used_nonces',$used_nonces );
 	return true;
 }
+endif;
 
 function fep_error($wp_error){
 	if(!is_wp_error($wp_error)){
@@ -292,8 +306,6 @@ function fep_get_userdata($data, $need = 'ID', $type = 'login' )
 function fep_message_box($action = '', $title = '', $total_message = false, $messages = false )
 {
 	global $user_ID;
-
-	  $token = fep_create_nonce('delete_message');
 	  
 	  
 	  if ( !$action )
@@ -329,9 +341,8 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
         $msgsOut .= "<table><tr class='fep-head'>
         <th width='20%'>".__("Started By", 'fep')."</th>
 		<th width='20%'>".__("To", 'fep')."</th>
-        <th width='30%'>".__("Subject", 'fep')."</th>
-        <th width='20%'>".__("Last Reply By", 'fep')."</th>
-        <th width='10%'>".__("Delete", 'fep')."</th></tr>";
+        <th width='40%'>".__("Subject", 'fep')."</th>
+        <th width='20%'>".__("Last Reply By", 'fep')."</th></tr>";
         
 		$a = 0;
         foreach ($messages as $msg)
@@ -354,9 +365,6 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
 		  $msgsOut .= "<td>" .fep_get_userdata( $msg->to_user, 'display_name', 'id' ). "</td>";}
 		  $msgsOut .= "<td><a href='".fep_action_url()."viewmessage&id=".$msg->id."'>".fep_output_filter($msg->message_title,true)."</a><br/><small>".$status."</small></td>";
 		  $msgsOut .= "<td>" .fep_get_userdata( $msg->last_sender, 'display_name', 'id' ). "<br/><small>".fep_format_date($msg->last_date)."</small></td>";
-		  $del_url = fep_action_url("deletemessage&id=$msg->id&token=$token");
-		  
-              $msgsOut .= "<td><a href='".apply_filters('fep_delete_message_url', $del_url, $msg->id, $action ) ."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", 'fep')."</a></td>";
           $msgsOut .=  "</tr>";
 		   //Alternate table colors
 		  if ($a) $a = 0; else $a = 1;
@@ -495,11 +503,11 @@ function fep_format_date($date)
 		do_action('fep_reply_form_before_content');
 		
 		if ('wp_editor' == fep_get_option('editor_type') || current_user_can ('manage_options')){
-		wp_editor( '', 'message_content', array('teeny' => false, 'media_buttons' => false, 'textarea_rows' => 8) );
+		wp_editor( '', 'message_content', array('teeny' => false, 'media_buttons' => false) );
 		} elseif ('teeny' == fep_get_option('editor_type','teeny')){ 
-		wp_editor( '', 'message_content', array('teeny' => true, 'media_buttons' => false, 'textarea_rows' => 8) );
+		wp_editor( '', 'message_content', array('teeny' => true, 'media_buttons' => false) );
 		} else {
-        echo  "<textarea name='message_content' placeholder='Message Content'></textarea>"; }
+        echo  "<textarea name='message_content' placeholder='".__('Message Content', 'fep')."'></textarea>"; }
 		
 		do_action('fep_reply_form_after_content');
 		
@@ -534,10 +542,10 @@ function fep_include_require_files()
 							'between' => 'fep-between-class.php',
 							'directory' => 'fep-directory-class.php',
 							'frontend-admin' => 'admin/fep-admin-frontend-class.php',
-							'announcement' => 'fep-announcement-class.php',
 							'email' => 'fep-email-class.php'
 							);
 				}
+	$fep_files['announcement'] = 'fep-announcement-class.php';
 	$fep_files['widgets'] = 'fep-widgets.php';
 	$fep_files['functions'] = 'functions.php';
 	$fep_files['attachment'] = 'fep-attachment-class.php';

@@ -235,5 +235,5 @@ function upload_file( $upload_data, $message_id ) {
   } //END CLASS
 } //ENDIF
 
-add_action('plugins_loaded', array(fep_attachment_class::init(), 'actions_filters'));
+add_action('wp_loaded', array(fep_attachment_class::init(), 'actions_filters'));
 ?>

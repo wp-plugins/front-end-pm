@@ -19,39 +19,12 @@ define('FEP_MESSAGES_TABLE',$wpdb->prefix.'fep_messages');
 define('FEP_META_TABLE',$wpdb->prefix.'fep_meta');
 require_once('essential-functions.php');
 
-	if ( is_admin() ) 
-		{
-			$fep_files = array(
-							'admin' => 'admin/fep-admin-class.php'
-							);
-										
-		} else {
-			$fep_files = array(
-							'main' => 'fep-class.php',
-							'menu' => 'fep-menu-class.php',
-							'between' => 'fep-between-class.php',
-							'directory' => 'fep-directory-class.php',
-							'frontend-admin' => 'admin/fep-admin-frontend-class.php',
-							'announcement' => 'fep-announcement-class.php',
-							'email' => 'fep-email-class.php'
-							);
-				}
-	$fep_files['widgets'] = 'fep-widgets.php';
-	$fep_files['functions'] = 'functions.php';
-	$fep_files['attachment'] = 'fep-attachment-class.php';
-					
-	$fep_files = apply_filters ('fep_include_files', $fep_files );
-	
-	foreach ( $fep_files as $fep_file )
-	require_once ( $fep_file );
-	unset ( $fep_files );
-
-
 	//ACTIVATE PLUGIN
 	register_activation_hook(__FILE__ , 'fep_plugin_activate');
 
 
 	//ADD ACTIONS
+	add_action('after_setup_theme', 'fep_include_require_files');
 	add_action('plugins_loaded', 'fep_translation');
 	add_action('wp_enqueue_scripts', 'fep_enqueue_scripts');
 

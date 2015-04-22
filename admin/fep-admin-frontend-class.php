@@ -79,7 +79,7 @@ if (!class_exists('fep_admin_frontend_class'))
 	function messages( $messages, $action ) {
 		global $wpdb;
 		
-		$page = ( isset ($_GET['page']) && $_GET['page']) ? absint($_GET['page']) : 0;
+		$page = ( isset ($_GET['feppage']) && $_GET['feppage']) ? absint($_GET['feppage']) : 0;
 		$start = $page * fep_get_option('messages_page', 50);
         $end = fep_get_option('messages_page', 50);
 		
@@ -149,5 +149,5 @@ if (!class_exists('fep_admin_frontend_class'))
   } //END CLASS
 } //ENDIF
 
-add_action('plugins_loaded', array(fep_admin_frontend_class::init(), 'actions_filters'));
+add_action('wp_loaded', array(fep_admin_frontend_class::init(), 'actions_filters'));
 ?>

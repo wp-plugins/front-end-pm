@@ -215,7 +215,7 @@ if (!class_exists("fep_main_class"))
 	  
       $to = (isset($_GET['to']))? $_GET['to']:'';
 	  
-	$message_to = ( isset( $_POST['message_to'] ) ) ? esc_html( $_POST['message_to'] ): fep_get_userdata( $to );
+	$message_to = ( isset( $_POST['message_to'] ) ) ? esc_html( $_POST['message_to'] ): fep_get_userdata( $to, 'user_login' );
 	$message_top = ( isset( $_POST['message_top'] ) ) ? esc_html( $_POST['message_top'] ): fep_get_userdata($to, 'display_name');
 	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? esc_html( $_REQUEST['message_title'] ): '';
 	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? esc_textarea( $_REQUEST['message_content'] ): '';
@@ -420,8 +420,8 @@ function dispReadMsg()
 		  
 		$threadOut .="</td></tr>";
 		
-      if ($post->status == 0 && $user_ID == $post->to_user) //Update only if the reader is the reciever 
-	  	$wpdb->update( FEP_MESSAGES_TABLE, array( 'status' => 1 ), array( 'id' => $pID ), array( '%d' ), array( '%d' ));
+      if ($post->status == 0 && $user_ID != $post->last_sender && ( $user_ID == $post->from_user || $user_ID == $post->to_user )) //Update only if the reader is not last sender
+	  	$wpdb->update( FEP_MESSAGES_TABLE, array( 'status' => 1 ), array( 'id' => $post->id ), array( '%d' ), array( '%d' ));
         }
         else
         {

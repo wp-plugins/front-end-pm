@@ -3,7 +3,7 @@
 
 function fep_backticker_encode($text) {
 	$text = $text[1];
-    $text = stripslashes($text);
+    //$text = stripslashes($text); //already done
     $text = str_replace('&amp;lt;', '&lt;', $text);
     $text = str_replace('&amp;gt;', '&gt;', $text);
 	$text = htmlspecialchars($text, ENT_QUOTES);
@@ -86,33 +86,36 @@ add_action('wp_ajax_fep_autosuggestion_ajax','fep_autosuggestion_ajax');
 
 function header_note() {
 	$numNew = fep_get_new_message_number();
-	$s = ( $numNew > 1 ) ? 's': '';
+	$sm = ( $numNew > 1 ) ? __('new messages', 'fep'): __('new message', 'fep');
 	
-	echo __('You have', 'fep')." (<font color='red'>$numNew</font>) ".__("new message{$s}", 'fep');
+	echo __('You have', 'fep')." (<font color='red'>$numNew</font>) $sm";
 	}
 add_action ('fep_header_note',  'header_note');
 
 function fep_notification() 
 		{
+			if ( ! is_user_logged_in() )
+				return;
+			
 			$New_mgs = fep_get_new_message_number();
-				$sm = ( $New_mgs > 1 ) ? 's': '';
+			$sm = ( $New_mgs > 1 ) ? __('new messages', 'fep'): __('new message', 'fep');
 				
 				$New_ann = 0;
 			if( class_exists('fep_announcement_class') )
 				$New_ann = fep_announcement_class::init()->getAnnouncementsNum();
-				$sa = ( $New_ann > 1 ) ? 's': '';
+				$sa = ( $New_ann > 1 ) ? __('new announcements', 'fep'): __('new announcement', 'fep');
 	
 			if ( $New_mgs || $New_ann ) {
 				$show = __("You have", 'fep');
 	
 			if ( $New_mgs )
-				$show .= "<a href='".fep_action_url()."'>".sprintf(__(" %d new message%s", 'fep'), $New_mgs, $sm ).'</a>';
+				$show .= "<a href='".fep_action_url('messagebox')."'> $New_mgs $sm</a>";
 	
 			if ( $New_mgs && $New_ann )
-				$show .= __(' and', 'fep');
+				$show .= ' ' .__('and', 'fep');
 	
 			if ( $New_ann )
-				$show .= "<a href='".fep_action_url('announcements')."'>".sprintf(__(" %d new announcement%s", 'fep'), $New_ann, $sa ).'</a>';
+				$show .= "<a href='".fep_action_url('announcements')."'> $New_ann $sa</a>";
 	
 			echo "<div id='fep-notification-bar'>$show</div>";
 				}
@@ -160,7 +163,7 @@ add_action('plugins_loaded', 'fep_check_db');
 
 function fep_show_code_post_help()
     {
-	echo '<p>Put code in between <code>`backticks`</code></p>';
+	echo '<p>' . __('Put code in between', 'fep'). ' <code>`'. __('backticks', 'fep').'`</code></p>';
     }	
 
 add_action('fep_message_form_after_content', 'fep_show_code_post_help', 5 );

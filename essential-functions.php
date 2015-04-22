@@ -64,7 +64,7 @@
 function fep_translation()
 	{
 	//SETUP TEXT DOMAIN FOR TRANSLATIONS
-	load_plugin_textdomain('fep', false, FEP_PLUGIN_DIR.'languages/');
+	load_plugin_textdomain('fep', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 	
 function fep_enqueue_scripts()
@@ -319,8 +319,8 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
         {
           $msgsOut .= "<p><strong>".__("Page", 'fep').": </strong> ";
           for ($i = 0; $i < $numPgs; $i++)
-            if ($_GET['page'] != $i){
-			  $msgsOut .= "<a href='".esc_url( fep_action_url($action) )."&page=".$i."'>".($i+1)."</a> ";
+            if ($_GET['feppage'] != $i){
+			  $msgsOut .= "<a href='".esc_url( fep_action_url($action) )."&feppage=".$i."'>".($i+1)."</a> ";
             } else {
               $msgsOut .= "[<b>".($i+1)."</b>] ";}
           $msgsOut .= "</p>";
@@ -368,7 +368,7 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
       }
       else
       {
-        return "<div id='fep-error'>".__("$title empty", 'fep')."</div>";
+        return "<div id='fep-error'>".sprintf(__("%s empty", 'fep'), $title )."</div>";
       }
 	
 }
@@ -410,7 +410,7 @@ function fep_get_user_messages( $action = 'messagebox', $userID = 0 )
 	  if ( !$userID )
 	  $userID = $user_ID;
 	  
-	  $page = ( isset ($_GET['page']) && $_GET['page']) ? absint($_GET['page']) : 0;
+	  $page = ( isset ($_GET['feppage']) && $_GET['feppage']) ? absint($_GET['feppage']) : 0;
 	  
       $start = $page * fep_get_option('messages_page', 50);
       $end = fep_get_option('messages_page', 50);
@@ -456,16 +456,18 @@ function fep_format_date($date)
     {
 		$now = current_time('mysql');
       //return date('M d, h:i a', strtotime($date));
-	  $formate = human_time_diff(strtotime($date),strtotime($now)).' ago';
+	  $formate = human_time_diff(strtotime($date),strtotime($now)).' '.__('ago', 'fep');
 	  
 	  return apply_filters( 'fep_formate_date', $formate, $date );
     }
 	
 	function fep_output_filter($string, $title = false)
     {
-	  if ($title)
+		$string = stripslashes($string);
+		
+	  if ($title) {
 	  $html = apply_filters('fep_filter_display_title', $string);
-	  else {
+	  } else {
 	  $html = apply_filters('fep_filter_display_message', $string);
 	  }
       return $html;
@@ -517,3 +519,32 @@ function fep_format_date($date)
 	return apply_filters('fep_reply_form', $reply_form );
 	}
 	
+function fep_include_require_files() 
+	{
+	if ( is_admin() ) 
+		{
+			$fep_files = array(
+							'admin' => 'admin/fep-admin-class.php'
+							);
+										
+		} else {
+			$fep_files = array(
+							'main' => 'fep-class.php',
+							'menu' => 'fep-menu-class.php',
+							'between' => 'fep-between-class.php',
+							'directory' => 'fep-directory-class.php',
+							'frontend-admin' => 'admin/fep-admin-frontend-class.php',
+							'announcement' => 'fep-announcement-class.php',
+							'email' => 'fep-email-class.php'
+							);
+				}
+	$fep_files['widgets'] = 'fep-widgets.php';
+	$fep_files['functions'] = 'functions.php';
+	$fep_files['attachment'] = 'fep-attachment-class.php';
+					
+	$fep_files = apply_filters('fep_include_files', $fep_files );
+	
+	foreach ( $fep_files as $fep_file ) {
+	require_once ( $fep_file );
+		}
+	}

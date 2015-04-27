@@ -90,12 +90,13 @@ I am very busy with my job. In my leisure i code for plugins. If you want to hel
 You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) and contact with me for paid support.
 
 == Screenshots ==
-1. Admin settings page.
-2. Front End PM setup instruction.
-3. Front End pm.
-4. Button widgets.
-5. Text widgets.
-6. Front End Directory.
+
+1. Front End pm.
+2. Button widgets.
+3. Text widgets.
+4. Front End Directory.
+5. Admin settings page.
+6. Front End PM setup instruction.
 7. FEP Contact Form Settings
 8. FEP Contact Form Settings 2
 9. FEP Contact Form

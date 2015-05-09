@@ -24,7 +24,7 @@ function fep_backticker_display_code($text) {
 add_filter('fep_filter_display_message', 'fep_backticker_display_code', 5);
 
 function fep_message_filter_content($html) {
-    $html = apply_filters('the_content', $html);
+    $html = apply_filters('comment_text', $html);
     return $html;
 }
 add_filter( 'fep_filter_display_message', 'fep_message_filter_content' );

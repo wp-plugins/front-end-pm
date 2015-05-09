@@ -478,7 +478,10 @@ function fep_format_date($date)
 	  } else {
 	  $html = apply_filters('fep_filter_display_message', $string);
 	  }
-      return $html;
+	  
+	  $html = wp_kses_data( stripslashes_deep( $html ) );
+	  
+      return addslashes( $html );
     }
 
 	

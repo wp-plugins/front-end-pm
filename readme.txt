@@ -103,6 +103,11 @@ You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) a
 
 == Changelog ==
 
+= 3.3 =
+
+* Critical Security update. Found cross-site scripting (XSS) vulnerability and fixed.
+* Please update as soon as possible.
+
 = 3.2 =
 
 * Security update. Admin could accidently delete all messages from database. fixed.
@@ -196,6 +201,11 @@ You can visit [Front End PM](http://frontendpm.blogspot.com/p/contact-us.html) a
 * Initial release.
 
 == Upgrade Notice ==
+
+= 3.3 =
+
+* Critical Security update. Found cross-site scripting (XSS) vulnerability and fixed.
+* Please update as soon as possible.
 
 = 3.2 =
 

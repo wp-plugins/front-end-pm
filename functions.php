@@ -207,3 +207,13 @@ function fep_notification_ajax() {
 	}
 
 add_action('wp_ajax_fep_notification_ajax','fep_notification_ajax');
+
+function fep_kses_filter( $message ) {
+	
+	$message['message_title'] = wp_kses_post($message['message_title']);
+	$message['message_content'] = wp_kses_post($message['message_content']);
+	
+	return $message;
+	}
+add_filter( 'fep_filter_message_before_send', 'fep_kses_filter');
+add_filter( 'fep_filter_announcement_before_add', 'fep_kses_filter');

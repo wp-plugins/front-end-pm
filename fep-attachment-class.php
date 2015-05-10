@@ -183,6 +183,7 @@ function upload_file( $upload_data, $message_id ) {
 	function display_attachment($message_id) {
 	
 	$attachment = fep_get_message_meta($message_id, 'attachment');
+	$token = fep_create_nonce('download');
 	
 	if ($attachment) {
 		  echo "<hr /><strong>" . __("Attachment", 'fep') . ":</strong><br />";
@@ -193,7 +194,7 @@ function upload_file( $upload_data, $message_id ) {
 		if ( $unserialized_file['type'] && $unserialized_file['url'] && $unserialized_file['file'] ) {
 		$attachment_id = $meta->meta_id; 
 		
-		echo "<a href='".FEP_PLUGIN_URL."attachment-download.php?attachment_id=$attachment_id' title='Download ". basename($unserialized_file['url'])."'>". basename($unserialized_file['url'])."</a><br />"; } 
+		echo "<a href='".fep_action_url("download&amp;id=$attachment_id&amp;token=$token")."' title='Download ". basename($unserialized_file['url'])."'>". basename($unserialized_file['url'])."</a><br />"; }
 				} 
 			}
 		}

@@ -557,3 +557,69 @@ function fep_include_require_files()
 	require_once ( $fep_file );
 		}
 	}
+
+add_action('template_redirect', 'fep_download_file');
+function fep_download_file()
+		{
+		if ( !isset($_GET['fepaction']) || $_GET['fepaction'] != 'download')
+		return;
+		
+			global $wpdb, $user_ID;
+			$errors = new WP_Error();
+	$id = absint($_GET['id']);
+
+	if ( !fep_verify_nonce($_GET['token'], 'download') )
+	$errors->add('invalidToken',__('Invalid token', 'fep'));
+
+	$msgsMeta = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".FEP_META_TABLE." WHERE meta_id = %d", $id));
+	if (!$msgsMeta)
+	$errors->add('noAttachment',__('No attachment found', 'fep'));
+
+	$message_id = $msgsMeta->message_id;
+
+	$unserialized_file = maybe_unserialize( $msgsMeta->field_value );
+		  
+	if ( $msgsMeta->field_name != 'attachment' || !$unserialized_file['type'] || !$unserialized_file['url'] || !$unserialized_file['file'] )
+	$errors->add('invalidAttachment',__('Invalid Attachment', 'fep'));
+
+		$attachment_type = $unserialized_file['type'];
+		$attachment_url = $unserialized_file['url'];
+		$attachment_path = $unserialized_file['file'];
+		$attachment_name = basename($attachment_url);
+
+	$msgsInfo = $wpdb->get_row($wpdb->prepare("SELECT from_user, to_user, status FROM ".FEP_MESSAGES_TABLE." WHERE id = %d", $message_id));
+
+	if (!$msgsInfo)
+	$errors->add('messageDeleted',__('Message already deleted', 'fep'));
+
+	if ( $msgsInfo->from_user != $user_ID && $msgsInfo->to_user != $user_ID && $msgsInfo->status != 2 && !current_user_can('manage_options') )
+	$errors->add('noPermission',__('No permission', 'fep'));
+
+	if(!file_exists($attachment_path)){
+	$wpdb->query($wpdb->prepare("DELETE FROM ".FEP_META_TABLE." WHERE meta_id = %d", $id));
+	$errors->add('attachmentDeleted',__('Attachment already deleted', 'fep'));
+	}
+	
+	if(count($errors->get_error_messages())>0){
+	echo fep_error($errors);
+	echo "<a href='".fep_action_url_joo("viewmessage&amp;id=$message_id")."'>".__('Go Back', 'fep')."</a>";
+	
+	} else {
+	
+		header("Content-Description: File Transfer");
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Type: $attachment_type", true, 200);
+		header("Content-Disposition: attachment; filename=\"$attachment_name\"");
+		header("Content-Length: " . filesize($attachment_path));
+		nocache_headers();
+		
+		//clean all levels of output buffering
+		while (ob_get_level()) {
+    		ob_end_clean();
+		}
+		
+		readfile($attachment_path);
+		
+			}
+			exit;
+		}

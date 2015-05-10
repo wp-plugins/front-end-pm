@@ -21,7 +21,8 @@ function fep_backticker_display_code($text) {
     $text = str_replace('<code></code>', '`', $text);
     return $text;
 }
-add_filter('fep_filter_display_message', 'fep_backticker_display_code', 5);
+//since 3.3 it is done in input for performance issue of wp_kses_post function
+//add_filter('fep_filter_display_message', 'fep_backticker_display_code', 5);
 
 function fep_message_filter_content($html) {
     $html = apply_filters('comment_text', $html);
@@ -207,6 +208,16 @@ function fep_notification_ajax() {
 	}
 
 add_action('wp_ajax_fep_notification_ajax','fep_notification_ajax');
+
+function fep_backticker_code_input_filter( $message ) {
+
+	$message['message_title'] = fep_backticker_display_code($message['message_title']);
+	$message['message_content'] = fep_backticker_display_code($message['message_content']);
+	
+	return $message;
+	}
+add_filter( 'fep_filter_message_before_send', 'fep_backticker_code_input_filter', 5);
+add_filter( 'fep_filter_announcement_before_add', 'fep_backticker_code_input_filter', 5);
 
 function fep_kses_filter( $message ) {
 	

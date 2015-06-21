@@ -220,17 +220,19 @@ if (!class_exists("fep_main_class"))
 	$parent_id = ( isset( $_POST['parent_id'] ) ) ? absint( $_POST['parent_id'] ): 0;
 	
         $newMsg = "<p><strong>".__("Create New Message", 'fep').":</strong></p>";
-        $newMsg .= "<form action='".fep_action_url('checkmessage')."' method='post' enctype='multipart/form-data'>".
-        __("To", 'fep').": ";
+        $newMsg .= "<form action='".fep_action_url('checkmessage')."' method='post' enctype='multipart/form-data'>";
+        $MgsTo = __("To", 'fep').": ";
 		if(fep_get_option('hide_autosuggest') != '1' || current_user_can('manage_options')) { 
 			wp_enqueue_script( 'fep-script' );
 			
-		$newMsg .="<noscript>".__('Username of recipient', 'fep')."</noscript><br/>";
-        $newMsg .="<input type='hidden' id='fep-message-to' name='message_to' autocomplete='off' value='$message_to' />
+		$MgsTo .="<noscript>".__('Username of recipient', 'fep')."</noscript><br/>";
+        $MgsTo .="<input type='hidden' id='fep-message-to' name='message_to' autocomplete='off' value='$message_to' />
 		<input type='text' id='fep-message-top' name='message_top' placeholder='".__('Name of recipient', 'fep')."' autocomplete='off' value='$message_top' /><img src='".FEP_PLUGIN_URL."images/loading.gif' class='fep-ajax-img' style='display:none;'/><br/>
         <div id='fep-result'></div>";
 		} else {
-		$newMsg .="<br/><input type='text' name='message_to' placeholder='".__('Username of recipient', 'fep')."' autocomplete='off' value='$message_to' /><br/>";}
+		$MgsTo .="<br/><input type='text' name='message_to' placeholder='".__('Username of recipient', 'fep')."' autocomplete='off' value='$message_to' /><br/>";}
+		
+		$newMsg .= apply_filters( 'fep_message_form_to_filter', $MgsTo); 
 		
         $newMsg .= __("Subject", 'fep').":<br/>
         <input type='text' name='message_title' placeholder='".__('Subject', 'fep')."' maxlength='65' value='$message_title' /><br/>";
@@ -281,12 +283,13 @@ function new_message_action(){
 	  $errors = new WP_Error();
 	  $message = $_POST;
 	  // print var_dump($_POST);
-	  $uData = get_userdata($message['message_from']);
-      $message['message_from_name'] = $uData->display_name;
-      if ($message['message_to']) {
+      if (!empty($message['message_to'])) {
 	  $preTo = $message['message_to'];
 	  } else {
-	  $preTo = $message['message_top']; }
+	  $preTo = ( isset( $message['message_top'] ) ) ? esc_html( $message['message_top'] ): ''; }
+	  
+	  $preTo = apply_filters( 'fep_preto_filter', $preTo );
+	  
       $message['to'] = fep_get_userdata( $preTo );
       $message['send_date'] = current_time('mysql');
       

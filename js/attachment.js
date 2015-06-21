@@ -1,4 +1,3 @@
-	var $ = jQuery; //if you use google CDN version of jQuery comment this line.
     var fep_Index = 1;
     function fep_get_by_id(id) { return document.getElementById(id); }
     function fep_create_element(name) { return document.createElement(name); }
@@ -8,7 +7,7 @@
     }
     function fep_add_new_file_field() {
         var maximum = fep_attachment_script.maximum;
-        var num_img = $('input[name="fep_upload[]"]').size() + $("a.delete").size();
+        var num_img = jQuery('input[name="fep_upload[]"]').size() + jQuery("a.delete").size();
         if((maximum!=0 && num_img<maximum) || maximum==0) {
             var id = 'p-' + fep_Index++;
 
@@ -49,26 +48,26 @@
      */
     function fep_add_file_field() {
         var count = 0;
-        $('input[name="fep_upload[]"]').each(function(index) {
-            if ( $(this).val() == '' ) {
+        jQuery('input[name="fep_upload[]"]').each(function(index) {
+            if ( jQuery(this).val() == '' ) {
                 count++;
             }
         });
         var maximum = fep_attachment_script.maximum;
-        var num_img = $('input[name="fep_upload[]"]').size() + $("a.delete").size();
+        var num_img = jQuery('input[name="fep_upload[]"]').size() + jQuery("a.delete").size();
         if (count == 0 && (maximum==0 || (maximum!=0 && num_img<maximum))) {
             fep_add_new_file_field();
         }
     }
 	function fep_hide_file_field() {
         var maximum = fep_attachment_script.maximum;
-        var num_img = $('input[name="fep_upload[]"]').size() + $("a.delete").size();
+        var num_img = jQuery('input[name="fep_upload[]"]').size() + jQuery("a.delete").size();
         if (maximum!=0 && num_img>maximum-1) {
 			//alert('maximum');
-            $('#fep-attachment-field-add').hide();
-			$('#fep-attachment-note').html(fep_attachment_script.max_text+' '+fep_attachment_script.maximum);
+            jQuery('#fep-attachment-field-add').hide();
+			jQuery('#fep-attachment-note').html(fep_attachment_script.max_text+' '+fep_attachment_script.maximum);
         } else {
-			$('#fep-attachment-field-add').show();
-			$('#fep-attachment-note').html('');
+			jQuery('#fep-attachment-field-add').show();
+			jQuery('#fep-attachment-note').html('');
 		}
     }

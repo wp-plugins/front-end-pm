@@ -52,8 +52,7 @@ if (!class_exists('fep_directory_class'))
 	
 	// The Query
 	$user_query = new WP_User_Query( $args );
-	  $result = count_users();
-	  $total = $result['total_users'];
+	  $total = $user_query->get_total();
       if (! empty( $user_query->results))
       {
         $directory = "<p><strong>".__("Total Users", 'fep').": (".$total.")</strong></p>";

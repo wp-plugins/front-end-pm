@@ -149,6 +149,14 @@ function fep_action_url( $action = '' ) {
 	  return get_permalink(fep_page_id()).$delim."fepaction=$action";
 }
 
+function fep_query_url( $action, $arg = array() ) {
+      
+	  $args = array( 'fepaction' => $action );
+	  $args = array_merge( $args, $arg );
+	  
+	  return esc_url( add_query_arg( $args, get_permalink( fep_page_id() ) ) );
+}
+
 if ( !function_exists('fep_create_nonce') ) :
  /**
  * Creates a token usable in a form
@@ -279,7 +287,7 @@ function fep_is_user_blocked( $login = '' ){
 	$login = $user_login;
 	
 	if ($login){
-	$wpusers = explode(',', str_replace(' ', '', strtolower(fep_get_option('have_permission'))));
+	$wpusers = explode(',', str_replace(' ', '', fep_get_option('have_permission')));
 	//var_dump($wpusers);
 		if(in_array( $login, $wpusers))
 		return true;

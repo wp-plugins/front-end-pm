@@ -228,3 +228,12 @@ function fep_kses_filter( $message ) {
 	}
 add_filter( 'fep_filter_message_before_send', 'fep_kses_filter');
 add_filter( 'fep_filter_announcement_before_add', 'fep_kses_filter');
+
+function fep_delete_message_link( $pID, $wholeThread )
+	{
+	$token = fep_create_nonce('delete_message');
+	$del_url = fep_action_url("deletemessage&id=$pID&token=$token");
+	echo "<p><a href='".apply_filters('fep_delete_message_url', $del_url, $pID) ."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", 'fep')."</a></p>";
+	}
+	
+add_action('fep_display_in_message_header', 'fep_delete_message_link', 10, 2 );

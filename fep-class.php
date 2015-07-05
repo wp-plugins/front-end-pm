@@ -193,8 +193,10 @@ if (!class_exists("fep_main_class"))
 	  if (!fep_verify_nonce($_POST['token'],'user_settings'))
 		  $errors->add('invalidToken', __('Your Token did not verify, Please try again!', 'fep'));
 		  
+		// This action hook is DEPRECATED since version 3.4. Use following filter hook instead
 	  do_action('fep_action_user_settings_before_save', $errors);
-	  $options = apply_filters('fep_filter_user_settings_before_save', $options);
+	  
+	  $options = apply_filters('fep_filter_user_settings_before_save', $options, $errors); //arg $errors added since version 3.4
 	  //var_dump($options);
 	  
 		if(count($errors->get_error_codes())==0){
@@ -325,9 +327,11 @@ function new_message_action(){
 		} else {
 		do_action('fep_before_send_new_message', $errors);
 		}
-
+	
+		// This action hook is DEPRECATED since version 3.4. Use following filter hook instead
 	  do_action('fep_action_message_before_send', $errors);
-	  $message = apply_filters('fep_filter_message_before_send', $message);
+	  
+	  $message = apply_filters('fep_filter_message_before_send', $message, $errors); //arg $errors added since version 3.4
 
       //If no errors then continue on
 	  if(count($errors->get_error_codes())==0){
@@ -383,12 +387,17 @@ function view_message()
 	  return "<div id='fep-error'>".__("You do not have permission to view this message!", 'fep')."</div>";
 	  
       $wholeThread = $this->getWholeThread( $pID, $order );
-	  $token = fep_create_nonce('delete_message');
 
       $threadOut = "<p><strong>".__("Message Thread", 'fep').":</strong></p>";
-	  $del_url = fep_action_url("deletemessage&id=$pID&token=$token");
+	  
+	  	ob_start();
 		  
-      $threadOut .= "<p><a href='".apply_filters('fep_delete_message_url', $del_url, $pID) ."' onclick='return confirm(\"".__('Are you sure?', 'fep')."\");'>".__("Delete", 'fep')."</a></p>
+		  do_action ('fep_display_in_message_header', $pID, $wholeThread );
+		  $threadOut .= ob_get_contents();
+		  
+		  ob_end_clean();
+		  
+      $threadOut .= "
       <table><tr><th width='15%'>".__("Sender", 'fep')."</th><th width='85%'>".__("Message", 'fep')."</th></tr>";
 	  
 

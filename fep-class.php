@@ -26,9 +26,9 @@ if (!class_exists("fep_main_class"))
       if ($user_ID)
       {
 	  
-	  if (fep_get_option('min_cap') != ''){ 
+	  if (fep_get_option('min_cap','read') != ''){ 
 	  //Required capability
-	  $cap = trim(fep_get_option('min_cap'));
+	  $cap = trim(fep_get_option('min_cap','read'));
 	  if (!current_user_can($cap)){
 	  
 	  return "<div id='fep-error'>".sprintf(__("Messaging is only allowed for users at least %s capability!", 'fep'), $cap)."</div>";}}

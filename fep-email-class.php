@@ -18,7 +18,7 @@ if (!class_exists('fep_email_class'))
     {
 	add_action ('fep_action_message_after_send', array(&$this, 'send_email'), 10, 2);
 	
-	if ( '1' == fep_get_option('notify_ann',1) )
+	if ( '1' == fep_get_option('notify_ann') )
 	add_action ('fep_after_add_announcement', array(&$this, 'notify_users'), 10, 2);
     }
 	

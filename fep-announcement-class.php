@@ -236,8 +236,9 @@ if (!class_exists('fep_announcement_class'))
 		if ( !fep_verify_nonce($message['token'], 'add_announcement') )
         $errors->add('InvalidToken', __("Invalid Token. Please try again!", 'fep'));
 		
+		// This action hook is DEPRECATED since version 3.4. Use following filter hook instead
 		do_action('fep_action_announcement_before_add', $errors);
-	  $message = apply_filters('fep_filter_announcement_before_add', $message);
+	  	$message = apply_filters('fep_filter_announcement_before_add', $message, $errors); //arg $errors added since version 3.4
 	  
 		if(count($errors->get_error_codes())==0){
 		$wpdb->insert( FEP_MESSAGES_TABLE, array( 'from_user' => $message['message_from'], 'message_title' => $message['message_title'], 'message_contents' => $message['message_content'], 'send_date' => $message['send_date'], 'status' => $message['status'] ), array( '%d', '%s', '%s', '%s', '%d' )); 

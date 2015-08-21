@@ -234,7 +234,7 @@ if (!class_exists("fep_main_class"))
 		} else {
 		$MgsTo .="<br/><input type='text' name='message_to' placeholder='".__('Username of recipient', 'fep')."' autocomplete='off' value='$message_to' /><br/>";}
 		
-		$newMsg .= apply_filters( 'fep_message_form_to_filter', $MgsTo); 
+		$newMsg .= apply_filters( 'fep_message_form_to_filter', $MgsTo, $message_to); //arg $message_to added in 3.4
 		
         $newMsg .= __("Subject", 'fep').":<br/>
         <input type='text' name='message_title' placeholder='".__('Subject', 'fep')."' maxlength='65' value='$message_title' /><br/>";

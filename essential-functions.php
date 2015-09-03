@@ -332,14 +332,20 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
 	  $msgsOut = '';
       if ($total_message)
       {
-			  $msgsOut .= "<p><strong>$title: ($total_message)</strong></p>";
+			  	ob_start();
+	  			do_action('fep_display_before_messagebox', $action);
+	  			$msgsOut .= ob_get_clean();
+				
+			$msgsOut .= "<p><strong>$title: ($total_message)</strong></p>";
 		
         $numPgs = $total_message / fep_get_option('messages_page',50);
+		$page = ( isset ($_GET['feppage']) && $_GET['feppage']) ? absint($_GET['feppage']) : 0;
+		
         if ($numPgs > 1)
         {
           $msgsOut .= "<p><strong>".__("Page", 'fep').": </strong> ";
           for ($i = 0; $i < $numPgs; $i++)
-            if ($_GET['feppage'] != $i){
+            if ( $page != $i){
 			  $msgsOut .= "<a href='".esc_url( fep_action_url($action) )."&feppage=".$i."'>".($i+1)."</a> ";
             } else {
               $msgsOut .= "[<b>".($i+1)."</b>] ";}

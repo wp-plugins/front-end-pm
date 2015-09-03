@@ -122,6 +122,10 @@ if (!class_exists("fep_main_class"))
 	  
 	  $menu .="</div>";
       $menu .= "<div id='fep-content'>";
+	  ob_start();
+	  do_action('fep_display_before_content');
+	  $menu .= ob_get_clean();
+	  
       return $menu;
     }
 	

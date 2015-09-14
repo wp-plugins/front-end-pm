@@ -166,7 +166,7 @@ if (!class_exists("fep_main_class"))
 		}
 	}
 	  $token = fep_create_nonce('user_settings');
-      $prefs .= "<form method='post' action='".fep_action_url('settings')."'>
+      $prefs .= "<form method='post' action='".fep_query_url('settings')."'>
 	  
       <input type='checkbox' name='allow_messages' value='1' ".checked(fep_get_user_option( 'allow_messages', 1), '1', false)."/> <i>".__("Allow others to send me messages?", 'fep')."</i><br/>
 	  
@@ -226,7 +226,7 @@ if (!class_exists("fep_main_class"))
 	$parent_id = ( isset( $_POST['parent_id'] ) ) ? absint( $_POST['parent_id'] ): 0;
 	
         $newMsg = "<p><strong>".__("Create New Message", 'fep').":</strong></p>";
-        $newMsg .= "<form action='".fep_action_url('checkmessage')."' method='post' enctype='multipart/form-data'>";
+        $newMsg .= "<form action='".fep_query_url('checkmessage')."' method='post' enctype='multipart/form-data'>";
         $MgsTo = __("To", 'fep').": ";
 		if(fep_get_option('hide_autosuggest') != '1' || current_user_can('manage_options')) { 
 			wp_enqueue_script( 'fep-script' );

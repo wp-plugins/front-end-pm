@@ -193,7 +193,7 @@ if (!class_exists('fep_announcement_class'))
 	$message_title = ( isset( $_REQUEST['message_title'] ) ) ? esc_html($_REQUEST['message_title']): '';
 	$message_content = ( isset( $_REQUEST['message_content'] ) ) ? esc_textarea($_REQUEST['message_content']): '';
 	
-      $form = "<form action='".fep_action_url('addannouncement')."' method='post' enctype='multipart/form-data'>
+      $form = "<form action='".fep_query_url('addannouncement')."' method='post' enctype='multipart/form-data'>
       ".__("Subject", 'fep').":<br/>
       <input type='text' name='message_title' value='$message_title' /><br/>";
 	  ob_start();

@@ -136,7 +136,7 @@ function fep_page_id() {
 		set_transient('fep_page_id', $id, 60*60*24);
 		}
 		
-     return $id;
+     return apply_filters( 'fep_page_id_filter', $id);
 }
 
 function fep_action_url( $action = '' ) {
@@ -154,7 +154,12 @@ function fep_query_url( $action, $arg = array() ) {
 	  $args = array( 'fepaction' => $action );
 	  $args = array_merge( $args, $arg );
 	  
-	  return esc_url( add_query_arg( $args, get_permalink( fep_page_id() ) ) );
+	  $permalink = apply_filters( 'fep_page_permalink_filter', get_permalink( fep_page_id() ), fep_page_id(), $args );
+	  
+	  if ( $permalink )
+	  return esc_url( add_query_arg( $args, $permalink ) );
+	  else
+	  return esc_url( add_query_arg( $args ) );
 }
 
 if ( !function_exists('fep_create_nonce') ) :
@@ -512,7 +517,7 @@ function fep_format_date($date)
 	
 	$reply_form = "
       <p><strong>".__("Add Reply", 'fep').":</strong></p>
-      <form action='".fep_action_url('checkmessage')."' method='post' enctype='multipart/form-data'><br/>";
+      <form action='".fep_query_url('checkmessage')."' method='post' enctype='multipart/form-data'><br/>";
 	  
       ob_start();
 		do_action('fep_reply_form_before_content');

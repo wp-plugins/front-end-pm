@@ -28,7 +28,15 @@ function fep_message_filter_content($html) {
     $html = apply_filters('comment_text', $html);
     return $html;
 }
-add_filter( 'fep_filter_display_message', 'fep_message_filter_content' );
+//add_filter( 'fep_filter_display_message', 'fep_message_filter_content' );
+
+add_filter( 'fep_filter_display_message', 'wptexturize'            );
+add_filter( 'fep_filter_display_message', 'convert_chars'          );
+add_filter( 'fep_filter_display_message', 'make_clickable',      9 );
+add_filter( 'fep_filter_display_message', 'force_balance_tags', 25 );
+add_filter( 'fep_filter_display_message', 'convert_smilies',    20 );
+add_filter( 'fep_filter_display_message', 'wpautop',            30 );
+add_filter( 'fep_filter_display_message', 'capital_P_dangit', 	31 );
 
 function fep_message_filter_title($html) {
     $html = apply_filters('the_title', $html);

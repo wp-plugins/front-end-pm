@@ -395,7 +395,7 @@ function fep_message_box($action = '', $title = '', $total_message = false, $mes
       }
       else
       {
-        return "<div id='fep-error'>".sprintf(__("%s empty", 'fep'), $title )."</div>";
+        return "<div id='fep-error'>".apply_filters('fep_filter_messagebox_empty', sprintf(__("%s empty", 'fep'), $title ), $action)."</div>";
       }
 	
 }

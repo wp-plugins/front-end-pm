@@ -107,7 +107,7 @@ class FEP_text_widget extends WP_Widget {
 		$show_messagebox = isset( $instance['show_messagebox'] ) ? $instance['show_messagebox'] : false;
 		$show_announcement = isset( $instance['show_announcement'] ) ? $instance['show_announcement'] : false;
 		
-			echo "Welcome ". fep_get_userdata( $user_ID, 'display_name', 'id' ). '<br />';
+			echo __('Welcome', 'fep') . ' ' . fep_get_userdata( $user_ID, 'display_name', 'id' ). '<br />';
 			
 			echo __('You have', 'fep');
 		

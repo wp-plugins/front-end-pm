@@ -216,6 +216,7 @@ function fep_notification_ajax() {
 	}
 
 add_action('wp_ajax_fep_notification_ajax','fep_notification_ajax');
+add_action('wp_ajax_nopriv_fep_notification_ajax','fep_notification_ajax');
 
 function fep_backticker_code_input_filter( $message ) {
 
